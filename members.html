@@ -123,6 +123,7 @@
   </aside>
 
   <main class="main">
+    <!-- EDIT MODAL -->
     <div id="editMemberModal" class="modal-overlay">
       <div class="modal-content">
         <h2 style="margin-bottom: 8px; font-weight: 900;">Edit Partner Node</h2>
@@ -131,7 +132,7 @@
         <input type="hidden" id="edit-id">
         <div class="form-group">
           <label>Full Name</label>
-          <input type="text" id="edit-name">
+          <input type="text" id="edit-name" placeholder="John Doe">
         </div>
         <div class="form-group">
           <label>Email Address</label>
@@ -148,6 +149,33 @@
 
         <button onclick="updateMember()" id="updateBtn" style="width: 100%; padding: 16px; border-radius: 12px; background: var(--aurum-blue); color: #fff; font-weight: 800; border: none; cursor: pointer; margin-top: 10px;">Save Changes →</button>
         <button onclick="closeEditModal()" style="width: 100%; background: none; border: none; color: var(--text-muted); margin-top: 16px; cursor: pointer; font-weight: 700; font-size: 0.85rem;">Cancel</button>
+      </div>
+    </div>
+
+    <!-- PROVISION MODAL -->
+    <div id="addMemberModal" class="modal-overlay">
+      <div class="modal-content">
+        <h2 style="margin-bottom: 8px; font-weight: 900;">Provision VIP Affiliate</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">Directly authorize a partner node (Bypass Checkout).</p>
+        
+        <div class="form-group">
+          <label>Partner Full Name</label>
+          <input type="text" id="new-name" placeholder="e.g. Alex Rivera">
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="new-email" placeholder="name@example.com">
+        </div>
+        <div class="form-group">
+          <label>Initial Status</label>
+          <select id="new-status">
+            <option value="active" selected>Active / VIP</option>
+            <option value="grace">Grace Period</option>
+          </select>
+        </div>
+
+        <button onclick="saveNewMember()" id="saveBtn" style="width: 100%; padding: 16px; border-radius: 12px; background: #22c55e; color: #fff; font-weight: 800; border: none; cursor: pointer; margin-top: 10px;">Authorize & Send Welcome →</button>
+        <button onclick="closeModal()" style="width: 100%; background: none; border: none; color: var(--text-muted); margin-top: 16px; cursor: pointer; font-weight: 700; font-size: 0.85rem;">Cancel</button>
       </div>
     </div>
 
