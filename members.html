@@ -91,7 +91,11 @@
       background: transparent; color: var(--text-muted); cursor: pointer; font-size: 0.8rem; font-weight: 600;
       transition: 0.2s; margin-right: 4px;
     }
-    .action-btn:hover { border-color: var(--aurum-blue); color: var(--aurum-blue); }
+    .action-btn:hover { border-color: var(--aurum-blue); color: var(--text-main); }
+    .btn-suspend { color: var(--warning); border-color: rgba(245, 158, 11, 0.3); }
+    .btn-suspend:hover { background: var(--warning); color: #000; }
+    .btn-delete { color: var(--danger); border-color: rgba(239, 68, 68, 0.3); }
+    .btn-delete:hover { background: var(--danger); color: #fff; }
     .btn-remind { color: var(--gold); border-color: rgba(212, 175, 55, 0.3); }
 
     /* === DASHBOARD TOOLTIP === */
@@ -285,6 +289,29 @@
       }
     }
 
+    async function deleteMember(id, email) {
+      if (!confirm(`Are you sure you want to PERMANENTLY delete ${email}?\n\nThis will revoke all affiliate tracking and dashboard access.`)) return;
+
+      try {
+        // Delete from BOTH tables to be thorough
+        await window.aurumDB.from('aurum_members').delete().eq('id', id);
+        await window.aurumDB.from('aurum_affiliates').delete().eq('email', email);
+        
+        alert("Partner successfully purged from database.");
+        location.reload();
+      } catch (err) {
+        alert("Deletions failed: " + err.message);
+      }
+    }
+
+    async function suspendMember(id, currentStatus) {
+      const newStatus = currentStatus === 'suspended' ? 'active' : 'suspended';
+      try {
+        await window.aurumDB.from('aurum_members').update({ status: newStatus }).eq('id', id);
+        location.reload();
+      } catch (err) { alert(err.message); }
+    }
+
     async function updateMember() {
       const id = document.getElementById('edit-id').value;
       const name = document.getElementById('edit-name').value;
@@ -347,7 +374,8 @@
             <td>${statusBadge}</td>
             <td>
               <button class="action-btn" onclick="openEditModal('${memberJson}')">Edit</button>
-              <button class="action-btn">Audit</button>
+              <button class="action-btn btn-suspend" onclick="suspendMember('${member.id}', '${member.status}')">${member.status === 'suspended' ? 'Re-Activate' : 'Suspend'}</button>
+              <button class="action-btn btn-delete" onclick="deleteMember('${member.id}', '${member.email}')">Delete</button>
             </td>
            `;
            tbody.appendChild(tr);
