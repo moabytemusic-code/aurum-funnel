@@ -241,7 +241,8 @@
       }
 
       try {
-        const { error } = await window.aurumDB
+        // 1. Insert into Affiliates Table (Tracking)
+        const { error: affError } = await window.aurumDB
           .from('aurum_affiliates')
           .insert([{ 
              email: email.toLowerCase(), 
@@ -253,12 +254,25 @@
              rotator_pool: null
           }]);
 
-        if (error) {
-           if(error.code === '23505') throw new Error("That Tracking Code or Email is already in use!");
-           throw error;
+        if (affError) {
+           if(affError.code === '23505') throw new Error("That Tracking Code or Email is already in use!");
+           throw affError;
         }
 
-        // Fire VIP Welcome Email via Secure Vercel Proxy
+        // 2. Insert into Members Table (License/Access)
+        const { error: memError } = await window.aurumDB
+          .from('aurum_members')
+          .insert([{
+             full_name: 'VIP Partner',
+             email: email.toLowerCase(),
+             status: 'active',
+             payment_status: 'paid',
+             membership_start: new Date().toISOString()
+          }]);
+
+        if (memError) console.error("Member sync failed:", memError);
+
+        // 3. Fire VIP Welcome Email via Secure Vercel Proxy
         try {
           const portalLink = window.location.origin + '/affiliate-portal.html';
           await fetch('/api/send-email', {
@@ -287,16 +301,7 @@
                 </p>
               </div>
             `
-          };
-
-          await fetch('https://api.brevo.com/v3/smtp/email', {
-            method: 'POST',
-            headers: {
-              'accept': 'application/json',
-              'api-key': BREVO_KEY,
-              'content-type': 'application/json'
-            },
-            body: JSON.stringify(emailBody)
+            })
           });
         } catch(e) { console.warn("Background Affiliate Email Failed:", e); }
 
