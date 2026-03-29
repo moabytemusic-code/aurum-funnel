@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Affiliate CRM | AURUM Admin</title>
+  <style>
+    :root {
+      --bg-color: #030712;
+      --panel-bg: #0F172A;
+      --panel-border: rgba(255, 255, 255, 0.08);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --aurum-blue: #0073FF;
+      --aurum-blue-hover: #3898F8;
+      --gold: #D4AF37;
+      --success: #22c55e;
+      --radius: 16px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-color); color: var(--text-main); line-height: 1.6;
+      -webkit-font-smoothing: antialiased; display: flex; min-height: 100vh;
+    }
+
+    /* === SIDEBAR === */
+    .sidebar {
+      width: 260px; background: var(--panel-bg); border-right: 1px solid var(--panel-border);
+      padding: 32px 24px; display: flex; flex-direction: column; position: sticky; top: 0;
+    }
+    .logo { font-weight: 900; font-size: 1.25rem; margin-bottom: 48px; display: flex; align-items: center; gap: 8px; }
+    .logo span { color: var(--aurum-blue); }
+    .nav-item {
+      padding: 12px 16px; border-radius: 12px; color: var(--text-muted); text-decoration: none;
+      font-weight: 600; margin-bottom: 8px; transition: all 0.2s; display: flex; align-items: center; gap: 12px;
+    }
+    .nav-item:hover, .nav-item.active { background: rgba(0, 115, 255, 0.1); color: var(--text-main); }
+    .nav-item.active { border: 1px solid rgba(0, 115, 255, 0.2); }
+
+    /* === MAIN CONTENT === */
+    .main { flex: 1; padding: 40px; overflow-y: auto; }
+    
+    /* === MODAL === */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(12px); z-index: 1000; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .modal-content {
+      background: var(--panel-bg); padding: 40px; border-radius: var(--radius);
+      border: 1px solid var(--panel-border); width: 100%; max-width: 480px;
+    }
+    .form-group { margin-bottom: 20px; text-align: left; }
+    label { display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+    input, select { 
+      width: 100%; padding: 14px 18px; border-radius: 10px; background: var(--bg-color); 
+      border: 1px solid var(--panel-border); color: #fff; font-size: 0.95rem; 
+    }
+
+    .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+    .header h1 { font-size: 2rem; font-weight: 900; letter-spacing: -0.02em; }
+    
+    .demo-toggle {
+      background: rgba(255, 255, 255, 0.05); padding: 8px 16px; border-radius: 99px; font-size: 0.85rem;
+      border: 1px solid var(--panel-border); cursor: pointer; color: var(--text-muted);
+    }
+    .demo-toggle.active { background: var(--success); color: #fff; border-color: var(--success); }
+
+    /* === STAT CARDS === */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px; }
+    .stat-card {
+      background: var(--panel-bg); padding: 24px; border-radius: var(--radius);
+      border: 1px solid var(--panel-border); box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .stat-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 8px; }
+    .stat-value { font-size: 2.5rem; font-weight: 900; color: var(--text-main); display: flex; align-items: baseline; gap: 8px; }
+    
+    /* === TABLE === */
+    .table-panel { background: var(--panel-bg); border-radius: var(--radius); border: 1px solid var(--panel-border); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 16px 24px; background: rgba(255,255,255,0.02); color: var(--text-muted); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid var(--panel-border); }
+    td { padding: 16px 24px; border-bottom: 1px solid var(--panel-border); font-size: 0.95rem; }
+    tr:last-child td { border-bottom: none; }
+    
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-weight: 700; font-family: monospace; font-size: 0.85rem; }
+    .badge-blue { background: rgba(0,115,255,0.1); color: var(--aurum-blue); }
+    .badge-gold { background: rgba(212, 175, 55, 0.1); color: var(--gold); }
+    .badge-gray { background: rgba(255,255,255,0.05); color: var(--text-muted); }
+    
+    .rotator-pool-text {
+      font-size: 0.8rem; color: var(--text-muted); font-family: monospace;
+      max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="logo">AURUM<span>ADMIN</span></div>
+    <nav>
+      <a href="admin.html" class="nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        Dashboard
+      </a>
+      <a href="members.html" class="nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        Members & Billing
+      </a>
+      <a href="organizations.html" class="nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        Organizations
+      </a>
+      <a href="affiliates.html" class="nav-item active">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        Affiliates (CRM)
+      </a>
+      <a href="index.html" class="nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Public Funnel
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div id="addAffiliateModal" class="modal-overlay">
+      <div class="modal-content">
+        <h2 style="margin-bottom: 8px; font-weight: 900;">Manual Affiliate Generation</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">Register a VIP partner and explicitly bypass their Funnel License checkout.</p>
+        
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="new-email" placeholder="partner@agency.com">
+        </div>
+        <div class="form-group">
+          <label>Temporary Password</label>
+          <input type="text" id="new-password" placeholder="e.g. override123">
+        </div>
+        <div class="form-group">
+          <label>Custom Attribution Node</label>
+          <input type="text" id="new-code" placeholder="e.g. ALPHA">
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">Leave blank to auto-generate standard `1W145K` style code.</p>
+        </div>
+
+        <button onclick="saveVIPAffiliate()" id="saveBtn" style="width: 100%; padding: 16px; border-radius: 12px; background: var(--aurum-blue); color: #fff; font-weight: 800; border: none; cursor: pointer; margin-top: 10px;">Provision Affiliate Node →</button>
+        <button onclick="closeModal()" style="width: 100%; background: none; border: none; color: var(--text-muted); margin-top: 16px; cursor: pointer; font-weight: 700; font-size: 0.85rem;">Cancel</button>
+      </div>
+    </div>
+
+    <header class="header">
+      <div>
+        <h1>Affiliate Network</h1>
+        <p style="color: var(--text-muted);" id="status-text">Real-time database of registered partners and rotators</p>
+      </div>
+      <div style="display:flex; gap:12px;">
+        <button onclick="openModal()" style="background: var(--aurum-blue); color: #fff; padding: 12px 24px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; box-shadow: 0 10px 25px rgba(0, 115, 255, 0.25);">+ Provision VIP Affiliate</button>
+      </div>
+    </header>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Affiliates</div>
+        <div class="stat-value" id="val-total">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Master Rotators</div>
+        <div class="stat-value" id="val-rotators" style="color: var(--gold);">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Active Trials</div>
+        <div class="stat-value" id="val-active" style="color: var(--aurum-blue);">0</div>
+      </div>
+    </div>
+
+    <div class="table-panel">
+      <div style="padding: 24px; border-bottom: 1px solid var(--panel-border); display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="font-size:1.1rem; font-weight:700;">Affiliate Roster</h3>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Date Joined</th>
+            <th>Email</th>
+            <th>Attribution ID</th>
+            <th>Password</th>
+            <th>Sub-Pool (Rotator)</th>
+          </tr>
+        </thead>
+        <tbody id="affiliateBody">
+          <!-- Dynamically Populated -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="supabase-client.js"></script>
+  <script>
+    // Ensure Supabase is fully loaded before we start
+    (async function initializeDB() {
+      if (typeof supabase === 'undefined') {
+        await new Promise((resolve) => {
+          const script = document.createElement('script');
+          script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+          script.onload = resolve;
+          document.head.appendChild(script);
+        });
+      }
+      
+      const SUPABASE_URL = 'https://cwdawyeiijbcoihobvpb.supabase.co';
+      const SUPABASE_ANON_KEY = 'sb_publishable_7mcxzRZkMjQcK1CTZjUl_w_AGm9kisr';
+      
+      if (!window.aurumDB && typeof supabase !== 'undefined') {
+        window.aurumDB = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log('[AURUM-DB] Manual Provisioning Client Initialized.');
+        fetchAffiliates(); // Initial population
+      }
+    })();
+
+    // === ADMIN MODAL LOGIC ===
+    function openModal() { document.getElementById('addAffiliateModal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('addAffiliateModal').style.display = 'none'; }
+
+    async function saveVIPAffiliate() {
+      const email = document.getElementById('new-email').value.trim();
+      const password = document.getElementById('new-password').value.trim();
+      let customCode = document.getElementById('new-code').value.trim().toUpperCase().replace(/[^A-Z0-9-]/g, '');
+      const btn = document.getElementById('saveBtn');
+
+      if (!email || !password) return alert("Email and Password are required.");
+      if (!window.aurumDB) return alert("Database not initialized.");
+
+      btn.innerText = "Provisioning Node...";
+      btn.disabled = true;
+
+      // Auto-generate default code if empty
+      if(!customCode) {
+        customCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+      } else if (!customCode.startsWith('TEAM-')) {
+        customCode = 'TEAM-' + customCode; // Keep enterprise formatting
+      }
+
+      try {
+        const { error } = await window.aurumDB
+          .from('aurum_affiliates')
+          .insert([{ 
+             email: email.toLowerCase(), 
+             password: password,
+             affiliate_code: customCode,
+             status: 'active',
+             payment_status: 'paid', // EXPLICIT CHECKOUT BYPASS
+             is_rotator: false,
+             rotator_pool: null
+          }]);
+
+        if (error) {
+           if(error.code === '23505') throw new Error("That Tracking Code or Email is already in use!");
+           throw error;
+        }
+
+        // Fire VIP Welcome Email directly to Affiliate via Brevo
+        try {
+          const BREVO_KEY = window.AURUM_CONFIG?.BREVO_KEY || '';
+          if (!BREVO_KEY) { console.warn("Brevo key missing in config.js"); return; }
+          
+          const portalLink = window.location.origin + '/affiliate-portal.html';
+
+          const emailBody = {
+            sender: { name: "AURUM Affiliate Support", email: "partners@smarthustlermarketing.com" },
+            to: [{ email: email, name: "VIP Affiliate" }],
+            subject: "Your VIP Master Portal Has Been Provisioned",
+            htmlContent: `
+              <div style="font-family: sans-serif; line-height: 1.6; color: #334155; padding: 40px; border: 1px solid #E2E8F0; border-radius: 12px; max-width: 600px; margin: 0 auto;">
+                <h1 style="color: #0F172A; font-size: 24px; margin-bottom: 20px;">Welcome to the Ecosystem!</h1>
+                <p>An administrator has officially provisioned your Master Tracking Node and bypassed your Funnel License checkout!</p>
+                <div style="background: #F8FAFC; padding: 20px; border-radius: 8px; margin: 24px 0;">
+                  <p style="margin: 0; font-weight: 700; color: #0073FF;">YOUR SECRET LOGIN CREDENTIALS:</p>
+                  <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li>Email: <b>${email}</b></li>
+                    <li>Password: <b>${password}</b></li>
+                    <li>Status: <b style="color: #22c55e;">Checkout Bypassed (Active)</b></li>
+                  </ul>
+                </div>
+                <p><b>YOUR NEXT STEPS:</b></p>
+                <p>Go to the partner portal using the link below, log in with these credentials, and the system will automatically drop you into your affiliate dashboard where you can copy your custom tracking links!</p>
+                <p style="margin-top: 24px; margin-bottom: 40px;"><a href="${portalLink}" style="background-color: #0F172A; color: #FFFFFF; padding: 14px 24px; text-decoration: none; border-radius: 8px; font-weight: 700;">Login To Dashboard &rarr;</a></p>
+                <p style="border-top: 1px solid #E2E8F0; padding-top: 20px; font-size: 13px; color: #94A3B8;">
+                  At The AI Finance Breakdown, we focus on realistic expectations and measured distributions. Keep this email safe.
+                </p>
+              </div>
+            `
+          };
+
+          await fetch('https://api.brevo.com/v3/smtp/email', {
+            method: 'POST',
+            headers: {
+              'accept': 'application/json',
+              'api-key': BREVO_KEY,
+              'content-type': 'application/json'
+            },
+            body: JSON.stringify(emailBody)
+          });
+        } catch(e) { console.warn("Background Affiliate Email Failed:", e); }
+
+        alert(`VIP Affiliate successfully created!\n\nEmail sent to ${email} containing their credentials.\nPassword: ${password}\nNode: ${customCode}`);
+        closeModal();
+        fetchAffiliates(); // Refresh table dynamically
+
+      } catch (err) {
+        console.error('Save failed:', err);
+        alert("Error saving affiliate: " + err.message);
+        btn.innerText = "Provision Affiliate Node →";
+        btn.disabled = false;
+      }
+    }
+
+    async function fetchAffiliates() {
+      const statusText = document.getElementById('status-text');
+      statusText.textContent = "Syncing with Supabase...";
+
+      try {
+        if (!window.aurumDB) throw new Error("Supabase client not initialized. Check supabase-client.js");
+
+        const { data, error } = await window.aurumDB
+          .from('aurum_affiliates')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error("Supabase error:", error);
+          throw error;
+        }
+
+        processAffiliates(data || []);
+        
+      } catch (err) {
+        console.error("Error fetching affiliates:", err);
+        statusText.textContent = "Error: Could not connect to Supabase backend.";
+        // Fallback demo data
+        processAffiliates([
+          { created_at: new Date().toISOString(), email: "demo.partner@example.com", affiliate_code: "1W145K", is_rotator: false, status: "trialing", password: "demo", rotator_pool: null },
+          { created_at: new Date(Date.now() - 86400000).toISOString(), email: "agency.lead@example.com", affiliate_code: "TEAM-DEMO", is_rotator: true, status: "active", password: "supersecret", rotator_pool: "JohnD99, SarahM01" }
+        ]);
+      }
+    }
+
+    function processAffiliates(affiliates) {
+      let total = 0;
+      let rotators = 0;
+      let active = 0;
+
+      const affBody = document.getElementById('affiliateBody');
+      affBody.innerHTML = "";
+
+      affiliates.forEach(aff => {
+        total++;
+        if (aff.is_rotator) rotators++;
+        if (aff.status === 'trialing' || aff.status === 'active') active++;
+
+        const dateObj = new Date(aff.created_at);
+        const dateStr = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+        const badgeClass = aff.is_rotator ? 'badge-gold' : 'badge-blue';
+        const codeDisplay = aff.affiliate_code || '<span class="badge badge-gray">Pending</span>';
+        
+        const pwDisplay = aff.password ? `<span style="font-family:monospace; color:var(--text-muted);">••••${aff.password.slice(-2) || aff.password}</span>` : '<em style="color:#475569; font-size:0.8rem;">None</em>';
+
+        const poolDisplay = aff.is_rotator && aff.rotator_pool 
+            ? `<span class="rotator-pool-text" title="${aff.rotator_pool}">${aff.rotator_pool}</span>` 
+            : `<em style="color:#475569; font-size:0.8rem;">Standard Link</em>`;
+
+        const row = \`
+          <tr>
+            <td style="color:var(--text-muted); font-size:0.85rem;">\${dateStr}</td>
+            <td style="font-weight:600;">\${aff.email || 'Unknown'}</td>
+            <td><span class="badge \${badgeClass}">\${codeDisplay}</span></td>
+            <td>\${pwDisplay}</td>
+            <td>\${poolDisplay}</td>
+          </tr>
+        \`;
+        affBody.innerHTML += row;
+      });
+
+      document.getElementById('val-total').textContent = total;
+      document.getElementById('val-rotators').textContent = rotators;
+      document.getElementById('val-active').textContent = active;
+
+      document.getElementById('status-text').textContent = \`Live Supabase Sync: \${new Date().toLocaleTimeString()}\`;
+    }
+
+    // Auto-fetch Supabase on load
+    fetchAffiliates();
+  </script>
+
+</body>
+</html>

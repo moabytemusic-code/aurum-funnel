@@ -1,0 +1,20 @@
+AURUM funnel email alignment notes
+
+Email 1 subject: quick question about AI crypto tools...
+Angle: curiosity + low pressure.
+CTA: check the beginner-friendly breakdown.
+
+Email 2 subject: why I looked at AURUM in the first place
+Angle: story + confusion in crypto + desire for simpler explanations.
+CTA: watch the presentation.
+
+Email 3 subject: what makes AURUM different?
+Angle: ecosystem story — trading bots, digital asset tools, Web3 finance.
+CTA: watch / review.
+
+Email 4 subject: not saying this is for everyone...
+Angle: objection handling, caution, let them decide.
+CTA: revisit presentation.
+
+Email 5 subject: if you’re still curious, here’s the next step
+Angle: direct CTA to signup / presentation page.

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Initialize Your Node | AURUM Digital Banking Activation</title>
+  <style>
+    :root {
+      --bg-color: #030712;
+      --panel-bg: #0F172A;
+      --panel-border: rgba(255, 255, 255, 0.08);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --aurum-blue: #0073FF;
+      --aurum-blue-hover: #3898F8;
+      --gold: #D4AF37;
+      --success: #22c55e;
+      --radius: 24px;
+      --accent-grad: linear-gradient(135deg, var(--aurum-blue), var(--aurum-blue-hover));
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-color); color: var(--text-main); line-height: 1.6;
+      -webkit-font-smoothing: antialiased; min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+
+    /* === NAV === */
+    nav {
+      background: rgba(3, 7, 18, 0.8);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--panel-border); padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1000px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; height: 72px;
+    }
+    .nav-brand { font-size: 1.1rem; font-weight: 800; color: #fff; text-decoration: none; }
+    .nav-brand span { color: var(--aurum-blue); }
+
+    /* === DASHBOARD LAYOUT === */
+    .dash-container {
+      max-width: 1000px; margin: 60px auto; padding: 0 24px;
+      display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px;
+      animation: fadeIn 0.6s ease-out;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .node-status {
+      background: var(--panel-bg); padding: 48px; border-radius: var(--radius);
+      border: 1px solid var(--panel-border); box-shadow: 0 40px 100px rgba(0,0,0,0.4);
+      position: relative; overflow: hidden;
+    }
+    .node-status::before {
+      content: ''; position: absolute; top:0; left:0; right:0; height:4px;
+      background: var(--accent-grad);
+    }
+
+    h1 { font-size: 2.4rem; font-weight: 900; margin-bottom: 12px; letter-spacing: -0.02em; }
+    .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 40px; }
+
+    /* === STEPS === */
+    .step-box { display: none; }
+    .step-box.active { display: block; animation: slideIn 0.4s ease-out; }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+
+    .form-group { margin-bottom: 24px; }
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.05em; }
+    .form-group input {
+      width: 100%; padding: 18px 24px; border-radius: 14px;
+      background: var(--bg-color); border: 1px solid var(--panel-border);
+      color: #fff; font-size: 1rem; font-weight: 600; transition: all 0.2s;
+    }
+    .form-group input:focus { outline: none; border-color: var(--aurum-blue); background: rgba(0,115,255,0.05); }
+
+    .coin-selector { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px; }
+    .coin-opt { 
+      background: rgba(255,255,255,0.05); padding: 16px; border-radius: 12px; border: 2px solid transparent;
+      text-align: center; cursor: pointer; transition: 0.2s;
+    }
+    .coin-opt:hover { background: rgba(255,255,255,0.08); }
+    .coin-opt.active { border-color: var(--aurum-blue); background: rgba(0, 115, 255, 0.1); }
+    .coin-opt .icon { font-size: 1.5rem; display: block; margin-bottom: 8px; }
+    .coin-opt span { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
+
+    .payment-details {
+      background: #FFFFFF; border-radius: 18px; padding: 32px;
+      margin-top: 32px; color: #000; text-align: center;
+      display: none;
+    }
+    .payment-details.active { display: block; }
+    .wallet-addr {
+      background: #F1F5F9; padding: 14px; border-radius: 10px;
+      font-family: monospace; font-size: 0.85rem; break-all: break-word;
+      margin: 15px 0; color: #334155; font-weight: 700;
+    }
+
+    .action-btn {
+      width: 100%; padding: 22px; border-radius: 16px;
+      background: var(--accent-grad); color: #fff; font-size: 1.25rem; font-weight: 800;
+      border: none; cursor: pointer; transition: all 0.3s;
+      box-shadow: 0 20px 40px rgba(0, 115, 255, 0.3); margin-top: 32px;
+    }
+    .action-btn:hover { transform: translateY(-3px); box-shadow: 0 30px 60px rgba(0, 115, 255, 0.45); }
+    .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* === ORDER SUMMARY === */
+    .summary-card {
+      background: rgba(255,255,255,0.03); padding: 40px; border-radius: var(--radius);
+      border: 1px solid var(--panel-border); height: fit-content;
+    }
+    .item-row { display: flex; justify-content: space-between; margin-bottom: 16px; }
+    .item-label { color: var(--text-muted); font-size: 0.95rem; }
+    .item-price { font-weight: 700; }
+    .total-row {
+      border-top: 1px solid var(--panel-border); padding-top: 24px; margin-top: 24px;
+      display: flex; justify-content: space-between; align-items: flex-end;
+    }
+    .total-price { font-size: 2.4rem; font-weight: 900; color: var(--gold); line-height: 1; }
+
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px); z-index: 1000; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .modal-content {
+      background: var(--panel-bg); padding: 40px; border-radius: var(--radius);
+      border: 1px solid var(--panel-border); width: 100%; max-width: 480px;
+      text-align: center;
+    }
+
+    .footer { text-align: center; padding: 60px 24px; color: var(--text-muted); font-size: 0.85rem; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="supabase-client.js"></script>
+</head>
+<body>
+
+  <div id="modal-override" class="modal-overlay">
+    <div class="modal-content">
+      <h2 style="margin-bottom: 12px; font-weight: 800;">Verify Membership</h2>
+      <p style="color: var(--text-muted); margin-bottom: 24px;">Enter your registered email to bypass the activation deposit.</p>
+      <div class="form-group">
+        <input type="email" id="verify_email" placeholder="email@example.com">
+      </div>
+      <button class="action-btn" onclick="verifyBypassMember()">Verify & Proceed →</button>
+      <button onclick="closeModal()" style="background:none; border:none; color:var(--text-muted); margin-top:16px; cursor:pointer; font-size:0.85rem; font-weight:700;">Cancel</button>
+    </div>
+  </div>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">TheAI<span>Finance</span>Breakdown</a>
+      <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Node Initialization</span>
+    </div>
+  </nav>
+
+  <div class="dash-container">
+    
+    <div class="node-status">
+      <h1>Secure Your Spot</h1>
+      <p class="subtitle">Complete your activation deposit to initialize your institutional digital banking node.</p>
+
+      <!-- STEP 1 -->
+      <div id="step-1" class="step-box active">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="full_name" placeholder="John Doe">
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="email" placeholder="john@example.com">
+        </div>
+        <button class="action-btn" onclick="nextStep(2)">Proceed to Activation →</button>
+      </div>
+
+      <!-- STEP 2 -->
+      <div id="step-2" class="step-box">
+        <label style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Select Payment Network</label>
+        <div class="coin-selector">
+          <div class="coin-opt" onclick="selectCoin('BTC', this)"><span class="icon">₿</span><span>BTC</span></div>
+          <div class="coin-opt" onclick="selectCoin('USDT', this)"><span class="icon">₮</span><span>USDT</span></div>
+          <div class="coin-opt" onclick="selectCoin('ETH', this)"><span class="icon">Ξ</span><span>ETH</span></div>
+          <div class="coin-opt" onclick="selectCoin('XRP', this)"><span class="icon">✕</span><span>XRP</span></div>
+        </div>
+
+        <div id="paymentArea" class="payment-details">
+          <p style="font-size: 0.9rem; font-weight: 600; color: #64748B;">Send exactly <b style="color:#000;">$546 USD</b> value to:</p>
+          <div id="walletAddr" class="wallet-addr">...</div>
+          <button onclick="copyAddr()" id="copyBtn" style="background:none; border:none; color:var(--aurum-blue); font-weight:800; cursor:pointer; font-size:0.85rem;">Copy Address</button>
+          
+          <button class="action-btn" style="background:#22c55e;" onclick="confirmPayment()">I Have Sent Payment →</button>
+          
+          <p style="margin-top: 20px; font-size: 0.75rem; color: #94A3B8;">Once detected on-chain, you will proceed to the setup checklist.</p>
+        </div>
+
+        <div style="margin-top: 40px; border-top: 1px dotted rgba(255,255,255,0.1); padding-top: 30px; text-align: center;">
+          <p style="font-size: 0.85rem; color: #94A3B8; margin-bottom: 12px;">Already a previously verified member?</p>
+          <a href="javascript:void(0)" onclick="openModal()" style="font-size: 0.95rem; font-weight: 800; color: var(--aurum-blue); text-decoration: none; display: inline-block; padding: 12px 24px; border: 1px solid rgba(0, 115, 255, 0.2); border-radius: 12px; transition: 0.2s;">Verify & Proceed (Bypass) →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUMMARY -->
+    <div class="summary-card">
+      <h3 style="margin-bottom: 24px; font-weight: 800;">Node Configuration</h3>
+      <div class="item-row"><span class="item-label">Institutional Setup</span><span class="item-price">$497.00</span></div>
+      <div class="item-row"><span class="item-label">1st Month License</span><span class="item-price">$49.00</span></div>
+      <div class="total-row">
+        <span style="font-weight: 800;">Deposit Amount</span>
+        <div class="total-price">$546</div>
+      </div>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 12px; text-align: right;">Includes setup + first month activation.</p>
+      
+      <div style="margin-top: 40px; padding: 20px; background: rgba(0, 115, 255, 0.05); border-radius: 16px;">
+        <p style="font-size: 0.85rem; color: var(--aurum-blue); font-weight: 700;">After Activation:</p>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">You will be redirected to the **Onboarding Checklist** to prepare your wallet/VPN and bond your AI liquidity bots.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const wallets = {
+      'BTC': 'bc1qgnpplgvp33zf77dnthxl5xv5cxxsk5arak540l',
+      'USDT': '0x4b5C494a822E9B1876C8B879fE65b1F0Aba9c4BC', // ERC20
+      'ETH': '0x4b5C494a822E9B1876C8B879fE65b1F0Aba9c4BC',
+      'XRP': 'rG2fVzHf6r5deG9epCfbZ29TYnC6u2oWe8'
+    };
+
+    function nextStep(step) {
+      if (step === 2) {
+        if (!document.getElementById('full_name').value || !document.getElementById('email').value) return alert('Details required.');
+        document.getElementById('step-1').classList.remove('active');
+        document.getElementById('step-2').classList.add('active');
+      }
+    }
+
+    function selectCoin(coin, el) {
+      // Remove active from all coin options
+      document.querySelectorAll('.coin-opt').forEach(opt => opt.classList.remove('active'));
+      
+      // Add active to the clicked element
+      el.classList.add('active');
+      
+      // Show payment area
+      const area = document.getElementById('paymentArea');
+      area.style.display = 'block';
+      area.classList.add('active');
+      
+      // Set wallet address
+      document.getElementById('walletAddr').innerText = wallets[coin];
+    }
+
+    function copyAddr() {
+      navigator.clipboard.writeText(document.getElementById('walletAddr').innerText);
+      document.getElementById('copyBtn').innerText = '✓ Copied';
+      setTimeout(() => document.getElementById('copyBtn').innerText = 'Copy Address', 2000);
+    }
+
+    async function confirmPayment() {
+      const btn = event.currentTarget;
+      const name = document.getElementById('full_name').value;
+      const email = document.getElementById('email').value;
+      const coin = document.querySelector('.coin-opt.active span').innerText;
+
+      if (!name || !email) return alert('Details required for verification.');
+
+      btn.innerText = 'Initializing Activation Node...';
+      btn.disabled = true;
+
+      try {
+        const BREVO_KEY = window.AURUM_CONFIG?.BREVO_KEY || '';
+        if (window.aurumDB) {
+        // 1. Send Transactional Welcome Email
+        const emailBody = {
+          sender: { name: "TheAI Finance Breakdown", email: "onboarding@smarthustlermarketing.com" },
+          to: [{ email: email, name: name }],
+          subject: "Activation Initialized: Welcome to the AI Finance Digital Banking Ecosystem",
+          htmlContent: `
+            <div style="font-family: sans-serif; line-height: 1.6; color: #334155; padding: 40px; border: 1px solid #E2E8F0; border-radius: 12px; max-width: 600px; margin: 0 auto;">
+              <h1 style="color: #0F172A; font-size: 24px; margin-bottom: 20px;">Welcome to The AI Finance Breakdown, ${name}!</h1>
+              <p>We are confirming that your <b>AURUM Digital Banking Node activation</b> is currently being processed on the blockchain.</p>
+              <div style="background: #F8FAFC; padding: 20px; border-radius: 8px; margin: 24px 0;">
+                <p style="margin: 0; font-weight: 700; color: #0073FF;">ACTIVATION SUMMARY:</p>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                  <li>Node Type: Institutional Setup</li>
+                  <li>Deposit Amount: <b>$546.00</b> ($497 Setup + $49 1st Month)</li>
+                  <li>Network: <b>${coin}</b></li>
+                </ul>
+              </div>
+              <p><b>NEXT STEPS:</b></p>
+              <p>1. <b>Verification:</b> We are monitoring the ${coin} blockchain. This typically takes 10-30 minutes.</p>
+              <p>2. <b>Onboarding Checklist:</b> While you wait, please finish the technical setup here: <a href="https://www.theaifinancebreakdown.com/onboarding.html?paid=true" style="color: #0073FF; font-weight: 700;">Complete Setup Checklist</a></p>
+              <p>3. <b>Credentials:</b> Once verified, we will send your official login details for the AURUM Backoffice.</p>
+              <p style="margin-top: 40px; border-top: 1px solid #E2E8F0; padding-top: 20px; font-size: 13px; color: #94A3B8;">
+                At The AI Finance Breakdown, we focus on realistic expectations and institutional risk management.
+              </p>
+            </div>
+          `
+        };
+
+        await fetch('https://api.brevo.com/v3/smtp/email', {
+          method: 'POST',
+          headers: {
+            'accept': 'application/json',
+            'api-key': BREVO_KEY,
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify(emailBody)
+        });
+
+        // 2. Add Contact to List 67 (Activation Pending)
+        await fetch('https://api.brevo.com/v3/contacts', {
+          method: 'POST',
+          headers: {
+            'accept': 'application/json',
+            'api-key': BREVO_KEY,
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            attributes: { FIRSTNAME: name.split(' ')[0], FULLNAME: name, STATUS: 'Payment Pending' },
+            listIds: [67],
+            updateEnabled: true
+          })
+        });
+
+      } catch (err) {
+        console.warn('Email automation failed, but proceeding to onboarding.', err);
+      }
+
+      window.location.href = 'onboarding.html?paid=true';
+    }
+
+    // BYPASS VERIFICATION LOGIC
+    function openModal() { document.getElementById('modal-override').style.display = 'flex'; }
+    function closeModal() { document.getElementById('modal-override').style.display = 'none'; }
+
+    async function verifyBypassMember() {
+      const email = document.getElementById('verify_email').value;
+      const btn = event.currentTarget;
+      
+      if (!email) return alert("Email required.");
+      if (!window.aurumDB) return alert("Database connection not ready. Try again later.");
+
+      btn.innerText = "Verifying Credentials...";
+      btn.disabled = true;
+
+      try {
+        const { data, error } = await window.aurumDB
+          .from('aurum_members')
+          .select('email, status')
+          .eq('email', email.trim().toLowerCase())
+          .single();
+
+        if (error || !data) {
+          alert("Member not found. Please complete activation.");
+          btn.innerText = "Verify & Proceed →";
+          btn.disabled = false;
+          return;
+        }
+
+        if (data.status === 'suspended') {
+          alert("Your membership has been suspended. Please contact support.");
+          btn.innerText = "Verify & Proceed →";
+          btn.disabled = false;
+          return;
+        }
+
+        // Redirect if Active or in Grace
+        window.location.href = 'onboarding.html?override=true&verified=true';
+
+      } catch (err) {
+        console.error('Verify failed:', err);
+        alert("System error during verification. Please complete standard activation.");
+        btn.innerText = "Verify & Proceed →";
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>

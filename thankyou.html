@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Received | Welcome to AURUM</title>
+  <style>
+    :root {
+      --bg-color: #030712;
+      --panel-bg: #0F172A;
+      --panel-border: rgba(255, 255, 255, 0.08);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --aurum-blue: #0073FF;
+      --aurum-blue-hover: #3898F8;
+      --gold: #D4AF37;
+      --success: #22c55e;
+      --radius: 24px;
+      --accent-grad: linear-gradient(135deg, var(--aurum-blue), var(--aurum-blue-hover));
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-color); color: var(--text-main); line-height: 1.6;
+      -webkit-font-smoothing: antialiased; display: flex; align-items: center; justify-content: center; min-height: 100vh;
+    }
+
+    .confirm-panel {
+      max-width: 600px; text-align: center; padding: 60px 40px;
+      background: var(--panel-bg); border-radius: var(--radius);
+      border: 1px solid var(--panel-border); box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+    }
+    .check-icon {
+      width: 100px; height: 100px; border-radius: 50%; background: rgba(34, 197, 94, 0.1);
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 32px;
+      color: var(--success); border: 2px solid rgba(34, 197, 94, 0.2);
+    }
+    h1 { font-size: 2.4rem; font-weight: 900; margin-bottom: 20px; letter-spacing: -0.03em; }
+    p { font-size: 1.15rem; color: var(--text-muted); margin-bottom: 40px; }
+
+    .instructions {
+      background: rgba(255,255,255,0.03); padding: 32px; border-radius: 18px;
+      border: 1px solid var(--panel-border); text-align: left;
+    }
+    .step { display: flex; gap: 20px; margin-bottom: 24px; }
+    .step:last-child { margin-bottom: 0; }
+    .step-num { 
+      width: 32px; height: 32px; border-radius: 8px; background: var(--aurum-blue); 
+      color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .step-text { font-size: 0.95rem; font-weight: 500; }
+    .step-text b { color: var(--text-main); }
+
+    .home-btn {
+      display: inline-block; padding: 18px 48px; border-radius: 99px;
+      background: var(--accent-grad); color: #fff; text-decoration: none;
+      font-weight: 800; font-size: 1.1rem; margin-top: 48px; transition: all 0.3s;
+    }
+    .home-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 115, 255, 0.4); }
+  </style>
+</head>
+<body>
+
+  <div class="confirm-panel">
+    <div class="check-icon">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    </div>
+    <h1>Activation Pending...</h1>
+    <p>Thank you for submitting your activation payment. Our team is now verifying the transaction on the blockchain.</p>
+
+    <div class="instructions">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text"><b>Blockchain Confirmation:</b> Your payment will reach our nodes in 10-20 minutes depending on network congestion.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text"><b>Login Credentials:</b> Once verified, you will receive an encrypted email with your login details for the AURUM Backoffice.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text"><b>Secure Connection:</b> Follow the onboarding guide to bond your Binance/Bybit account to our AI Liquidity Bots.</div>
+      </div>
+    </div>
+
+    <a href="index.html" class="home-btn">Return Home</a>
+  </div>
+
+  <!-- TRACKING -->
+  <script src="tracking.js"></script>
+</body>
+</html>

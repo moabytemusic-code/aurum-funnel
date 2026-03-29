@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onboarding Checklist | AURUM Ecosystem</title>
+  <style>
+    :root {
+      --bg-color: #F8FAFC;
+      --bg-gradient: radial-gradient(circle at top, #FFFFFF 0%, #F1F5F9 100%);
+      --text-main: #0F172A;
+      --text-muted: #475569;
+      --aurum-blue: #0073FF;
+      --aurum-blue-hover: #3898F8;
+      --glass-bg: rgba(255, 255, 255, 0.8);
+      --glass-border: rgba(0, 0, 0, 0.05);
+      --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+      --accent-grad: linear-gradient(135deg, var(--aurum-blue), var(--aurum-blue-hover));
+      --dark-panel: #030712;
+      --radius: 20px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-color) var(--bg-gradient);
+      color: var(--text-main); line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* === NAV === */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--glass-border); padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; height: 72px;
+    }
+    .nav-brand { font-size: 1.1rem; font-weight: 800; color: var(--text-main); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+    .nav-brand span { color: var(--aurum-blue); }
+
+    /* === LAYOUT === */
+    .container { max-width: 900px; margin: 0 auto; padding: 60px 24px; }
+    .header { text-align: center; margin-bottom: 60px; }
+    h1 { font-size: clamp(2.2rem, 5vw, 3rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 16px; }
+    .subtitle { font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+
+    /* === CHECKLIST STEPS === */
+    .steps { display: flex; flex-direction: column; gap: 32px; margin-bottom: 60px; }
+    .step-card {
+      background: #FFFFFF; border-radius: var(--radius); padding: 40px;
+      border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);
+      position: relative;
+    }
+    .step-num {
+      position: absolute; top: 40px; left: -20px;
+      width: 40px; height: 40px; border-radius: 12px;
+      background: var(--accent-grad); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1.2rem; box-shadow: 0 4px 12px rgba(0, 115, 255, 0.3);
+    }
+    h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
+    .step-content p { margin-bottom: 16px; font-size: 1.1rem; color: var(--text-muted); }
+    
+    .crypto-list {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+      padding: 20px; background: #F8FAFC; border-radius: 16px; margin-top: 20px;
+    }
+    .crypto-item { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.95rem; }
+    .crypto-item svg { color: var(--aurum-blue); }
+
+    .vpn-note {
+      background: #FFFBEB; border: 1px solid #FEF3C7;
+      padding: 20px; border-radius: 16px; color: #92400E;
+      font-size: 0.95rem; margin-top: 20px;
+    }
+
+    /* === VIDEO === */
+    .video-wrapper {
+      position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+      border-radius: 16px; background: #000; margin-top: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+    .video-wrapper iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:0; }
+
+    .join-btn {
+      display: inline-block; padding: 22px 64px; border-radius: 99px;
+      background: var(--accent-grad); color: #fff;
+      font-size: 1.25rem; font-weight: 800; text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+      box-shadow: 0 15px 35px rgba(0, 115, 255, 0.4);
+      margin-top: 40px; position: relative; z-index: 2;
+    }
+    .join-btn:hover { 
+      transform: translateY(-5px) scale(1.02); 
+      box-shadow: 0 25px 50px rgba(0, 115, 255, 0.5); 
+    }
+
+    .foot { text-align: center; margin-top: 60px; color: var(--text-muted); font-size: 0.9rem; opacity: 0.6; }
+
+
+
+    @media (max-width: 768px) {
+      nav { padding: 0 12px; }
+      .nav-inner { height: 60px; }
+      .nav-brand { font-size: 0.82rem; white-space: nowrap; }
+      .nav-cta { padding: 8px 14px; font-size: 0.8rem; white-space: nowrap; }
+
+      .container { padding: 40px 16px; }
+      .header { margin-bottom: 40px; }
+      h1 { font-size: 1.8rem; }
+      .subtitle { font-size: 1.05rem; }
+
+      .step-num { left: 50%; top: -20px; transform: translateX(-50%); }
+      .step-card { padding: 40px 20px 24px; text-align: center; }
+      .step-card h2 { font-size: 1.25rem; margin-top: 10px; }
+      
+      .crypto-list { grid-template-columns: 1fr; padding: 16px; text-align: left; }
+      .crypto-item { font-size: 0.9rem; }
+      
+      .final-cta { padding: 40px 20px; border-radius: 20px; }
+      .final-cta h2 { font-size: 1.6rem; }
+      .join-btn { width: 100%; padding: 12px 20px; font-size: 1.05rem; white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">TheAI<span>Finance</span>Breakdown</a>
+      <a href="offer.html" class="nav-cta">Explore Digital Banking Ecosystem →</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <div class="header">
+      <h1 id="skin-h1">Onboarding Checklist</h1>
+      <p id="skin-sub" class="subtitle">Complete these 3 essential steps before creating your AURUM account within our digital banking ecosystem.</p>
+    </div>
+
+    <div class="steps">
+      <!-- STEP 1 -->
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h2>Prepare Your Crypto</h2>
+        <div class="step-content">
+          <p>Ensure you have your funds ready in a compatible wallet. You will need a minimum of <strong>$100 USD</strong> for the trading bot, plus <strong>$19.99</strong> for the annual fee.</p>
+          <div class="crypto-list">
+            <div class="crypto-item">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707l-4.5 4.5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L8.5 9.586l3.793-3.793a1 1 0 011.414 1.414z"></path></svg>
+              USDT (TRC20 / BEP20)
+            </div>
+            <div class="crypto-item">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707l-4.5 4.5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L8.5 9.586l3.793-3.793a1 1 0 011.414 1.414z"></path></svg>
+              USDC (BEP20 / ERC20 / Polygon)
+            </div>
+            <div class="crypto-item">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707l-4.5 4.5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L8.5 9.586l3.793-3.793a1 1 0 011.414 1.414z"></path></svg>
+              Standard Web3 Wallets
+            </div>
+            <div class="crypto-item">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707l-4.5 4.5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L8.5 9.586l3.793-3.793a1 1 0 011.414 1.414z"></path></svg>
+              BNB / ETH / MATIC for Gas
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h2>VPN Setup (US / CA Users)</h2>
+        <div class="step-content">
+          <p>If you are located in the US, Canada, or Mexico, you <strong>must</strong> use a VPN set to a country outside these regions (e.g., Europe) to access the registration page.</p>
+          <p><strong>Recommendations:</strong></p>
+          <ul style="list-style: none; margin-bottom: 20px;">
+            <li style="margin-bottom: 8px;">🔹 <strong>ProtonVPN.com</strong> - Free version available.</li>
+            <li>🔹 <strong>Opera Browser</strong> - Built-in free VPN (select "Europe").</li>
+          </ul>
+          <div class="vpn-note">
+            <strong>Pro Tip:</strong> Use the <strong>Opera Browser</strong> if you only want the VPN to apply to your Aurum session without affecting your other open apps or trading websites.
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h2>Watch the Step-by-Step Guide</h2>
+        <div class="step-content">
+          <p>Follow the 5-minute video below strictly to ensure your account is activated correctly. <strong>Wait until the video finishes before proceeding.</strong></p>
+          <div class="video-wrapper">
+            <iframe src="https://player.vimeo.com/video/1127732746" title="Onboarding Guide" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINAL JOIN -->
+    <section class="final-cta">
+      <h2>All Steps Completed?</h2>
+      <p style="opacity: 0.8; margin-top: 10px;">Click the button below to join the official AURUM backoffice and bond your bots.</p>
+      <a href="https://backoffice.aurum.foundation/u/1W145K" id="dynamic-join-btn" target="_blank" class="join-btn">Go to AURUM Dashboard →</a>
+    </section>
+
+    <footer class="foot">
+      <p>© 2026 The AI Finance Breakdown. All rights reserved.</p>
+      <p style="margin-top: 10px;">Review the official terms on the Aurum backoffice before participating.</p>
+    </footer>
+  </div>
+
+  <!-- TRACKING & AFFILIATE LOGIC -->
+  <script src="tracking.js"></script>
+  <script src="skin.js"></script>
+</body>
+</html>

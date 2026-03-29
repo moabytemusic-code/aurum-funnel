@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics Dashboard | AURUM Admin</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg-color: #030712;
+      --panel-bg: #0F172A;
+      --panel-border: rgba(255, 255, 255, 0.08);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --aurum-blue: #0073FF;
+      --aurum-blue-hover: #3898F8;
+      --gold: #D4AF37;
+      --success: #22c55e;
+      --radius: 16px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-color); color: var(--text-main); line-height: 1.6;
+      -webkit-font-smoothing: antialiased; display: flex; min-height: 100vh;
+    }
+
+    /* === SIDEBAR === */
+    .sidebar {
+      width: 260px; background: var(--panel-bg); border-right: 1px solid var(--panel-border);
+      padding: 32px 24px; display: flex; flex-direction: column; position: sticky; top: 0;
+    }
+    .logo { font-weight: 900; font-size: 1.25rem; margin-bottom: 48px; display: flex; align-items: center; gap: 8px; }
+    .logo span { color: var(--aurum-blue); }
+    .nav-item {
+      padding: 12px 16px; border-radius: 12px; color: var(--text-muted); text-decoration: none;
+      font-weight: 600; margin-bottom: 8px; transition: all 0.2s; display: flex; align-items: center; gap: 12px;
+    }
+    .nav-item:hover, .nav-item.active { background: rgba(0, 115, 255, 0.1); color: var(--text-main); }
+    .nav-item.active { border: 1px solid rgba(0, 115, 255, 0.2); }
+
+    /* === MAIN CONTENT === */
+    .main { flex: 1; padding: 40px; overflow-y: auto; }
+    .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+    .header h1 { font-size: 2rem; font-weight: 900; letter-spacing: -0.02em; }
+    
+    .demo-toggle {
+      background: rgba(255, 255, 255, 0.05); padding: 8px 16px; border-radius: 99px; font-size: 0.85rem;
+      border: 1px solid var(--panel-border); cursor: pointer; color: var(--text-muted);
+    }
+    .demo-toggle.active { background: var(--success); color: #fff; border-color: var(--success); }
+
+    /* === STAT CARDS === */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 40px; }
+    .stat-card {
+      background: var(--panel-bg); padding: 24px; border-radius: var(--radius);
+      border: 1px solid var(--panel-border); box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .stat-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 8px; }
+    .stat-value { font-size: 2rem; font-weight: 900; color: var(--text-main); display: flex; align-items: baseline; gap: 8px; }
+    .stat-trend { font-size: 0.85rem; font-weight: 700; color: var(--success); }
+
+    /* === CHARTS === */
+    .charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 40px; }
+    .chart-panel {
+      background: var(--panel-bg); padding: 32px; border-radius: var(--radius);
+      border: 1px solid var(--panel-border);
+    }
+    .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .chart-header h3 { font-size: 1.1rem; font-weight: 700; }
+
+    /* === TABLE === */
+    .table-panel { background: var(--panel-bg); border-radius: var(--radius); border: 1px solid var(--panel-border); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 16px 24px; background: rgba(255,255,255,0.02); color: var(--text-muted); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid var(--panel-border); }
+    td { padding: 16px 24px; border-bottom: 1px solid var(--panel-border); font-size: 0.95rem; }
+    tr:last-child td { border-bottom: none; }
+    .badge-ref { display: inline-block; padding: 4px 10px; border-radius: 6px; background: rgba(0,115,255,0.1); color: var(--aurum-blue); font-weight: 700; font-family: monospace; }
+
+    @media (max-width: 1200px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .charts-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="logo">AURUM<span>ADMIN</span></div>
+    <nav>
+      <a href="admin.html" class="nav-item active">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        Dashboard
+      </a>
+      <a href="members.html" class="nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        Members & Billing
+      </a>
+      <a href="organizations.html" class="nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        Organizations
+      </a>
+      <a href="affiliates.html" class="nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        Affiliates
+      </a>
+      <a href="index.html" class="nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Public Funnel
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="header">
+      <div>
+        <h1>Funnel Overview</h1>
+        <p style="color: var(--text-muted);" id="status-text">Real-time metrics for The AI Finance Breakdown</p>
+      </div>
+      <div style="display:flex; gap:12px;">
+        <button class="demo-toggle" id="testEmailBtn" style="background:#475569; color:#fff;">✉ Test Email</button>
+        <button class="demo-toggle" id="settingsBtn" style="background:#334155; color:#fff;">⚙ Settings</button>
+        <button class="demo-toggle active" id="demoToggle">Demo Data Enabled</button>
+      </div>
+    </header>
+
+    <!-- SETTINGS MODAL (HIDDEN) -->
+    <div id="settingsModal" style="display:none; background:rgba(0,0,0,0.8); position:fixed; inset:0; z-index:999; align-items:center; justify-content:center;">
+      <div style="background:var(--panel-bg); padding:40px; border-radius:var(--radius); border:1px solid var(--panel-border); max-width:500px; width:90%;">
+        <h3 style="margin-bottom:12px;">Connect Google Sheet</h3>
+        <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:20px;">Paste your 'Published to Web' CSV URL from Google Sheets to see live data.</p>
+        <input type="text" id="csvUrlInput" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv" style="width:100%; padding:14px; border-radius:12px; background:#030712; border:1px solid var(--panel-border); color:#fff; margin-bottom:20px;">
+        <div style="display:flex; gap:10px;">
+          <button id="saveSettings" style="flex:1; padding:12px; border-radius:12px; background:var(--aurum-blue); color:#fff; border:none; cursor:pointer; font-weight:700;">Save & Sync</button>
+          <button id="closeSettings" style="padding:12px; border-radius:12px; background:#334155; color:#fff; border:none; cursor:pointer;">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Visits</div>
+        <div class="stat-value" id="val-visits">0 <span class="stat-trend" id="trend-visits">--</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Product Views (Offer)</div>
+        <div class="stat-value" id="val-offer">0 <span class="stat-trend" id="trend-offer">--</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Onboarding Started</div>
+        <div class="stat-value" id="val-onboard">0 <span class="stat-trend" id="trend-onboard">--</span></div>
+      </div>
+      <div class="stat-card" style="border-color: var(--success);">
+        <div class="stat-label">Aurum Signups</div>
+        <div class="stat-value" style="color: var(--success);" id="val-signups">0 <span class="stat-trend" id="trend-signups">--</span></div>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-panel">
+        <div class="chart-header">
+          <h3>Traffic over time</h3>
+        </div>
+        <canvas id="trafficChart" height="100"></canvas>
+      </div>
+      <div class="chart-panel">
+        <div class="chart-header">
+          <h3>Device Breakdown</h3>
+        </div>
+        <canvas id="deviceChart"></canvas>
+      </div>
+    </div>
+
+    <div class="table-panel">
+      <div style="padding: 24px; border-bottom: 1px solid var(--panel-border); display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="font-size:1.1rem; font-weight:700;">Top Performing Affiliates</h3>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Ref Code</th>
+            <th>Visitors</th>
+            <th>Onboarded</th>
+            <th>Signups</th>
+            <th>Conversion</th>
+          </tr>
+        </thead>
+        <tbody id="affiliateBody">
+          <!-- Dynamically Populated -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-panel" style="margin-top:24px;">
+      <div style="padding: 24px; border-bottom: 1px solid var(--panel-border); display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="font-size:1.1rem; font-weight:700;">Organization Performance</h3>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Org Name</th>
+            <th>Total Traffic</th>
+            <th>Signups</th>
+            <th>Conversion</th>
+          </tr>
+        </thead>
+        <tbody id="orgBody">
+          <!-- Dynamically Populated -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="supabase-client.js"></script>
+  <script>
+    const BREVO_KEY = window.AURUM_CONFIG?.BREVO_KEY || ''; 
+    let charts = {};
+    const elements = {
+      demoToggle: document.getElementById('demoToggle'),
+      statusText: document.getElementById('status-text')
+    };
+
+    // Initialize Charts
+    function initCharts(trafficData = [820, 940, 1100, 890, 1400, 1800, 2100], deviceData = [65, 30, 5]) {
+      if (charts.traffic) charts.traffic.destroy();
+      if (charts.device) charts.device.destroy();
+
+      const trafficCtx = document.getElementById('trafficChart').getContext('2d');
+      charts.traffic = new Chart(trafficCtx, {
+        type: 'line',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [{
+            label: 'Total Hits',
+            data: trafficData,
+            borderColor: '#0073FF',
+            backgroundColor: 'rgba(0, 115, 255, 0.1)',
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { grid: { display:false }, ticks:{color:'#94A3B8'}}, y: { grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'#94A3B8'}}} }
+      });
+
+      const deviceCtx = document.getElementById('deviceChart').getContext('2d');
+      charts.device = new Chart(deviceCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Mobile', 'Desktop', 'Tablet'],
+          datasets: [{ data: deviceData, backgroundColor: ['#0073FF', '#384152', '#D4AF37'], borderWidth: 0 }]
+        },
+        options: { plugins: { legend: { position: 'bottom', labels: { color: '#94A3B8', padding: 20 } } } }
+      });
+    }
+
+    async function fetchData() {
+      if (!window.aurumDB) return setTimeout(fetchData, 500);
+      
+      elements.statusText.textContent = "Syncing with live database...";
+      
+      try {
+        // 1. Fetch Tracking Events (for traffic patterns)
+        const { data: events, error: trackError } = await window.aurumDB
+          .from('aurum_tracking')
+          .select('*');
+          
+        if (trackError) throw trackError;
+
+        // 2. Fetch Actual Affiliates count (for signups)
+        const { data: affiliates, error: affError } = await window.aurumDB
+          .from('aurum_affiliates')
+          .select('count', { count: 'exact' });
+          
+        if (affError) throw affError;
+
+        processData(events, affiliates ? affiliates.length : 0);
+        
+      } catch (err) {
+        console.error(err);
+        elements.statusText.textContent = "Connection error. Using cache.";
+        initCharts(); // Demo fallback
+      }
+    }
+
+    function processData(events, affiliateCount) {
+      const stats = { visits: 0, offer: 0, onboard: 0, signups: affiliateCount };
+      const affiliates = {};
+      const orgs = {};
+      const devices = { Mobile: 0, Desktop: 0, Tablet: 0 };
+      
+      events.forEach(ev => {
+        stats.visits++;
+        if (ev.page === 'Offer') stats.offer++;
+        if (ev.page === 'Onboarding') stats.onboard++;
+
+        if (ev.platform && devices[ev.platform] !== undefined) {
+          devices[ev.platform]++;
+        }
+
+        // Affiliate Analytics
+        const ref = ev.ref || 'Direct';
+        if (ref !== 'Direct' && ref !== 'None') {
+          if (!affiliates[ref]) affiliates[ref] = { visits: 0, onboard: 0, signups: 0 };
+          affiliates[ref].visits++;
+          if (ev.page === 'Onboarding') affiliates[ref].onboard++;
+        }
+      });
+
+      updateUI(stats, affiliates, orgs, devices);
+      elements.statusText.textContent = `Live Supabase Sync: ${new Date().toLocaleTimeString()}`;
+    }
+
+    function updateUI(stats, affiliates, orgs, devices) {
+      document.getElementById('val-visits').textContent = stats.visits;
+      document.getElementById('val-offer').textContent = stats.offer;
+      document.getElementById('val-onboard').textContent = stats.onboard;
+      document.getElementById('val-signups').textContent = stats.signups;
+
+      // Render Affiliates
+      const affBody = document.getElementById('affiliateBody');
+      affBody.innerHTML = "";
+      Object.entries(affiliates).sort((a,b) => b[1].visits - a[1].visits).slice(0, 5).forEach(([id, data]) => {
+        affBody.innerHTML += `<tr><td><span class="badge-ref">${id}</span></td><td>${data.visits}</td><td>${data.onboard}</td><td>--</td><td style="color:var(--success); font-weight:700;">LIVE</td></tr>`;
+      });
+      
+      initCharts([0,0,0,0,0,0,stats.visits], [devices.Mobile, devices.Desktop, devices.Tablet]);
+    }
+
+    // Auto-fetch Supabase on load
+    fetchData();
+
+    // EMAIL TESTER
+    document.getElementById('testEmailBtn').onclick = async () => {
+      const email = prompt("Enter email for Test Welcome Email:");
+      if (!email || !BREVO_KEY) return alert("Error: Brevo Key Not Configured");
+      
+      try {
+        const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+          method: 'POST',
+          headers: { 'api-key': BREVO_KEY, 'content-type': 'application/json' },
+          body: JSON.stringify({
+            sender: { name: "AURUM Admin", email: "onboarding@smarthustlermarketing.com" },
+            to: [{ email: email }],
+            subject: "AURUM SMTP Check: Ready For Launch",
+            htmlContent: "<h1>System Check: Success!</h1><p>The Brevo SMTP engine is officially synced with your AURUM funnel dashboard.</p>"
+          })
+        });
+        if (res.ok) alert("Test email sent! Check your inbox.");
+      } catch(e) { alert("Error: " + e.message); }
+    };
+
+  </script>
+
+</body>
+</html>

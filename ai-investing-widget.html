@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURUM Featured Resource Widget</title>
+  <style>
+    /* Premium Aurum.foundation Blue/Silver Styling */
+    :root {
+      --bg-color: #FFFFFF; 
+      --text-main: #03030C;
+      --text-muted: #444967;
+      --aurum-blue: #0073FF;
+      --aurum-blue-hover: #3898F8;
+      --gold-accent: #D4AF37;
+      --glass-border: rgba(0, 0, 0, 0.08);
+      --accent-grad: linear-gradient(135deg, var(--aurum-blue), var(--aurum-blue-hover));
+      --radius: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #EEEEEE; /* Light background so the widget pops */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* -------------------------------------
+              WIDGET HTML START
+    -------------------------------------- */
+    .aurum-widget {
+      width: 100%;
+      max-width: 380px; 
+      background: #FFFFFF; 
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+      position: relative;
+      overflow: hidden;
+      border-top: 4px solid var(--aurum-blue);
+    }
+
+    /* Subtle glow effect inside the widget */
+    .aurum-widget::before {
+      content: "";
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(0, 115, 255, 0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .aurum-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--aurum-blue);
+      background: rgba(0, 115, 255, 0.1);
+      padding: 4px 10px;
+      border-radius: 99px;
+      border: 1px solid rgba(0, 115, 255, 0.2);
+      margin-bottom: 16px;
+    }
+
+    .aurum-widget h3 {
+      font-size: 1.35rem;
+      margin-bottom: 12px;
+      color: var(--text-main);
+      line-height: 1.25;
+      font-weight: 700;
+    }
+
+    .aurum-widget p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .aurum-btn {
+      display: block;
+      width: 100%;
+      padding: 14px 20px;
+      border: 0;
+      border-radius: 99px;
+      background: var(--accent-grad);
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 14px rgba(0, 115, 255, 0.2);
+    }
+
+    .aurum-btn:hover {
+      box-shadow: 0 6px 20px rgba(0, 115, 255, 0.35);
+      transform: translateY(-2px);
+      color: #fff;
+    }
+    /* -------------------------------------
+               WIDGET HTML END
+    -------------------------------------- */
+
+  </style>
+</head>
+<body>
+
+  <!-- AURUM FEATURED RESOURCE WIDGET -->
+  <div class="aurum-widget">
+    <div class="aurum-badge">Featured Resource</div>
+    <h3>The AURUM AI Digital Ecosystem</h3>
+    <p>Discover how AI-driven liquidity bots and Web3 Neobanks are automating intelligent digital asset management.</p>
+    
+    <!-- Just replace this URL with wherever your AURUM funnel is hosted! -->
+    <a href="https://moabytemusic-code.github.io/aurum-funnel/" target="_blank" class="aurum-btn">
+      See The Free Breakdown
+    </a>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Member Management | AURUM Admin</title>
+  <style>
+    :root {
+      --bg-color: #030712;
+      --panel-bg: #0F172A;
+      --panel-border: rgba(255, 255, 255, 0.08);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --aurum-blue: #0073FF;
+      --aurum-blue-hover: #3898F8;
+      --gold: #D4AF37;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --radius: 16px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-color); color: var(--text-main); line-height: 1.6;
+      -webkit-font-smoothing: antialiased; display: flex; min-height: 100vh;
+    }
+
+    /* === MODAL === */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(12px); z-index: 1000; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .modal-content {
+      background: var(--panel-bg); padding: 40px; border-radius: var(--radius);
+      border: 1px solid var(--panel-border); width: 100%; max-width: 480px;
+    }
+    .form-group { margin-bottom: 20px; text-align: left; }
+    label { display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+    input, select { 
+      width: 100%; padding: 14px 18px; border-radius: 10px; background: var(--bg-color); 
+      border: 1px solid var(--panel-border); color: #fff; font-size: 0.95rem; 
+    }
+
+    /* === SIDEBAR === */
+    .sidebar {
+      width: 260px; background: var(--panel-bg); border-right: 1px solid var(--panel-border);
+      padding: 32px 24px; display: flex; flex-direction: column; position: sticky; top: 0;
+    }
+    .logo { font-weight: 900; font-size: 1.25rem; margin-bottom: 48px; display: flex; align-items: center; gap: 8px; }
+    .logo span { color: var(--aurum-blue); }
+    .nav-item {
+      padding: 12px 16px; border-radius: 12px; color: var(--text-muted); text-decoration: none;
+      font-weight: 600; margin-bottom: 8px; transition: all 0.2s; display: flex; align-items: center; gap: 12px;
+    }
+    .nav-item:hover, .nav-item.active { background: rgba(0, 115, 255, 0.1); color: var(--text-main); }
+    .nav-item.active { border: 1px solid rgba(0, 115, 255, 0.2); }
+
+    /* === MAIN CONTENT === */
+    .main { flex: 1; padding: 40px; overflow-y: auto; }
+    .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+    .header h1 { font-size: 2rem; font-weight: 900; letter-spacing: -0.02em; }
+    
+    /* === STAT CARDS === */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px; }
+    .stat-card {
+      background: var(--panel-bg); padding: 24px; border-radius: var(--radius);
+      border: 1px solid var(--panel-border);
+    }
+    .stat-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 8px; }
+    .stat-value { font-size: 2rem; font-weight: 900; }
+
+    /* === MEMBER TABLE === */
+    .table-panel { background: var(--panel-bg); border-radius: var(--radius); border: 1px solid var(--panel-border); overflow: hidden; }
+    .table-header { padding: 24px; border-bottom: 1px solid var(--panel-border); display: flex; justify-content: space-between; align-items: center; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 16px 24px; background: rgba(255,255,255,0.02); color: var(--text-muted); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid var(--panel-border); }
+    td { padding: 16px 24px; border-bottom: 1px solid var(--panel-border); font-size: 0.95rem; }
+    tr:hover td { background: rgba(255,255,255,0.01); }
+
+    .status-badge {
+      display: inline-block; padding: 4px 10px; border-radius: 99px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase;
+    }
+    .status-active { background: rgba(34, 197, 94, 0.1); color: var(--success); }
+    .status-grace { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+    .status-expired { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+
+    .action-btn {
+      padding: 6px 12px; border-radius: 6px; border: 1px solid var(--panel-border);
+      background: transparent; color: var(--text-muted); cursor: pointer; font-size: 0.8rem; font-weight: 600;
+      transition: 0.2s; margin-right: 4px;
+    }
+    .action-btn:hover { border-color: var(--aurum-blue); color: var(--aurum-blue); }
+    .btn-remind { color: var(--gold); border-color: rgba(212, 175, 55, 0.3); }
+
+    /* === DASHBOARD TOOLTIP === */
+    .grace-timer { font-size: 0.75rem; color: var(--warning); display: block; margin-top: 4px; }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="logo">AURUM<span>ADMIN</span></div>
+    <nav>
+      <a href="admin.html" class="nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        Dashboard
+      </a>
+      <a href="members.html" class="nav-item active">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        Members & Billing
+      </a>
+      <a href="organizations.html" class="nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        Organizations
+      </a>
+      <a href="affiliates.html" class="nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        Affiliates
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div id="editMemberModal" class="modal-overlay">
+      <div class="modal-content">
+        <h2 style="margin-bottom: 8px; font-weight: 900;">Edit Partner Node</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">Modify access status and account details.</p>
+        
+        <input type="hidden" id="edit-id">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="edit-name">
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="edit-email" readonly style="opacity:0.6; cursor:not-allowed;">
+        </div>
+        <div class="form-group">
+          <label>Access Status</label>
+          <select id="edit-status">
+            <option value="active">Active (VIP)</option>
+            <option value="grace">Grace Period</option>
+            <option value="suspended">Suspended</option>
+          </select>
+        </div>
+
+        <button onclick="updateMember()" id="updateBtn" style="width: 100%; padding: 16px; border-radius: 12px; background: var(--aurum-blue); color: #fff; font-weight: 800; border: none; cursor: pointer; margin-top: 10px;">Save Changes →</button>
+        <button onclick="closeEditModal()" style="width: 100%; background: none; border: none; color: var(--text-muted); margin-top: 16px; cursor: pointer; font-weight: 700; font-size: 0.85rem;">Cancel</button>
+      </div>
+    </div>
+
+    <header class="header">
+      <div>
+        <h1>Partner Roster</h1>
+        <p style="color: var(--text-muted);">Manage billing cycles, grace periods, and access control.</p>
+      </div>
+      <button onclick="openModal()" style="background: var(--aurum-blue); color: #fff; padding: 12px 24px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; box-shadow: 0 10px 25px rgba(0, 115, 255, 0.25);">+ Provision VIP Affiliate</button>
+    </header>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Active Partners</div>
+        <div class="stat-value" id="count-active">...</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">In Grace Period</div>
+        <div class="stat-value" style="color: var(--warning);" id="count-grace">...</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Projected MRR</div>
+        <div class="stat-value" style="color: var(--success);" id="monthly-rev">Calculating...</div>
+      </div>
+    </div>
+
+    <div class="table-panel">
+      <div class="table-header">
+        <h3 style="font-size: 1.1rem; font-weight: 800;">Partner Access Status</h3>
+        <div style="display:flex; gap:10px;">
+          <input type="text" placeholder="Search partners..." style="background:var(--bg-color); border:1px solid var(--panel-border); color:#fff; padding:8px 16px; border-radius:8px; font-size:0.85rem;">
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Partner</th>
+            <th>Attribution</th>
+            <th>Date Joined</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="member-body">
+          <!-- Dynamically populated from Supabase -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
+  <script>
+    // MODAL CONTROL
+    function openModal() { document.getElementById('addMemberModal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('addMemberModal').style.display = 'none'; }
+    
+    function openEditModal(memberJson) {
+      const member = JSON.parse(decodeURIComponent(memberJson));
+      document.getElementById('edit-id').value = member.id;
+      document.getElementById('edit-name').value = member.full_name;
+      document.getElementById('edit-email').value = member.email;
+      document.getElementById('edit-status').value = member.status;
+      document.getElementById('editMemberModal').style.display = 'flex';
+    }
+    function closeEditModal() { document.getElementById('editMemberModal').style.display = 'none'; }
+
+    async function saveNewMember() {
+      const name = document.getElementById('new-name').value;
+      const email = document.getElementById('new-email').value;
+      const status = document.getElementById('new-status').value;
+      const btn = document.getElementById('saveBtn');
+
+      if (!name || !email) return alert("All fields required.");
+      if (!window.aurumDB) return alert("Database not initialized.");
+
+      btn.innerText = "Provisioning Account...";
+      btn.disabled = true;
+
+      try {
+        const { error } = await window.aurumDB
+          .from('aurum_members')
+          .insert([{ 
+             full_name: name, 
+             email: email.trim().toLowerCase(), 
+             status: status,
+             membership_start: new Date().toISOString()
+          }]);
+
+        if (error) throw error;
+        
+        // Assemble Private Bypass Link
+        const originRoot = window.location.origin;
+        const bypassDirectUrl = `${originRoot}/onboarding.html?override=true&verified=true`;
+        
+        // Auto-copy to Admin Clipboard
+        navigator.clipboard.writeText(bypassDirectUrl).catch(e => console.warn('Clipboard write failed:', e));
+        
+        alert(`VIP successfully registered!\n\nEmail sequence dispatched to ${email}.\nAdmin Note: Bypass Link copied to clipboard.`);
+        location.reload();
+
+      } catch (err) {
+        console.error('Save failed:', err);
+        alert("Error: " + err.message);
+        btn.innerText = "Provision VIP Affiliate →";
+        btn.disabled = false;
+      }
+    }
+
+    async function updateMember() {
+      const id = document.getElementById('edit-id').value;
+      const name = document.getElementById('edit-name').value;
+      const status = document.getElementById('edit-status').value;
+      const btn = document.getElementById('updateBtn');
+
+      btn.innerText = "Updating...";
+      btn.disabled = true;
+
+      try {
+        const { error } = await window.aurumDB
+          .from('aurum_members')
+          .update({ full_name: name, status: status })
+          .eq('id', id);
+
+        if (error) throw error;
+        location.reload();
+      } catch (err) {
+        alert("Update failed: " + err.message);
+        btn.innerText = "Save Changes →";
+        btn.disabled = false;
+      }
+    }
+
+    async function loadMembers() {
+      if (!window.aurumDB) return setTimeout(loadMembers, 500); 
+      
+      try {
+        const { data, error } = await window.aurumDB
+          .from('aurum_members')
+          .select('*')
+          .order('membership_start', { ascending: false });
+          
+        if (error) throw error;
+        
+        const tbody = document.getElementById('member-body');
+        tbody.innerHTML = '';
+        
+        let activeCount = 0;
+        let graceCount = 0;
+        
+        data.forEach(member => {
+           if (member.status === 'active') activeCount++;
+           else if (member.status === 'grace') graceCount++;
+           
+           const statusBadge = member.status === 'active' ? '<span class="status-badge status-active">VIP / Active</span>' : 
+                               member.status === 'grace' ? '<span class="status-badge status-grace">Grace</span>' : 
+                               '<span class="status-badge status-expired">Suspended</span>';
+           
+           const tr = document.createElement('tr');
+           const memberJson = encodeURIComponent(JSON.stringify(member));
+
+           tr.innerHTML = `
+            <td>
+              <div style="font-weight:700;">${member.full_name}</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">${member.email}</div>
+            </td>
+            <td><span style="font-family:monospace; font-size:0.8rem; background:rgba(255,255,255,0.05); padding:3px 6px; border-radius:4px;">${member.referred_by || 'DIRECT'}</span></td>
+            <td>${new Date(member.membership_start).toLocaleDateString()}</td>
+            <td>${statusBadge}</td>
+            <td>
+              <button class="action-btn" onclick="openEditModal('${memberJson}')">Edit</button>
+              <button class="action-btn">Audit</button>
+            </td>
+           `;
+           tbody.appendChild(tr);
+        });
+        
+        document.getElementById('count-active').innerText = activeCount;
+        document.getElementById('count-grace').innerText = graceCount;
+        document.getElementById('monthly-rev').innerText = `$${(activeCount * 10).toLocaleString()}`;
+        
+      } catch (e) { console.error(e); }
+    }
+    
+    document.addEventListener("DOMContentLoaded", loadMembers);
+  </script>
+</body>
+</html>

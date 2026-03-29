@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The AI Finance Breakdown | AURUM Story</title>
+  <style>
+    :root {
+      --bg-color: #EEEEEE;
+      --bg-gradient: radial-gradient(circle at top, #FFFFFF 0%, #EEEEEE 100%);
+      --text-main: #03030C;
+      --text-muted: #444967;
+      --aurum-blue: #0073FF;
+      --aurum-blue-hover: #3898F8;
+      --gold-accent: #D4AF37;
+      --glass-bg: rgba(255,255,255,0.7);
+      --glass-border: rgba(0,0,0,0.1);
+      --glass-shadow: 0 8px 32px 0 rgba(0,0,0,0.06);
+      --accent-grad: linear-gradient(135deg, var(--aurum-blue), var(--aurum-blue-hover));
+      --radius: 16px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg-color) var(--bg-gradient);
+      color: var(--text-main); line-height: 1.6;
+      -webkit-font-smoothing: antialiased; overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* === NAV === */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--glass-border); padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; height: 64px;
+    }
+    .nav-brand { font-size: 1rem; font-weight: 800; letter-spacing: -0.01em; color: var(--text-main); text-decoration: none; }
+    .nav-brand span { color: var(--aurum-blue); }
+    .nav-cta {
+      padding: 10px 22px; border-radius: 99px;
+      background: var(--accent-grad); color: #fff;
+      font-weight: 700; font-size: 0.9rem; text-decoration: none; white-space: nowrap;
+      transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,115,255,0.25);
+    }
+    .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,115,255,0.4); color: #fff; }
+
+    /* === LAYOUT === */
+    .container { max-width: 700px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 50px 0; }
+    .hero { text-align: left; padding-top: 70px; padding-bottom: 10px; }
+
+    h1 { font-size: clamp(2.2rem,5vw,3.5rem); line-height: 1.15; margin-bottom: 24px; letter-spacing: -0.02em; font-weight: 800; color: var(--text-main); }
+    h2 { font-size: clamp(1.5rem,4vw,2rem); margin-bottom: 20px; color: var(--text-main); font-weight: 700; }
+    p { font-size: 1.15rem; margin-bottom: 20px; color: var(--text-muted); }
+    p strong { color: var(--text-main); font-weight: 600; }
+    .subheadline { font-size: 1.25rem; color: var(--aurum-blue); margin-bottom: 36px; font-weight: 600; line-height: 1.5; }
+
+    .glass-panel {
+      background: #FFFFFF;
+      border: 1px solid var(--glass-border); border-radius: var(--radius);
+      padding: 36px; box-shadow: var(--glass-shadow); margin: 28px 0;
+    }
+    .highlight-box {
+      border-left: 4px solid var(--aurum-blue);
+      padding: 24px 24px 4px 28px;
+      background: linear-gradient(90deg, rgba(0,115,255,0.05) 0%, transparent 100%);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin: 36px 0;
+    }
+
+    ul { list-style-type: none; padding-left: 0; margin-bottom: 20px; }
+    ul li { margin-bottom: 12px; position: relative; padding-left: 28px; font-size: 1.1rem; color: var(--text-main); }
+    ul li::before { content:'→'; position:absolute; left:0; color:var(--aurum-blue); font-weight:800; }
+
+    /* === VIDEO === */
+    .video-wrapper {
+      position: relative; padding-bottom: 56.25%; height: 0;
+      overflow: hidden; border-radius: var(--radius);
+      border: 1px solid var(--glass-border); background: #000;
+      margin: 28px 0; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    .video-wrapper iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:0; }
+
+    /* === FAQ ACCORDION === */
+    .faq-section { margin: 40px 0; }
+    .faq-section h2 { margin-bottom: 24px; }
+    .faq-item {
+      background: #FFFFFF; border: 1px solid var(--glass-border);
+      border-radius: var(--radius); margin-bottom: 12px; overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    }
+    .faq-question {
+      width: 100%; text-align: left; background: transparent;
+      border: none; cursor: pointer; padding: 20px 24px;
+      color: var(--text-main); font-size: 1.1rem; font-weight: 600;
+      display: flex; justify-content: space-between; align-items: center;
+      transition: background 0.2s;
+    }
+    .faq-question:hover { background: rgba(0,115,255,0.02); }
+    .faq-icon { font-size: 1.3rem; color: var(--aurum-blue); transition: transform 0.3s ease; flex-shrink: 0; margin-left: 12px; }
+    .faq-answer {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.2s ease;
+      padding: 0 24px; color: var(--text-muted); font-size: 1.05rem; line-height: 1.6;
+    }
+    .faq-item.open .faq-answer { max-height: 200px; padding: 0 24px 20px; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+    /* === CTA === */
+    .btn {
+      display: block; width: 100%;
+      padding: 20px 32px; border-radius: 99px;
+      background: var(--accent-grad); color: #fff;
+      font-weight: 800; font-size: 1.2rem;
+      text-align: center; transition: all 0.3s ease;
+      box-shadow: 0 4px 14px rgba(0,115,255,0.3);
+      text-decoration: none; margin: 32px 0 12px;
+    }
+    .btn:hover { box-shadow: 0 8px 25px rgba(0,115,255,0.45); transform: translateY(-3px); color: #fff; }
+    .btn-subtext { text-align: center; font-size: 0.95rem; color: var(--text-muted); margin-bottom: 40px; }
+
+    /* === FOOTER === */
+    .footer {
+      text-align: center; padding: 40px 24px;
+      font-size: 0.85rem; color: var(--text-muted);
+      border-top: 1px solid var(--glass-border); margin-top: 40px;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 12px; }
+      .nav-inner { height: 60px; }
+      .nav-brand { font-size: 0.82rem; white-space: nowrap; }
+      .nav-cta { padding: 8px 14px; font-size: 0.8rem; white-space: nowrap; }
+      
+      section { padding: 32px 0; }
+      .hero { padding-top: 40px; }
+      .glass-panel { padding: 24px; margin: 20px 0; }
+      .highlight-box { padding: 20px 20px 4px 20px; margin: 24px 0; }
+      
+      p { font-size: 1.05rem; margin-bottom: 16px; }
+      .btn { padding: 12px 20px; font-size: 1rem; white-space: nowrap; }
+      .faq-question { padding: 14px 18px; font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SHARED NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">TheAI<span>Finance</span>Breakdown</a>
+      <a href="offer.html" class="nav-cta">Explore Digital Banking Ecosystem →</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- SECTION 1: HERO VIDEO (POSITION 1) -->
+    <section class="hero" style="padding-bottom: 20px;">
+      <h1 id="skin-h1" style="margin-bottom: 30px;">The AURUM NeoBank & AI Digital Banking Ecosystem</h1>
+      <div id="skin-video" class="video-wrapper" style="margin-top: 0;">
+        <iframe src="https://www.youtube.com/embed/hep0eYXJY8c?rel=0" title="AURUM NeoBank - Position 1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </section>
+
+    <!-- SECTION 2: STORY BRIDGE -->
+    <section class="hero" style="padding-top: 20px;">
+      <h2 style="font-size: 2.4rem; line-height: 1.1; margin-bottom: 24px; letter-spacing: -0.02em;">I Was Skeptical About AI Crypto… Until I Saw This</h2>
+      <p id="skin-sub" class="subheadline">I've been looking into AI finance tools lately… and this is one of the few that actually made me stop and take a closer look.</p>
+
+      <div class="highlight-box">
+        <p>I'm not saying this is the answer…</p>
+        <p>But this is one of the few AI crypto platforms focused on realistic expectations and institutional-grade risk management.</p>
+      </div>
+    </section>
+
+    <!-- SECTION 3: PERSONAL STORY -->
+    <section style="padding-top:0;">
+      <p>Honestly… most of what I've seen in this space either felt <strong>way too technical</strong>… or just straight hype.</p>
+      <p>So I started digging deeper to find something that actually made sense.</p>
+
+      <div class="glass-panel">
+        <p>That's when I came across <strong>AURUM</strong>.</p>
+        <p>And what caught my attention wasn't hype…</p>
+        <p>It was how they're positioning it.</p>
+      </div>
+
+      <p>It isn't just a single trading bot. It's an entire <strong>digital banking ecosystem</strong> — AI trading bots, digital asset tools, and a broader Web3 finance angle.</p>
+
+      <div class="highlight-box">
+        <p>Here's the part that made me stop and look deeper…</p>
+        <ul>
+          <li>It's <strong>not just one tool</strong></li>
+          <li>It's positioned as a <strong>digital banking ecosystem</strong></li>
+          <li>It's built around true <strong>automation</strong></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SECTION 4: VIDEO 2 -->
+    <section style="padding-top:0; text-align: center;">
+      <h2>Watch This Breakdown</h2>
+
+      <div class="video-wrapper">
+        <iframe src="https://www.youtube.com/embed/QfDQCw7wkEk?rel=0" title="AURUM Breakdown - Video 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+
+      <p><strong>What stood out to me:</strong></p>
+      <ul style="display: inline-block; text-align: left;">
+        <li>Simple, jargon-free explanation</li>
+        <li>Experienced team with a measured, realistic approach</li>
+        <li>Focused on great returns while mitigating risk</li>
+      </ul>
+    </section>
+
+    <!-- SECTION 8: TRUST + FINAL PUSH -->
+    <section style="padding-top:0;">
+
+      <!-- TRUST + FINAL PUSH -->
+      <div class="glass-panel" style="text-align:center;">
+        <p style="font-size:1.2rem; margin-bottom:20px;">Don't just take my word for it…</p>
+        <p>That's why I recommend watching the full presentation and deciding for yourself.</p>
+        <p style="margin-top: 24px;">If you're even a little curious… just click below. At the very least, you'll understand what's happening in this space right now.</p>
+
+        <a href="offer.html" class="btn">Watch The Full AURUM Breakdown</a>
+        <p class="btn-subtext">Takes you straight to the official presentation. No commitment.</p>
+      </div>
+
+      <!-- FAQ SECTION (MOVED TO BOTTOM) -->
+      <div class="faq-section">
+        <h2>Common Questions</h2>
+
+        <div class="faq-item">
+          <button class="faq-question">Do I need trading experience? <span class="faq-icon">+</span></button>
+          <div class="faq-answer">No. The AI automation angle is specifically designed for people who don't want to manually trade. That's a big part of what drew me toward investigating it further.</div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">What happens after I click the button? <span class="faq-icon">+</span></button>
+          <div class="faq-answer">You'll see the full AURUM presentation. There's no pressure, no commitment — just a more detailed walkthrough of the platform so you can make an informed decision for yourself.</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div style="display:flex; justify-content:center; gap:24px; margin-bottom:20px;">
+        <a href="affiliate-portal.html" style="color:var(--text-muted); text-decoration:none; font-weight:700; font-size:0.85rem; text-transform:uppercase; letter-spacing:0.05em; transition:color 0.2s;" onmouseover="this.style.color='var(--aurum-blue)'" onmouseout="this.style.color='var(--text-muted)'">Partner Program</a>
+      </div>
+      <p><strong>Educational Purposes Only</strong></p>
+      <p style="margin-top:8px;">No earnings claims or guarantees. All digital asset and banking platforms carry risk. Please do your own independent research before making any decisions.</p>
+    </div>
+  </footer>
+
+  <!-- FAQ Accordion JS -->
+  <script>
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+  </script>
+
+  <!-- TRACKING & AFFILIATE LOGIC -->
+  <script src="tracking.js"></script>
+  <script src="skin.js"></script>
+
+</body>
+</html>

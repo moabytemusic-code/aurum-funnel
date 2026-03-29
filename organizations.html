@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organizations & Skinning | AURUM Admin</title>
+  <style>
+    :root {
+      --bg-color: #030712;
+      --panel-bg: #0F172A;
+      --panel-border: rgba(255, 255, 255, 0.08);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --aurum-blue: #0073FF;
+      --aurum-blue-hover: #3898F8;
+      --gold: #D4AF37;
+      --success: #22c55e;
+      --radius: 16px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-color); color: var(--text-main); line-height: 1.6;
+      -webkit-font-smoothing: antialiased; display: flex; min-height: 100vh;
+    }
+
+    /* === SIDEBAR === */
+    .sidebar {
+      width: 260px; background: var(--panel-bg); border-right: 1px solid var(--panel-border);
+      padding: 32px 24px; display: flex; flex-direction: column; position: sticky; top: 0;
+    }
+    .logo { font-weight: 900; font-size: 1.25rem; margin-bottom: 48px; display: flex; align-items: center; gap: 8px; }
+    .logo span { color: var(--aurum-blue); }
+    .nav-item {
+      padding: 12px 16px; border-radius: 12px; color: var(--text-muted); text-decoration: none;
+      font-weight: 600; margin-bottom: 8px; transition: all 0.2s; display: flex; align-items: center; gap: 12px;
+    }
+    .nav-item:hover, .nav-item.active { background: rgba(0, 115, 255, 0.1); color: var(--text-main); }
+    .nav-item.active { border: 1px solid rgba(0, 115, 255, 0.2); }
+
+    /* === MAIN CONTENT === */
+    .main { flex: 1; padding: 40px; overflow-y: auto; }
+    .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+    .header h1 { font-size: 2rem; font-weight: 900; letter-spacing: -0.02em; }
+    .header p { color: var(--text-muted); }
+    
+    .add-btn { 
+      background: var(--aurum-blue); color: #fff; border:none; padding: 10px 20px; 
+      border-radius: 99px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .add-btn:hover { background: var(--aurum-blue-hover); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,115,255,0.3); }
+
+    /* === ORG GRID === */
+    .org-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 24px; margin-bottom: 40px; }
+    .org-card {
+      background: var(--panel-bg); padding: 24px; border-radius: var(--radius);
+      border: 1px solid var(--panel-border); transition: all 0.2s;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .org-card:hover { border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+    
+    .org-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+    .org-swatch { width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+    .org-info h3 { font-size: 1.25rem; font-weight: 800; }
+    .org-code { display:inline-block; margin-top: 4px; padding: 4px 8px; background: rgba(255,255,255,0.05); border-radius: 6px; font-size: 0.75rem; color: var(--text-muted); font-family: monospace; letter-spacing: 0.05em; }
+
+    .org-details p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; }
+    .org-details strong { color: var(--text-main); }
+    
+    .org-actions { display: flex; gap: 12px; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--panel-border); }
+    .action-btn { flex: 1; padding: 8px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; }
+    .btn-edit { background: rgba(255,255,255,0.05); color: var(--text-main); }
+    .btn-edit:hover { background: rgba(255,255,255,0.1); }
+    .btn-link { background: rgba(0,115,255,0.1); color: var(--aurum-blue); }
+    .btn-link:hover { background: rgba(0,115,255,0.2); }
+    .btn-delete { background: rgba(239, 68, 68, 0.1); color: #EF4444; }
+    .btn-delete:hover { background: rgba(239, 68, 68, 0.2); }
+
+    /* === FORM MODAL === */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
+      display: none; align-items: center; justify-content: center; z-index: 999;
+    }
+    .modal {
+      background: var(--panel-bg); padding: 40px; border-radius: 20px; border: 1px solid var(--panel-border);
+      width: 100%; max-width: 500px;
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; text-transform: uppercase; }
+    .form-group input { 
+      width: 100%; padding: 12px 16px; border-radius: 8px; background: var(--bg-color); 
+      border: 1px solid var(--panel-border); color: #fff; font-size: 1rem;
+    }
+    .form-group input:focus { outline: none; border-color: var(--aurum-blue); }
+    .modal-actions { display: flex; gap: 12px; margin-top: 32px; }
+    .modal-actions button { flex: 1; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="logo">AURUM<span>ADMIN</span></div>
+    <nav>
+      <a href="admin.html" class="nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        Dashboard
+      </a>
+      <a href="affiliates.html" class="nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        Affiliates
+      </a>
+      <a href="organizations.html" class="nav-item active">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        Organizations
+      </a>
+      <a href="index.html" class="nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Public Funnel
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="header">
+      <div>
+        <h1>Organization Skins</h1>
+        <p>Manage dynamic branding, colors, and content for team marketing.</p>
+      </div>
+      <button class="add-btn" id="addOrgBtn">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        New Organization
+      </button>
+    </header>
+
+    <div class="org-grid" id="orgContainer">
+      <!-- Orgs injected by JS -->
+    </div>
+  </main>
+
+  <!-- ADD / EDIT MODAL -->
+  <div class="modal-overlay" id="orgModal">
+    <div class="modal">
+      <h2 style="margin-bottom: 24px;" id="modalTitle">Add Organization</h2>
+      <div class="form-group">
+        <label>Organization Code (URL Param)</label>
+        <input type="text" id="orgCode" placeholder="e.g. ALPHA" style="text-transform: uppercase;">
+      </div>
+      <div class="form-group">
+        <label>Brand Name HTML</label>
+        <input type="text" id="orgBrand" placeholder="e.g. ALPHA<span>FINANCE</span>">
+      </div>
+      <div class="form-group">
+        <label>Primary Brand Color (Hex)</label>
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <input type="color" id="orgColorPicker" style="width: 50px; height: 46px; padding: 0; cursor: pointer; background: none; border: none; border-radius: 8px;">
+          <input type="text" id="orgColor" placeholder="e.g. #7C3AED" style="flex: 1;">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Headline (H1)</label>
+        <input type="text" id="orgH1" placeholder="The Strategy...">
+      </div>
+      <div class="form-group">
+        <label>Subtitle (Description)</label>
+        <input type="text" id="orgSub" placeholder="Leverage the Alpha Ecosystem...">
+      </div>
+      <div class="modal-actions">
+        <button style="background: var(--aurum-blue); color: #fff;" onclick="saveOrg()">Save Skin</button>
+        <button style="background: rgba(255,255,255,0.1); color: #fff;" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initial data matching skin.js logic
+    const defaultOrgs = [
+      {
+        code: 'ALPHA',
+        brand: 'ALPHA<span>FINANCE</span>',
+        color: '#7C3AED',
+        h1: 'The Alpha Digital Finance Strategy',
+        sub: 'Leverage the Alpha Ecosystem...'
+      },
+      {
+        code: 'WEALTH',
+        brand: 'WEALTH<span>ADVISORS</span>',
+        color: '#059669',
+        h1: 'Wealth Generation via AI Automation',
+        sub: 'Join the Wealth Advisors network...'
+      },
+      {
+        code: 'GOLD',
+        brand: 'GOLD<span>STANDARD</span>',
+        color: '#D4AF37',
+        h1: 'The Gold Standard of AI Finance',
+        sub: 'Secure your financial future...'
+      }
+    ];
+
+    let orgsData = JSON.parse(localStorage.getItem('aurum_orgs_config')) || defaultOrgs;
+
+    function persistOrgs() {
+      localStorage.setItem('aurum_orgs_config', JSON.stringify(orgsData));
+    }
+
+    // Connect to Supabase to fetch master config
+    (async function initSupabase() {
+      try {
+        if (!window.supabase) {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+          });
+        }
+        const SUPABASE_URL = 'https://cwdawyeiijbcoihobvpb.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_7mcxzRZkMjQcK1CTZjUl_w_AGm9kisr';
+        window.aurumDB = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        const { data, error } = await window.aurumDB.from('aurum_organizations').select('*');
+        if (data && !error && data.length > 0) {
+          orgsData = data;
+          persistOrgs();
+          renderOrgs();
+        }
+      } catch (e) {
+        console.warn('Supabase fetch failed, relying on localStorage cache.', e);
+      }
+    })();
+
+    const orgContainer = document.getElementById('orgContainer');
+    const modal = document.getElementById('orgModal');
+
+    function renderOrgs() {
+      orgContainer.innerHTML = '';
+      orgsData.forEach((org, index) => {
+        // Strip HTML span for raw readout
+        const cleanBrand = org.brand.replace(/<[^>]+>/g, '');
+        
+        orgContainer.innerHTML += `
+          <div class="org-card">
+            <div>
+              <div class="org-header">
+                <div class="org-swatch" style="background: linear-gradient(135deg, ${org.color}, #555);"></div>
+                <div class="org-info">
+                  <h3>${cleanBrand}</h3>
+                  <div class="org-code">?org=${org.code}</div>
+                </div>
+              </div>
+              <div class="org-details">
+                <p><strong>Brand HTML:</strong> ${org.brand.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
+                <p><strong>Color:</strong> ${org.color}</p>
+                <p><strong>Headline:</strong> "${org.h1}"</p>
+                <p><strong>Subtitle:</strong> "${org.sub || ''}"</p>
+              </div>
+            </div>
+            <div class="org-actions">
+              <button class="action-btn btn-edit" onclick="editOrg(${index})">Edit Skin</button>
+              <button class="action-btn btn-link" onclick="copyLink('${org.code}')">Copy Link</button>
+              <button class="action-btn btn-delete" onclick="deleteOrg(${index})">Delete</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function copyLink(code) {
+      const url = window.location.origin + '/?org=' + code;
+      navigator.clipboard.writeText(url);
+      alert('Copied testing link: ' + url);
+    }
+
+    const colorPicker = document.getElementById('orgColorPicker');
+    const colorText = document.getElementById('orgColor');
+
+    colorPicker.addEventListener('input', (e) => {
+      colorText.value = e.target.value.toUpperCase();
+    });
+
+    colorText.addEventListener('input', (e) => {
+      if (e.target.value.length === 7 && e.target.value.startsWith('#')) {
+        colorPicker.value = e.target.value;
+      }
+    });
+
+    document.getElementById('addOrgBtn').onclick = () => {
+      document.getElementById('modalTitle').innerText = 'New Organization';
+      document.getElementById('orgCode').value = '';
+      document.getElementById('orgBrand').value = '';
+      document.getElementById('orgColor').value = '#0073FF';
+      colorPicker.value = '#0073FF';
+      document.getElementById('orgH1').value = '';
+      document.getElementById('orgSub').value = '';
+      modal.style.display = 'flex';
+    };
+
+    function editOrg(index) {
+      const org = orgsData[index];
+      document.getElementById('modalTitle').innerText = 'Edit Organization';
+      document.getElementById('orgCode').value = org.code;
+      document.getElementById('orgBrand').value = org.brand;
+      document.getElementById('orgColor').value = org.color;
+      
+      try { 
+        colorPicker.value = org.color.length === 7 ? org.color : '#0073FF'; 
+      } catch(e) {}
+      
+      document.getElementById('orgH1').value = org.h1;
+      document.getElementById('orgSub').value = org.sub || '';
+      modal.style.display = 'flex';
+    }
+
+    async function deleteOrg(index) {
+      if (!confirm('Are you sure you want to delete this organization?')) return;
+      const deletedCode = orgsData[index].code;
+      
+      if (window.aurumDB) {
+        const { error } = await window.aurumDB.from('aurum_organizations').delete().eq('code', deletedCode);
+        if (error) {
+          console.error("Supabase Delete Error:", error);
+          alert("Failed to delete from database: " + error.message);
+          return;
+        }
+      }
+      
+      orgsData.splice(index, 1);
+      persistOrgs();
+      renderOrgs();
+    }
+
+    function closeModal() {
+      modal.style.display = 'none';
+    }
+
+    async function saveOrg() {
+      const code = document.getElementById('orgCode').value.toUpperCase();
+      if (!code) return alert('Code is required.');
+
+      const newOrg = {
+        code,
+        brand: document.getElementById('orgBrand').value || code,
+        color: document.getElementById('orgColor').value || '#0073FF',
+        h1: document.getElementById('orgH1').value || 'AI Finance Strategy',
+        sub: document.getElementById('orgSub').value || 'Secure your financial future...'
+      };
+
+      if (window.aurumDB) {
+        const { error } = await window.aurumDB.from('aurum_organizations').upsert(newOrg, { onConflict: 'code' });
+        if (error) {
+          console.error("Supabase Save Error:", error);
+          alert("Failed to save to database: " + error.message);
+          return;
+        }
+      }
+
+      const existingIndex = orgsData.findIndex(o => o.code === code);
+      if (existingIndex >= 0) {
+        orgsData[existingIndex] = newOrg;
+      } else {
+        orgsData.push(newOrg);
+      }
+
+      persistOrgs();
+      renderOrgs();
+      closeModal();
+    }
+
+    renderOrgs();
+  </script>
+</body>
+</html>
