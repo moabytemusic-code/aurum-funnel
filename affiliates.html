@@ -249,7 +249,6 @@
              password: password,
              affiliate_code: customCode,
              status: 'active',
-             payment_status: 'paid', // EXPLICIT CHECKOUT BYPASS
              is_rotator: false,
              rotator_pool: null
           }]);
@@ -266,7 +265,6 @@
              full_name: 'VIP Partner',
              email: email.toLowerCase(),
              status: 'active',
-             payment_status: 'paid',
              membership_start: new Date().toISOString()
           }]);
 
@@ -372,15 +370,15 @@
             ? `<span class="rotator-pool-text" title="${aff.rotator_pool}">${aff.rotator_pool}</span>` 
             : `<em style="color:#475569; font-size:0.8rem;">Standard Link</em>`;
 
-        const row = \`
+        const row = `
           <tr>
-            <td style="color:var(--text-muted); font-size:0.85rem;">\${dateStr}</td>
-            <td style="font-weight:600;">\${aff.email || 'Unknown'}</td>
-            <td><span class="badge \${badgeClass}">\${codeDisplay}</span></td>
-            <td>\${pwDisplay}</td>
-            <td>\${poolDisplay}</td>
+            <td style="color:var(--text-muted); font-size:0.85rem;">${dateStr}</td>
+            <td style="font-weight:600;">${aff.email || 'Unknown'}</td>
+            <td><span class="badge ${badgeClass}">${codeDisplay}</span></td>
+            <td>${pwDisplay}</td>
+            <td>${poolDisplay}</td>
           </tr>
-        \`;
+        `;
         affBody.innerHTML += row;
       });
 

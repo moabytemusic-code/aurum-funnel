@@ -280,8 +280,7 @@
              email: email.trim().toLowerCase(),
              password: 'vip-' + Math.floor(Math.random() * 9000 + 1000), // temp password
              affiliate_code: 'TEAM-' + customCode,
-             status: 'active',
-             payment_status: 'paid' // THIS ONE IS CORRECT
+             status: 'active'
           }]);
 
         if (affError) console.warn("Affiliate sync failed:", affError);
