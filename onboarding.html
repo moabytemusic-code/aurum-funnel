@@ -285,7 +285,7 @@
       try {
         const { data, error } = await aurumDB
           .from('aurum_affiliates')
-          .select('full_name, email, phone, instructions')
+          .select('full_name, email, phone, instructions, affiliate_id')
           .eq('affiliate_code', ref)
           .single();
 
@@ -309,6 +309,20 @@
             if (data.instructions) {
                 document.getElementById('sponsor-instructions-zone').classList.remove('hidden');
                 document.getElementById('team-message-text').innerText = data.instructions;
+            }
+
+            // DYNAMIC LINK BRIDGE: Update Final Join Button
+            if (data.affiliate_id) {
+                const finalBtn = document.getElementById('final-join-btn');
+                if (finalBtn) {
+                   // Clean the URL to ensure it starts with https:// if it's a domain
+                   let targetUrl = data.affiliate_id.trim();
+                   if (!targetUrl.startsWith('http')) {
+                       targetUrl = `https://${targetUrl}`;
+                   }
+                   finalBtn.href = targetUrl;
+                   console.log("Tracking Bridge Established:", targetUrl);
+                }
             }
         }
       } catch (e) { console.warn("Sponsor Lookup Error", e); }
