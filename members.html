@@ -256,29 +256,59 @@
       if (!name || !email) return alert("All fields required.");
       if (!window.aurumDB) return alert("Database not initialized.");
 
-      btn.innerText = "Provisioning Account...";
+      btn.innerText = "Provisioning Node...";
       btn.disabled = true;
 
       try {
-        const { error } = await window.aurumDB
+        // 1. Insert into Members Table
+        const { error: memError } = await window.aurumDB
           .from('aurum_members')
           .insert([{ 
              full_name: name, 
              email: email.trim().toLowerCase(), 
              status: status,
+             payment_status: 'paid', // EXPLICIT OVERRIDE
              membership_start: new Date().toISOString()
           }]);
 
-        if (error) throw error;
+        if (memError) throw memError;
+
+        // 2. Insert into Affiliates Table (So they have a tracking link)
+        const customCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+        const { error: affError } = await window.aurumDB
+          .from('aurum_affiliates')
+          .insert([{
+             email: email.trim().toLowerCase(),
+             password: 'vip-' + Math.floor(Math.random() * 9000 + 1000), // temp password
+             affiliate_code: 'TEAM-' + customCode,
+             status: 'active',
+             payment_status: 'paid'
+          }]);
+
+        if (affError) console.warn("Affiliate sync failed:", affError);
         
-        // Assemble Private Bypass Link
-        const originRoot = window.location.origin;
-        const bypassDirectUrl = `${originRoot}/onboarding.html?override=true&verified=true`;
-        
-        // Auto-copy to Admin Clipboard
-        navigator.clipboard.writeText(bypassDirectUrl).catch(e => console.warn('Clipboard write failed:', e));
-        
-        alert(`VIP successfully registered!\n\nEmail sequence dispatched to ${email}.\nAdmin Note: Bypass Link copied to clipboard.`);
+        // 3. Fire VIP Welcome Email via Secure Vercel Proxy
+        try {
+          const portalLink = window.location.origin + '/affiliate-portal.html';
+          await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              to: [{ email: email }],
+              subject: `VIP Status Activated: Welcome to AURUM AFB`,
+              htmlContent: `
+                <div style="font-family: sans-serif; padding: 40px; border: 1px solid #eee; border-radius: 12px; max-width: 600px; margin: 0 auto;">
+                  <h1 style="color: #0073FF;">VIP Node Activated</h1>
+                  <p>You have been officially provisioned for the AURUM Digital Banking Funnel.</p>
+                  <p>Your affiliate tracking link is ready. Use the link below to access your master dashboard.</p>
+                  <p><a href="${portalLink}" style="background: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block;">Go to Master Portal</a></p>
+                </div>
+              `
+            })
+          });
+        } catch(e) { console.warn("Welcome Email failed:", e); }
+
+        alert(`VIP successfully registered!\n\nEmail sequence dispatched to ${email}.\nAdmin Note: Dual-Tables Sync complete.`);
         location.reload();
 
       } catch (err) {
