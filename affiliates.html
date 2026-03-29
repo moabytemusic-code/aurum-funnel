@@ -141,9 +141,62 @@
           <input type="text" id="new-code" placeholder="e.g. ALPHA">
           <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">Leave blank to auto-generate standard `1W145K` style code.</p>
         </div>
+        
+        <!-- NEW CONTACT FIELDS -->
+        <div class="form-group">
+          <label>Partner Phone Number (Optional)</label>
+          <input type="tel" id="new-phone" placeholder="+1 (555) 000-0000">
+        </div>
+        <div class="form-group">
+          <label>Onboarding Instructions (Optional)</label>
+          <textarea id="new-instructions" placeholder="e.g. Welcome to the team! Message me for your private link." style="width: 100%; height: 80px; padding: 12px; border: 1px solid var(--panel-border); border-radius: 8px; background: #fff; font-family: inherit; font-size: 0.9rem; resize: none;"></textarea>
+        </div>
+
+        <div class="form-group" style="display:flex; gap:20px; align-items:center; margin-bottom: 24px;">
+          <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+            <input type="checkbox" id="grant-rotator" style="width:20px; height:20px; cursor:pointer;"> Master Rotator
+          </label>
+          <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+            <input type="checkbox" id="grant-whitelabel" style="width:20px; height:20px; cursor:pointer;"> White Label
+          </label>
+        </div>
 
         <button onclick="saveVIPAffiliate()" id="saveBtn" style="width: 100%; padding: 16px; border-radius: 12px; background: var(--aurum-blue); color: #fff; font-weight: 800; border: none; cursor: pointer; margin-top: 10px;">Provision Affiliate Node →</button>
         <button onclick="closeModal()" style="width: 100%; background: none; border: none; color: var(--text-muted); margin-top: 16px; cursor: pointer; font-weight: 700; font-size: 0.85rem;">Cancel</button>
+      </div>
+    </div>
+
+    <!-- EDIT MODAL -->
+    <div id="editAffiliateModal" class="modal-overlay">
+      <div class="modal-content">
+        <h2 style="margin-bottom: 8px; font-weight: 900;">Edit Partner Node</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">Modify attribution, status, and rotator settings for this node.</p>
+        
+        <input type="hidden" id="edit-original-email">
+
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="edit-name" placeholder="John Doe">
+        </div>
+        <div class="form-group">
+          <label>Attribution ID (Node Code)</label>
+          <input type="text" id="edit-code" placeholder="e.g. ALPHA">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:800; color:var(--gold);">
+            <input type="checkbox" id="edit-is-rotator" style="width:20px; height:20px; cursor:pointer;" onchange="toggleEditPool(this.checked)"> Master Rotator Mode
+          </label>
+        </div>
+
+        <div class="form-group" id="edit-pool-zone" style="display:none;">
+          <label>Rotator Pool (Comma Separated IDs)</label>
+          <textarea id="edit-pool" placeholder="User1, User2, User3" style="width: 100%; height: 80px; padding: 12px; border: 1px solid var(--panel-border); border-radius: 8px; background: #fff; font-family: inherit; font-size: 0.9rem; resize: none;"></textarea>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">Traffic will rotate sequentially through these IDs.</p>
+        </div>
+
+        <button onclick="saveEditAffiliate()" id="editSaveBtn" style="width: 100%; padding: 16px; border-radius: 12px; background: var(--aurum-blue); color: #fff; font-weight: 800; border: none; cursor: pointer; margin-top: 10px;">Save Node Changes →</button>
+        <button onclick="closeEditModal()" style="width: 100%; background: none; border: none; color: var(--text-muted); margin-top: 16px; cursor: pointer; font-weight: 700; font-size: 0.85rem;">Cancel</button>
       </div>
     </div>
 
@@ -258,16 +311,22 @@
         customCode = 'TEAM-' + customCode; // Keep enterprise formatting
       }
 
+      const grantRotator = document.getElementById('grant-rotator').checked;
+      const grantWhiteLabel = document.getElementById('grant-whitelabel').checked;
+
       try {
         // 1. Insert into Affiliates Table (Tracking)
         const { error: affError } = await window.aurumDB
           .from('aurum_affiliates')
           .insert([{ 
+             full_name: document.getElementById('new-code').value ? 'Agency Partner' : 'VIP Partner',
              email: email.toLowerCase(), 
              password: password,
              affiliate_code: customCode,
+             phone: document.getElementById('new-phone').value.trim(),
+             instructions: document.getElementById('new-instructions').value.trim(),
              status: 'active',
-             is_rotator: false,
+             is_rotator: grantRotator,
              rotator_pool: null
           }]);
 
@@ -280,7 +339,7 @@
         const { error: memError } = await window.aurumDB
           .from('aurum_members')
           .insert([{
-             full_name: 'VIP Partner',
+             full_name: document.getElementById('new-code').value ? 'Agency Partner' : 'VIP Partner',
              email: email.toLowerCase(),
              status: 'active',
              membership_start: new Date().toISOString()
@@ -399,7 +458,8 @@
             <td><span class="badge ${aff.status === 'trialing' ? 'badge-blue' : 'badge-gold'}">${aff.status.toUpperCase()}</span></td>
             <td>${pwDisplay}</td>
             <td>${poolDisplay}</td>
-            <td style="text-align:right;">
+            <td style="text-align:right; display:flex; gap:12px; justify-content:flex-end; align-items:center;">
+              <button onclick='openEditModal(${JSON.stringify(aff)})' style="background:none; border:none; color:var(--aurum-blue); font-weight:900; cursor:pointer; font-size:0.75rem; letter-spacing:0.05em;">EDIT</button>
               <button onclick="openDeleteModal('${aff.email}')" style="background:none; border:none; color:#ef4444; font-weight:900; cursor:pointer; font-size:0.75rem; opacity:0.7; letter-spacing:0.05em; transition: opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">PURGE ×</button>
             </td>
           </tr>
@@ -453,7 +513,55 @@
         closeDeleteModal();
       }
     }
+    // === EDIT MODAL LOGIC ===
+    function openEditModal(aff) {
+      document.getElementById('edit-original-email').value = aff.email;
+      document.getElementById('edit-name').value = aff.full_name || '';
+      document.getElementById('edit-code').value = aff.affiliate_code || '';
+      document.getElementById('edit-is-rotator').checked = aff.is_rotator || false;
+      document.getElementById('edit-pool').value = aff.rotator_pool || '';
+      
+      toggleEditPool(aff.is_rotator);
+      document.getElementById('editAffiliateModal').style.display = 'flex';
+    }
 
+    function closeEditModal() { document.getElementById('editAffiliateModal').style.display = 'none'; }
+    function toggleEditPool(show) { document.getElementById('edit-pool-zone').style.display = show ? 'block' : 'none'; }
+
+    async function saveEditAffiliate() {
+      const email = document.getElementById('edit-original-email').value;
+      const name = document.getElementById('edit-name').value;
+      const code = document.getElementById('edit-code').value.trim();
+      const isRotator = document.getElementById('edit-is-rotator').checked;
+      const pool = document.getElementById('edit-pool').value;
+      const btn = document.getElementById('editSaveBtn');
+
+      btn.innerText = "Updating Node...";
+      btn.disabled = true;
+
+      try {
+        const { error } = await window.aurumDB
+          .from('aurum_affiliates')
+          .update({
+            full_name: name,
+            affiliate_code: code,
+            is_rotator: isRotator,
+            rotator_pool: isRotator ? pool : null
+          })
+          .eq('email', email);
+
+        if (error) throw error;
+
+        closeEditModal();
+        fetchAffiliates();
+        alert(`Node updated: ${email}`);
+      } catch (err) {
+        alert("Update failed: " + err.message);
+      } finally {
+        btn.innerText = "Save Node Changes →";
+        btn.disabled = false;
+      }
+    }
     // Auto-fetch Supabase on load
     fetchAffiliates();
   </script>

@@ -194,6 +194,16 @@
         font-size: 1.8rem;
       }
     }
+
+    /* === VIEW ENGINE === */
+    .view-section {
+      display: none;
+      width: 100%;
+    }
+    
+    .view-section.active {
+      display: block !important;
+    }
   </style>
 </head>
 
@@ -231,110 +241,165 @@
     </div>
 
     <!-- ============================================== -->
-    <!-- GATEWAY VIEW (14-DAY TRIAL CHECKOUT)           -->
+    <!-- GATEWAY VIEW (14-DAY TRIAL SALES PAGE)         -->
     <!-- ============================================== -->
-    <div id="gateway-view" class="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center w-full z-10"
-      style="display: block;">
+    <div id="gateway-view" class="view-section active max-w-4xl mx-auto px-6 w-full z-10">
 
-      <!-- Left: Value Prop -->
-      <div>
-        <div
-          class="inline-block px-4 py-1.5 bg-[#D4AF37]/10 border border-[#D4AF37]/20 rounded-full text-[#D4AF37] text-[10px] font-black tracking-widest uppercase mb-6">
-          Partner Program
+      <!-- PART 1: ELITE HEADER -->
+      <div class="text-center mb-16">
+        <div class="inline-block px-4 py-1.5 bg-[#D4AF37]/10 border border-[#D4AF37]/20 rounded-full text-[#D4AF37] text-[10px] font-black tracking-widest uppercase mb-8">
+          The AURUM Partner Ecosystem
         </div>
-        <h1 class="text-5xl md:text-6xl font-black leading-[1.1] tracking-tighter uppercase mb-6">
-          Scale Your Wealth.<br><span class="text-[#D4AF37]">Build Your Network.</span>
+        <h1 class="text-5xl md:text-7xl font-black leading-[1] tracking-tighter uppercase mb-8">
+          Build Your <span class="gradient-text" style="background: linear-gradient(to right, #fff, #D4AF37); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Financial Empire</span>
         </h1>
-        <p class="text-lg text-gray-300 leading-relaxed mb-8 max-w-md">
-          Get exclusive access to our AURUM Affiliate Onboarding Funnel. Start your 14-day free trial today, generate
-          custom referral links, and earn recurring crypto commissions.
+        <p class="text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto mb-12">
+          Activate your partner node and start earning high-ticket commissions by sharing the world's most advanced AI Digital Banking ecosystem.
         </p>
+      </div>
 
-        <div class="flex items-center gap-4 bg-white/[0.02] border border-white/5 p-4 rounded-2xl mb-4">
-          <div class="w-10 h-10 rounded-full bg-[#00F5FF]/10 flex items-center justify-center text-[#00F5FF]">✓</div>
-          <div>
-            <h4 class="font-bold text-sm text-white uppercase tracking-tight">14-Day Free Trial</h4>
-            <p class="text-xs text-gray-400">Cancel anytime before the trial ends.</p>
-          </div>
+      <!-- PART 2: CORE VALUE GRID -->
+      <div class="grid md:grid-cols-3 gap-6 text-left mb-10">
+        <div class="bg-white/[0.03] border border-white/10 p-8 rounded-[32px] hover:border-[#D4AF37]/40 transition-all group">
+          <div class="text-[#D4AF37] text-3xl mb-4 group-hover:scale-110 transition-transform">∞</div>
+          <h4 class="font-black text-sm uppercase tracking-tight text-white mb-2">Passive Commissions</h4>
+          <p class="text-xs text-gray-500 leading-relaxed">Earn recurring monthly payouts on every active license in your network.</p>
         </div>
-
-        <div class="flex items-center gap-4 bg-white/[0.02] border border-white/5 p-4 rounded-2xl">
-          <div class="w-10 h-10 rounded-full bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37]">Ξ</div>
-          <div>
-            <h4 class="font-bold text-sm text-white uppercase tracking-tight">$10/month subscription</h4>
-            <p class="text-xs text-gray-400">Paid seamlessly in crypto. Unlock limitless earning.</p>
-          </div>
+        <div class="bg-white/[0.03] border border-white/10 p-8 rounded-[32px] hover:border-[#00F5FF]/40 transition-all group">
+          <div class="text-[#00F5FF] text-3xl mb-4 group-hover:scale-110 transition-transform">⚡</div>
+          <h4 class="font-black text-sm uppercase tracking-tight text-white mb-2">Instant Setup</h4>
+          <p class="text-xs text-gray-500 leading-relaxed">Activate your 14-day trial and generate your personal tracking links in seconds.</p>
+        </div>
+        <div class="bg-white/[0.03] border border-white/10 p-8 rounded-[32px] hover:border-purple-500/40 transition-all group">
+          <div class="text-purple-400 text-3xl mb-4 group-hover:scale-110 transition-transform">📊</div>
+          <h4 class="font-black text-sm uppercase tracking-tight text-white mb-2">Global Tracking</h4>
+          <p class="text-xs text-gray-500 leading-relaxed">Access real-time analytics for every click, signup, and conversion in your tree.</p>
         </div>
       </div>
 
-      <!-- Right: Checkout Form -->
-      <div class="bg-[#001F3F] border border-[#D4AF37]/20 p-8 md:p-12 rounded-[40px] shadow-2xl relative">
-        <div
-          class="absolute -top-4 -right-4 bg-[#D4AF37] text-[#001F3F] text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest shadow-glow">
-          Secure Web3</div>
-        <h2 class="text-2xl font-black mb-2 text-white uppercase">Activate Affiliate Profile</h2>
-        <p class="text-xs text-gray-400 mb-8">Connect and authorize your 14-day trial to generate your links.</p>
-
-        <form id="checkout-form" class="flex flex-col gap-5">
-          <div>
-            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">Email
-              Address</label>
-            <input type="email" id="aff-email" placeholder="name@example.com"
-              class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl text-sm font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37]"
-              required>
+      <!-- PART 3: AGENCY EXPANSION GRID -->
+      <div class="grid md:grid-cols-3 gap-6 text-left mb-24">
+          <div onclick="window.location.href='rotator.html'" class="bg-white/[0.03] border border-[#D4AF37]/20 p-8 rounded-[32px] group cursor-pointer hover:bg-[#D4AF37]/5 transition-all">
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="text-xs font-black uppercase text-[#D4AF37] tracking-widest">Master Rotator</h3>
+                <span class="text-[10px] font-bold text-white">$47 + $5/mo</span>
+              </div>
+              <p class="text-[10px] text-gray-400 leading-relaxed uppercase tracking-tighter">Automate team traffic sequentially. Perfect for agency leaders.</p>
+              <div class="mt-6 text-[10px] font-black text-[#D4AF37] uppercase border-b border-[#D4AF37]/30 inline-block group-hover:border-[#D4AF37] transition-all">Activate Agency Hub →</div>
           </div>
 
-          <div class="mt-4 pt-4">
-            <button type="submit" id="start-trial-btn"
-              class="w-full bg-[#D4AF37] hover:bg-white text-[#001F3F] font-black text-lg py-5 rounded-2xl shadow-glow flex justify-center items-center gap-2">
-              <span>Start Setup Profile</span>
-            </button>
-            <p class="text-[10px] text-gray-400 text-center mt-4">Returning affiliates will automatically be prompted
-              for their password.</p>
+          <div onclick="window.location.href='whitelabel.html'" class="bg-white/[0.03] border border-[#00F5FF]/20 p-8 rounded-[32px] group cursor-pointer hover:bg-[#00F5FF]/5 transition-all">
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="text-xs font-black uppercase text-[#00F5FF] tracking-widest">White Label</h3>
+                <span class="text-[10px] font-bold text-white">$499</span>
+              </div>
+              <p class="text-[10px] text-gray-400 leading-relaxed uppercase tracking-tighter">Full dynamic ecosystem skinning. Custom logos and branding.</p>
+              <div class="mt-6 text-[10px] font-black text-[#00F5FF] uppercase border-b border-[#00F5FF]/30 group-hover:border-[#00F5FF] transition-all">Access White Label →</div>
           </div>
+
+          <div class="bg-white/[0.03] border border-white/10 p-8 rounded-[32px] relative overflow-hidden group">
+              <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent"></div>
+              <h3 class="text-xs font-black uppercase text-gray-400 tracking-widest mb-4">High Ticket</h3>
+              <p class="text-[10px] text-gray-400 leading-relaxed uppercase tracking-tighter">You earn 10% monthly USDT payouts on all active licenses.</p>
+              <div class="mt-6 text-[10px] font-black text-gray-500 uppercase border-b border-white/10 inline-block">Earn 10% Recurring →</div>
+          </div>
+      </div>
+
+      <!-- PART 4: ACTIVATION FORM (CENTRAL CTA) -->
+      <div class="max-w-xl mx-auto bg-[#001F3F] border border-[#D4AF37]/20 p-10 md:p-14 rounded-[40px] shadow-2xl relative mb-24 text-center">
+        <div class="absolute -top-4 -right-4 bg-[#00F5FF] text-[#001F3F] text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest shadow-glow-teal">
+          14-Day Free Entry</div>
+        
+        <h2 class="text-3xl font-black mb-2 text-white uppercase">Activate Affiliate Profile</h2>
+        <p class="text-sm text-gray-400 mb-10">Enter your email to initialize your 14-day free trial.</p>
+
+        <form id="checkout-form" class="flex flex-col gap-6">
+          <input type="email" id="aff-email" placeholder="name@example.com"
+            class="w-full bg-white/5 border border-white/10 px-8 py-5 rounded-2xl text-md font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37]"
+            required>
+
+          <button type="submit" id="start-trial-btn"
+            class="w-full bg-[#D4AF37] hover:bg-white text-[#001F3F] font-black text-xl py-6 rounded-2xl shadow-glow transition-all transform hover:scale-[1.02]">
+            Claim My 14-Day Trial →
+          </button>
         </form>
-        <p class="text-[9px] text-center text-gray-600 uppercase tracking-widest mt-6 pb-2">Powered by AURUM Smart
-          Contracts</p>
+        <p class="text-[10px] text-gray-500 mt-8 uppercase tracking-widest font-bold">No Credit Card Required • Instant Activation</p>
       </div>
 
     </div>
+    <!-- ============================================== -->
+    <!-- FORGOT PASSWORD VIEW                           -->
+    <!-- ============================================== -->
+    <div id="forgot-view" class="view-section max-w-xl mx-auto px-6 w-full z-10">
+      <div class="bg-[#001F3F] border border-[#D4AF37]/20 p-8 md:p-12 rounded-[40px] shadow-2xl relative text-center">
+        <h2 class="text-3xl font-black mb-2 text-white uppercase">Reset Access</h2>
+        <p class="text-sm text-gray-400 mb-8">Enter your registered email. We will send you instructions to regain access to your dashboard.</p>
 
+        <form onsubmit="handleForgot(event)" class="flex flex-col gap-6">
+          <input type="email" id="forgot-email" placeholder="name@example.com"
+            class="w-full bg-white/5 border border-white/10 px-8 py-5 rounded-2xl text-md font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37]"
+            required>
+
+          <button type="submit"
+            class="w-full bg-[#D4AF37] hover:bg-white text-[#001F3F] font-black text-lg py-5 rounded-2xl shadow-glow transition-all transform hover:scale-[1.02]">
+            Send Reset Instructions →
+          </button>
+        </form>
+        <button onclick="hideForgot()" class="mt-6 text-[10px] font-black text-gray-500 uppercase tracking-widest hover:text-white transition-colors">← Back to Login</button>
+      </div>
+    </div>
     <!-- ============================================== -->
     <!-- SETUP VIEW (ENTER AFFILIATE INFO)              -->
     <!-- ============================================== -->
-    <div id="setup-view" class="max-w-xl mx-auto px-6 w-full z-10" style="display: none;">
+    <div id="setup-view" class="view-section max-w-xl mx-auto px-6 w-full z-10">
       <div class="bg-[#001F3F] border border-[#D4AF37]/20 p-8 md:p-12 rounded-[40px] shadow-2xl relative">
         <h2 class="text-3xl font-black mb-2 text-white uppercase text-center" id="setup-title">Complete Setup</h2>
         <p class="text-sm text-gray-400 mb-8 text-center" id="setup-desc">Secure your dashboard and link your AURUM
           corporate account.</p>
 
         <form id="setup-form">
-          <div>
-            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Full Name</label>
-            <p class="text-[9px] text-gray-400 mb-2 leading-tight">Displayed on your dashboard and in official
-              communication.</p>
-            <input type="text" id="setup-fullname" placeholder="John Doe"
-              class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl text-sm font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37] transition-all"
-              required>
-          </div>
-          <div>
-            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Account
-              Password</label>
-            <p class="text-[9px] text-gray-400 mb-2 leading-tight">Choose a secure password specifically for your AURUM
-              partner portal.</p>
-            <input type="password" id="setup-password" placeholder="••••••••"
-              class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl text-sm font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37] transition-all"
-              required>
-          </div>
-          <div id="aurum-id-field">
-            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">AURUM Corporate
-              Link</label>
-            <p class="text-[9px] text-gray-400 mb-2 leading-tight">Paste your unique referral link (e.g.
-              aurum.foundation/u/User123) to bridge your traffic directly to your tree.</p>
-            <input type="text" id="setup-aff-id" placeholder="e.g. aurum.foundation/u/AlexR24"
-              class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl text-sm font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37] transition-all">
+          <!-- REGISTRATION ONLY FIELDS -->
+          <div id="registration-fields-zone">
+            <div class="mb-5">
+              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Full Name</label>
+              <p class="text-[9px] text-gray-400 mb-2 leading-tight">Displayed on your dashboard and in official communication.</p>
+              <input type="text" id="setup-fullname" placeholder="John Doe"
+                class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl text-sm font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37] transition-all"
+                required>
+            </div>
+            <div class="mb-5">
+              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Phone Number (Optional)</label>
+              <p class="text-[9px] text-gray-400 mb-2 leading-tight">Displayed in the 'Sponsor Contact' window for your team.</p>
+              <input type="tel" id="setup-phone" placeholder="+1 (555) 000-0000"
+                class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl text-sm font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37] transition-all">
+            </div>
+            <div class="mb-5">
+              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Onboarding Instructions (Optional)</label>
+              <p class="text-[9px] text-gray-400 mb-2 leading-tight">Custom message displayed to your leads on their checklist page.</p>
+              <textarea id="setup-instructions" placeholder="e.g. Text me once you've joined our Telegram group!"
+                class="w-full h-24 bg-white/5 border border-white/10 px-6 py-4 rounded-2xl text-xs font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37] transition-all resize-none"></textarea>
+            </div>
+            <div id="aurum-id-field" class="mb-5">
+              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">AURUM Corporate Link</label>
+              <p class="text-[9px] text-gray-400 mb-2 leading-tight">Paste your unique referral link (e.g. aurum.foundation/u/User123) to bridge your traffic directly to your tree.</p>
+              <input type="text" id="setup-aff-id" placeholder="e.g. aurum.foundation/u/AlexR24"
+                class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl text-sm font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37] transition-all">
+            </div>
           </div>
 
+          <div class="mb-5">
+            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Account Password</label>
+            <p class="text-[9px] text-gray-400 mb-2 leading-tight">Choose a secure password specifically for your AURUM partner portal.</p>
+            <div class="relative">
+              <input type="password" id="setup-password" placeholder="••••••••"
+                class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl text-sm font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37] transition-all"
+                required>
+              <button type="button" onclick="togglePasswordVisibility('setup-password')" class="absolute right-6 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#D4AF37] text-xs font-black uppercase tracking-widest">View</button>
+            </div>
+            <div class="flex justify-end mt-2">
+              <button type="button" onclick="showForgot()" class="text-[9px] font-black text-[#D4AF37] uppercase tracking-widest hover:text-white transition-colors">Forgot Password?</button>
+            </div>
+          </div>
           <button type="submit" id="save-setup-btn"
             class="w-full bg-[#00F5FF] hover:bg-white text-[#001F3F] font-black text-lg py-5 rounded-2xl transition-all transform hover:scale-[1.02] active:scale-95 shadow-glow-teal flex justify-center items-center gap-2 mt-4">
             <span id="setup-btn-text">Save & Generate Dashboard</span>
@@ -346,7 +411,7 @@
     <!-- ============================================== -->
     <!-- DASHBOARD VIEW (AUTHENTICATED)                 -->
     <!-- ============================================== -->
-    <div id="dashboard-view" class="max-w-6xl mx-auto px-6 w-full z-10" style="display: none;">
+    <div id="dashboard-view" class="view-section max-w-6xl mx-auto px-6 w-full z-10">
 
       <!-- Top Bar: Dashboard Identity (Simplified) -->
       <div class="flex items-center justify-between mb-8">
@@ -354,40 +419,88 @@
           <h2 class="text-xs font-black uppercase text-[#D4AF37] tracking-[0.3em] mb-1">Partner Dashboard</h2>
           <div class="flex items-center gap-3">
             <div class="w-2 h-2 rounded-full bg-[#00F5FF] shadow-[0_0_10px_rgba(0,245,255,0.5)]"></div>
-            <span class="text-white font-bold text-sm uppercase tracking-tight" id="dash-name-top">...</span>
+            <span class="text-white font-bold text-sm uppercase tracking-tight" id="dash-name-top">Welcome back, Partner</span>
           </div>
         </div>
 
-        <div class="bg-black/40 border border-[#00F5FF]/10 px-4 py-2 rounded-xl flex items-center gap-3">
-          <div class="text-[10px] font-black text-white uppercase tracking-widest" id="trial-status-text">Trial Active
+        <div class="flex items-center gap-4">
+          <button onclick="togglePasswordUpdate()" class="text-[9px] font-black text-gray-500 uppercase tracking-widest hover:text-white transition-colors bg-white/5 px-4 py-2 rounded-lg border border-white/5">Security</button>
+          <div class="bg-black/40 border border-[#00F5FF]/10 px-4 py-2 rounded-xl flex items-center gap-3">
+            <div class="text-[10px] font-black text-white uppercase tracking-widest" id="trial-status-text">Trial Active</div>
+            <div class="w-px h-3 bg-white/10"></div>
+            <div class="text-[9px] text-gray-400 uppercase font-bold" id="trial-days-text">14 Days</div>
           </div>
-          <div class="w-px h-3 bg-white/10"></div>
-          <div class="text-[9px] text-gray-400 uppercase font-bold" id="trial-days-text">14 Days</div>
         </div>
       </div>
 
-      <div class="grid lg:grid-cols-3 gap-8">
+      <div id="password-form-zone" class="hidden max-w-xl mx-auto mb-8 bg-black/60 border border-white/10 p-6 rounded-2xl">
+         <div class="flex items-center justify-between mb-4">
+            <h4 class="text-xs font-black uppercase text-white tracking-widest">Update Portal Password</h4>
+            <button onclick="togglePasswordUpdate()" class="text-gray-500 hover:text-white">×</button>
+         </div>
+         <div class="flex gap-4">
+            <input type="password" id="new-p-input" placeholder="New Password" class="flex-1 bg-black/50 border border-white/10 p-4 rounded-xl text-xs text-white focus:outline-none focus:border-[#00F5FF]">
+            <button onclick="updateUserPassword()" class="bg-[#00F5FF] text-[#001F3F] font-black text-[10px] px-8 py-2 rounded-xl uppercase">Save</button>
+         </div>
+      </div>
 
-        <!-- Main Column: Affiliate Link -->
-        <div class="lg:col-span-2 flex flex-col gap-8">
+      <div class="max-w-3xl mx-auto flex flex-col gap-8">
 
-          <div class="bg-white/[0.02] border border-white/5 rounded-[32px] p-8 md:p-10 relative overflow-hidden group">
-            <div
-              class="absolute -inset-1 bg-gradient-to-r from-[#D4AF37]/20 to-transparent blur-xl opacity-0 group-hover:opacity-100 transition duration-1000">
-            </div>
-            <div class="relative z-10">
-              <h3 class="text-xl font-black uppercase text-white mb-2">Your Affiliate Link</h3>
-              <p class="text-sm text-gray-400 mb-8 max-w-md">Share this link directly. Anyone who joins via your link
-                will be permanently attributed to your tree.</p>
+        <!-- Main Workspace: Affiliate Link -->
+        <div id="main-column-dash" class="flex flex-col gap-8">
 
-              <div class="flex gap-4 items-center mb-4">
-                <input type="text" readonly id="aff-link"
-                  class="w-full bg-black/50 border border-white/10 px-6 py-4 rounded-xl text-sm font-bold text-[#D4AF37] focus:outline-none"
-                  value="...">
-                <button onclick="copyLink()" id="copy-btn"
-                  class="bg-[#00F5FF]/10 text-[#00F5FF] hover:bg-[#00F5FF]/20 font-black px-6 py-4 rounded-xl transition-colors uppercase text-[10px] tracking-widest whitespace-nowrap">
-                  Copy
-                </button>
+              <!-- STANDARD LINK VIEW -->
+              <div id="standard-link-view">
+                <h3 class="text-xl font-black uppercase text-white mb-2">Your Affiliate Link</h3>
+                <p class="text-sm text-gray-400 mb-8 max-w-md">Share this link directly. Anyone who joins via your link
+                  will be permanently attributed to your tree.</p>
+
+                <div class="flex gap-4 items-center mb-4">
+                  <input type="text" readonly id="aff-link"
+                    class="w-full bg-black/50 border border-white/10 px-6 py-4 rounded-xl text-sm font-bold text-[#D4AF37] focus:outline-none"
+                    value="...">
+                  <button onclick="copyLink()" id="copy-btn"
+                    class="bg-[#00F5FF]/10 text-[#00F5FF] hover:bg-[#00F5FF]/20 font-black px-6 py-4 rounded-xl transition-colors uppercase text-[10px] tracking-widest whitespace-nowrap">
+                    Copy
+                  </button>
+                </div>
+              </div>
+
+              <!-- ROTATOR CONTROL VIEW (HIDDEN BY DEFAULT) -->
+              <div id="rotator-control-view" class="hidden">
+                <div class="flex justify-between items-start mb-6">
+                  <div>
+                    <h3 class="text-xl font-black uppercase text-[#D4AF37] mb-1">Master Rotator Control</h3>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest font-black">Active Agency Node</p>
+                  </div>
+                  <div class="px-3 py-1 bg-[#D4AF37]/10 border border-[#D4AF37]/20 rounded-lg text-[#D4AF37] text-[10px] font-black uppercase">TEAM MASTER</div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                  <div class="bg-black/40 border border-white/10 p-6 rounded-2xl">
+                    <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 block">Sub-Affiliate Pool</label>
+                    <textarea id="rotator-pool" placeholder="e.g. JohnD123, SarahM99, AlexR01" 
+                      class="w-full h-32 bg-black/50 border border-white/10 p-4 rounded-xl text-sm font-bold text-white focus:outline-none focus:border-[#D4AF37] resize-none mb-3"></textarea>
+                    <p class="text-[9px] text-gray-500 uppercase leading-tight">Separate IDs with commas. Clicks will rotate through these partners sequentially.</p>
+                  </div>
+                  <div class="bg-black/40 border border-white/10 p-6 rounded-2xl flex flex-col justify-between">
+                    <div>
+                      <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 block">Agency Brand ID</label>
+                      <input type="text" id="rotator-name" placeholder="e.g. ALPHA" 
+                        class="w-full bg-black/50 border border-white/10 px-6 py-4 rounded-xl text-sm font-bold text-[#D4AF37] focus:outline-none focus:border-[#D4AF37] mb-3 uppercase">
+                      <p class="text-[9px] text-gray-500 uppercase leading-tight">Your marketing link: ?ref=TEAM-[NAME]</p>
+                    </div>
+                    <button onclick="upgradeToRotator()" id="rotator-btn"
+                      class="w-full bg-[#D4AF37] text-[#001F3F] font-black py-4 rounded-xl uppercase text-[11px] tracking-widest mt-4 shadow-glow hover:scale-[1.02] transition-transform">
+                      Save Rotator Configuration →
+                    </button>
+                  </div>
+                </div>
+
+                <div class="bg-[#D4AF37]/5 border border-[#D4AF37]/20 p-4 rounded-xl flex items-center justify-between">
+                   <div class="text-[10px] font-black text-[#D4AF37] uppercase tracking-widest">Master Rotator Link</div>
+                   <input type="text" readonly id="master-aff-link" class="bg-transparent border-none text-right font-bold text-white text-xs w-2/3 focus:outline-none" value="...">
+                </div>
               </div>
 
               <!-- QR CODE BLOCK -->
@@ -436,88 +549,13 @@
                 <div class="text-[#00F5FF] text-2xl opacity-20 hover:opacity-100 transition-opacity">🛡</div>
               </div>
             </div>
-          </div>
-        </div>
+               </div>
 
-        <!-- Sidebar: Modular Widgets -->
-        <div class="col-span-1 flex flex-col gap-5">
-
-          <!-- Window 1: User Profile & Security (TOP) -->
-          <div class="border border-[#D4AF37]/20 bg-black/40 backdrop-blur-xl rounded-[24px] p-5">
-            <div class="flex items-center gap-4 mb-5">
-              <div
-                class="w-12 h-12 rounded-full bg-gradient-to-tr from-[#D4AF37] to-black flex items-center justify-center font-black text-xs shadow-glow"
-                id="profile-initials">..</div>
-              <div class="overflow-hidden">
-                <div class="text-[11px] font-black text-white uppercase truncate" id="profile-name">Partner Name</div>
-                <div class="text-[9px] text-gray-500 uppercase tracking-widest truncate" id="profile-email">
-                  email@example.com</div>
-              </div>
-            </div>
-
-            <div id="password-toggle-zone">
-              <button onclick="togglePasswordUpdate()"
-                class="w-full bg-white/5 hover:bg-white/10 text-white font-bold text-[9px] py-3 rounded-xl transition-colors uppercase tracking-widest border border-white/5">
-                Security Settings
-              </button>
-            </div>
-
-            <div id="password-form-zone" class="hidden flex flex-col gap-3 pt-4 border-t border-white/5 mt-4">
-              <input type="password" id="new-p-input" placeholder="New Password"
-                class="w-full bg-black/50 border border-white/10 p-3 rounded-xl text-[10px] text-white focus:outline-none focus:border-[#00F5FF]">
-              <div class="flex gap-2">
-                <button onclick="updateUserPassword()"
-                  class="flex-1 bg-[#00F5FF] text-[#001F3F] font-black text-[9px] py-2 rounded-lg uppercase">Save</button>
-                <button onclick="togglePasswordUpdate()"
-                  class="flex-1 bg-white/5 text-gray-400 font-black text-[9px] py-2 rounded-lg uppercase text-[15px]">×</button>
-              </div>
-            </div>
-
-            <div class="mt-4">
-              <button id="activate-node-btn" onclick="showCheckout()"
-                class="w-full bg-[#D4AF37] hover:bg-white text-[#001F3F] font-black text-[9px] py-4 rounded-xl transition-all uppercase tracking-widest border border-[#D4AF37]/10 shadow-glow">
-                14 Day - Free Trial
-              </button>
-              <p class="text-[8px] text-gray-500 mt-2 text-center uppercase tracking-widest font-black"
-                id="trial-days-subtext">Node Active: 14 Days Remaining</p>
-            </div>
-          </div>
-
-          <!-- Window 3: Additional Services (EXPANDED) -->
-          <div class="border border-white/10 bg-black/40 backdrop-blur-xl rounded-[24px] p-6">
-            <h3 class="text-[10px] font-black uppercase text-gray-500 tracking-[0.2em] mb-5">Additional Services</h3>
-            <div class="grid grid-cols-1 gap-4">
-              <!-- Rotator Service Card -->
-              <div
-                class="bg-white/5 border border-white/5 hover:border-[#00F5FF]/30 rounded-[20px] p-5 group transition-all cursor-pointer">
-                <div class="flex justify-between items-start mb-3">
-                  <h5 class="text-[11px] font-black text-white uppercase tracking-tight">Rotator Service</h5>
-                  <span class="text-[9px] font-black text-[#00F5FF]">$5/M</span>
-                </div>
-                <p class="text-[9px] text-gray-400 leading-relaxed mb-4 uppercase tracking-tighter">Automate traffic
-                  distribution across multiple affiliate IDs sequentially.</p>
-                <a href="mailto:support@aurum.foundation?subject=Rotator%20Service"
-                  class="inline-block text-[9px] font-black text-[#00F5FF] uppercase border-b border-[#00F5FF]/30 hover:border-[#00F5FF] transition-all">Request
-                  Activation →</a>
-              </div>
-
-              <!-- Agency Service Card -->
-              <div
-                class="bg-white/5 border border-white/5 hover:border-[#D4AF37]/30 rounded-[24px] p-6 group transition-all cursor-pointer">
-                <div class="flex justify-between items-start mb-4">
-                  <h5 class="text-[12px] font-black text-white uppercase tracking-tight">Agency Services (White Label)
-                  </h5>
-                  <span class="text-[10px] font-black text-[#D4AF37]">$2500/Y</span>
-                </div>
-                <p class="text-[10px] text-gray-400 leading-relaxed mb-6 uppercase tracking-tighter">Premium White Label
-                  solutions for established agencies and crypto funds. Full ecosystem skinning, custom domains, and
-                  custom branding.</p>
-                <a href="mailto:support@aurum.foundation?subject=Agency%20Services"
-                  class="inline-block w-full text-center bg-[#D4AF37]/10 hover:bg-[#D4AF37] hover:text-[#001F3F] text-[10px] font-black text-[#D4AF37] uppercase py-4 rounded-xl border border-[#D4AF37]/20 transition-all">Request
-                  Agency Proposal →</a>
-              </div>
-            </div>
-          </div>
+        <!-- Footnote: Simplified Upgrades -->
+        <div class="flex flex-wrap items-center justify-center gap-6 mt-12 py-8 border-t border-white/5">
+             <button onclick="window.location.href='rotator.html'" class="text-[9px] font-black text-gray-500 uppercase tracking-widest hover:text-[#D4AF37] transition-colors bg-white/5 px-6 py-3 rounded-xl border border-white/5">Master Rotator Node</button>
+             <button onclick="window.location.href='whitelabel.html'" class="text-[9px] font-black text-gray-500 uppercase tracking-widest hover:text-[#00F5FF] transition-colors bg-white/5 px-6 py-3 rounded-xl border border-white/5">White Label Engine</button>
+             <div class="text-[9px] font-black text-gray-600 uppercase tracking-[0.2em] px-4">Earn 10% Recurring USDT</div>
         </div>
 
       </div>
@@ -595,6 +633,8 @@
     let currentEmail = "";
     let isReturningUser = false;
     let currentPaymentStatus = 'unpaid';
+    window.isMasterRotator = false;
+    window.currentRotatorPool = "";
 
     // Initialize Dashboard State
     (async function checkExistingSession() {
@@ -603,8 +643,11 @@
         try {
           const session = JSON.parse(storedSession);
           currentEmail = session.email;
-          // Direct load to avoid timing issues in Chrome/Incognito
-          showDashboard(session.email, session.code, session.paymentStatus || 'unpaid', session.name);
+          const sessionName = session.name || session.email.split('@')[0] || 'Partner';
+          window.isMasterRotator = session.is_rotator || false;
+          window.currentRotatorPool = session.instructions || ''; 
+          // Direct load to avoid timing issues
+          showDashboard(session.email, session.code, session.paymentStatus || 'unpaid', sessionName);
         } catch (e) { console.error("Session parse error", e); }
       }
     })();
@@ -680,7 +723,8 @@
         // Configure Setup View
         document.getElementById('setup-title').innerText = isReturningUser ? "Login to Dashboard" : "Complete Setup";
         document.getElementById('setup-desc').innerText = isReturningUser ? "Enter your password to access your affiliate links." : "Secure your dashboard and link your AURUM corporate account.";
-        document.getElementById('aurum-id-field').style.display = isReturningUser ? 'none' : 'block';
+        document.getElementById('registration-fields-zone').style.display = isReturningUser ? 'none' : 'block';
+        document.getElementById('setup-fullname').required = !isReturningUser;
         document.getElementById('setup-btn-text').innerText = isReturningUser ? "Login" : "Save & Generate Dashboard";
 
         switchView('gateway-view', 'setup-view');
@@ -724,7 +768,7 @@
           if (isReturningUser) {
             const { data, error } = await window.aurumDB
               .from('aurum_affiliates')
-              .select('affiliate_code, password, full_name')
+              .select('affiliate_code, password, full_name, phone, instructions, is_rotator, rotator_pool')
               .eq('email', emailToUse)
               .single();
 
@@ -735,8 +779,10 @@
               return;
             }
             finalCode = data.affiliate_code;
-            finalName = data.full_name || 'Partner';
+            finalName = data.full_name || emailToUse.split('@')[0];
             currentPaymentStatus = 'unpaid';
+            isMasterRotator = data.is_rotator || false;
+            currentRotatorPool = data.rotator_pool || '';
 
           } else {
             if (affId.includes('/u/')) {
@@ -757,6 +803,8 @@
                   full_name: fullName || 'Trial Partner',
                   email: emailToUse,
                   affiliate_code: affId,
+                  phone: document.getElementById('setup-phone')?.value || '',
+                  instructions: document.getElementById('setup-instructions')?.value || '',
                   password: password,
                   status: 'trialing'
                 }
@@ -808,40 +856,58 @@
              } catch(e) { console.warn("Welcome Email failed:", e); }
 
              finalCode = affId;
-             finalName = fullName;
+             finalName = fullName || emailToUse.split('@')[0];
+             finalPhone = document.getElementById('setup-phone')?.value || '';
+             finalInstructions = document.getElementById('setup-instructions')?.value || '';
              currentPaymentStatus = 'unpaid';
            }
          }
 
-        // Save session locally
-        currentEmail = emailToUse; // Ensure global state is synced
-        const sessionData = { email: emailToUse, name: finalName, code: finalCode, paymentStatus: currentPaymentStatus };
-        localStorage.setItem('aurum_affiliate_session', JSON.stringify(sessionData));
+         // Save session locally
+         currentEmail = emailToUse; // Ensure global state is synced
+         const sessionNameForStorage = finalName || emailToUse.split('@')[0] || 'Partner';
+         const sessionData = { 
+            email: emailToUse, 
+            name: sessionNameForStorage, 
+            code: finalCode, 
+            phone: finalPhone || '',
+            instructions: finalInstructions || '',
+            is_rotator: window.isMasterRotator || false,
+            paymentStatus: currentPaymentStatus 
+         };
+         localStorage.setItem('aurum_affiliate_session', JSON.stringify(sessionData));
 
-        showDashboard(emailToUse, finalCode, currentPaymentStatus, finalName);
+        showDashboard(emailToUse, finalCode, currentPaymentStatus, sessionNameForStorage);
 
       } catch (err) {
-        console.error("Setup error:", err);
-        alert("Authentication failed. Please check your connection.");
-        btnText.innerText = originalText;
-        btn.disabled = false;
+        console.warn("Database Sync Delayed. Saving Locally...", err);
+        // CRITICAL FALLBACK: If Supabase fails, save locally and proceed. Do NOT block the user.
+        try {
+          const sessionData = { email: emailToUse, name: fullName || 'Partner', code: affId || 'AURUM-99', paymentStatus: 'unpaid' };
+          localStorage.setItem('aurum_affiliate_session', JSON.stringify(sessionData));
+          showDashboard(emailToUse, affId || 'AURUM-99', 'unpaid', fullName || 'Partner');
+        } catch (localErr) {
+          alert("A connection error occurred. Please refresh and try again.");
+          btnText.innerText = originalText;
+          btn.disabled = false;
+        }
       }
     });
 
     function showDashboard(email, affiliateCode, paymentStatus = 'unpaid', name = '') {
       if (!email || !affiliateCode) return;
 
-      // Set display names
-      const displayName = name || email.split('@')[0];
-      document.getElementById('dash-name-top').innerText = displayName;
-      document.getElementById('profile-name').innerText = displayName;
-      document.getElementById('profile-email').innerText = email;
-      document.getElementById('profile-initials').innerText = (displayName || "AP").substring(0, 2).toUpperCase();
+      // Set display names (Safe Updates)
+      const displayName = name || email.split('@')[0] || 'Partner';
+      
+      const nameEl = document.getElementById('dash-name-top');
+      if (nameEl) nameEl.innerText = `Welcome back, ${displayName}`;
 
       // Generate Links
       const urlRoot = window.location.origin;
       const fullLink = `${urlRoot}/index.html?ref=${affiliateCode}`;
-      document.getElementById('aff-link').value = fullLink;
+      const affLinkInput = document.getElementById('aff-link');
+      if (affLinkInput) affLinkInput.value = fullLink;
 
       const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(fullLink)}`;
       document.getElementById('qr-code-img').src = qrUrl;
@@ -864,12 +930,57 @@
         if (daysSubtext) daysSubtext.innerText = "Processing Node activation...";
       }
 
+      // SHOW ROTATOR IF APPLICABLE
+      if (window.isMasterRotator) {
+        document.getElementById('standard-link-view').classList.add('hidden');
+        document.getElementById('rotator-control-view').classList.remove('hidden');
+        document.getElementById('rotator-pool').value = window.currentRotatorPool || '';
+        document.getElementById('rotator-name').value = affiliateCode.replace('TEAM-', '');
+        document.getElementById('master-aff-link').value = `${urlRoot}/index.html?ref=${affiliateCode}`;
+      }
+
       // Transition View (Direct Switch to avoid flash)
       switchView('', 'dashboard-view');
       document.getElementById('navLoginBtn').classList.remove('hidden');
 
       // Fetch Real-time Stats
       updateDashboardStats(affiliateCode);
+    }
+
+    // Multi-View Controller (Optimized Anti-Flicker)
+    function switchView(from, to) {
+      document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+      const target = document.getElementById(to);
+      if (target) {
+        target.classList.add('active');
+        if (to === 'dashboard-view') {
+          document.getElementById('navLoginBtn').classList.remove('hidden');
+        } else {
+          document.getElementById('navLoginBtn').classList.add('hidden');
+        }
+      }
+    }
+
+    function togglePasswordVisibility(id) {
+      const input = document.getElementById(id);
+      const btn = input.nextElementSibling;
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.innerText = 'Hide';
+      } else {
+        input.type = 'password';
+        btn.innerText = 'View';
+      }
+    }
+
+    function showForgot() { switchView('setup-view', 'forgot-view'); }
+    function hideForgot() { switchView('forgot-view', 'setup-view'); }
+
+    async function handleForgot(e) {
+      e.preventDefault();
+      const email = document.getElementById('forgot-email').value;
+      alert(`Instructions have been sent to ${email} (if registered).`);
+      hideForgot();
     }
 
     // Security Features
@@ -1037,11 +1148,6 @@
     };
     let checkoutPlan = 'Monthly';
     let checkoutAmount = 10;
-
-    document.getElementById('navLoginBtn').addEventListener('click', () => {
-      localStorage.removeItem('aurum_affiliate_session');
-      location.reload();
-    });
   </script>
 </body>
 

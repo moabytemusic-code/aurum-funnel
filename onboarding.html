@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Onboarding Checklist | AURUM Ecosystem</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root {
       --bg-color: #F8FAFC;
@@ -26,6 +27,10 @@
       color: var(--text-main); line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       min-height: 100vh;
+    }
+
+    .shadow-glow {
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
     }
 
     /* === NAV === */
@@ -101,7 +106,12 @@
 
     .foot { text-align: center; margin-top: 60px; color: var(--text-muted); font-size: 0.9rem; opacity: 0.6; }
 
-
+    /* === ANIMATIONS === */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideInFromTop { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .animate-in { animation: fadeIn 0.5s ease-out forwards; }
+    .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+    .slide-in-from-top-4 { animation: slideInFromTop 0.5s ease-out forwards; }
 
     @media (max-width: 768px) {
       nav { padding: 0 12px; }
@@ -136,12 +146,47 @@
     </div>
   </nav>
 
+  <!-- TOP SPONSOR BAR -->
+  <div id="sponsor-instructions-zone" class="hidden animate-in fade-in slide-in-from-top-4 duration-1000">
+      <div class="bg-gradient-to-r from-[#030712] via-[#0F172A] to-[#030712] border-b border-[#D4AF37]/20 py-6">
+          <div class="max-w-[1100px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+              
+              <div class="flex items-center gap-6">
+                  <div id="sponsor-avatar" class="w-16 h-16 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#E5C04A] flex items-center justify-center text-[#001F3F] font-black text-2xl shadow-glow shrink-0">...</div>
+                  <div>
+                      <div class="flex items-center gap-2 mb-1">
+                          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                          <h4 class="text-[10px] font-black uppercase text-[#D4AF37] tracking-[0.2em]">Your Aurum Sponsor</h4>
+                      </div>
+                      <p id="sponsor-name" class="text-xl font-black text-white leading-none">...</p>
+                  </div>
+              </div>
+
+              <div class="bg-white/5 border border-white/10 px-6 py-3 rounded-2xl flex-1 max-w-md">
+                  <p id="team-message-text" class="text-gray-300 text-xs font-medium italic leading-relaxed text-center md:text-left">...</p>
+              </div>
+
+              <div id="sponsor-contact-window" class="flex flex-col gap-2 items-end">
+                  <a id="sponsor-email-link" href="#" class="flex items-center gap-2 text-[11px] font-black text-white/50 hover:text-[#D4AF37] transition-all uppercase tracking-tighter">
+                      <span class="text-xs">📧</span> <span id="sponsor-email-text">...</span>
+                  </a>
+                  <a id="sponsor-phone-link" href="#" class="flex items-center gap-2 text-[11px] font-black text-white/50 hover:text-[#D4AF37] transition-all uppercase tracking-tighter">
+                      <span class="text-xs">📱</span> <span id="sponsor-phone-text">...</span>
+                  </a>
+              </div>
+
+          </div>
+      </div>
+  </div>
+
   <div class="container">
 
     <div class="header">
       <h1 id="skin-h1">Onboarding Checklist</h1>
       <p id="skin-sub" class="subtitle">Complete these 3 essential steps before creating your AURUM account within our digital banking ecosystem.</p>
     </div>
+
+
 
     <div class="steps">
       <!-- STEP 1 -->
@@ -201,18 +246,61 @@
       </div>
     </div>
 
-    <!-- FINAL JOIN -->
-    <section class="final-cta">
-      <h2>All Steps Completed?</h2>
-      <p style="opacity: 0.8; margin-top: 10px;">Click the button below to join the official AURUM backoffice and bond your bots.</p>
-      <a href="https://backoffice.aurum.foundation/u/1W145K" id="dynamic-join-btn" target="_blank" class="join-btn">Go to AURUM Dashboard →</a>
-    </section>
+
 
     <footer class="foot">
       <p>© 2026 The AI Finance Breakdown. All rights reserved.</p>
       <p style="margin-top: 10px;">Review the official terms on the Aurum backoffice before participating.</p>
     </footer>
   </div>
+
+  <!-- Load Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Initialize Supabase (Global lookup)
+    const SUPABASE_URL_BASE = 'https://cwdawyeiijbcoihobvpb.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_7mcxzRZkMjQcK1CTZjUl_w_AGm9kisr';
+    const aurumDB = supabase.createClient(SUPABASE_URL_BASE, SUPABASE_ANON_KEY);
+
+    async function lookupSponsor() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const ref = urlParams.get('ref');
+      if (!ref) return;
+
+      try {
+        const { data, error } = await aurumDB
+          .from('aurum_affiliates')
+          .select('full_name, email, phone, instructions')
+          .eq('affiliate_code', ref)
+          .single();
+
+        if (data && !error) {
+            // Update Contact Window
+            document.getElementById('sponsor-contact-window').classList.remove('hidden');
+            document.getElementById('sponsor-contact-window').classList.remove('hidden');
+            document.getElementById('sponsor-name').innerText = data.full_name;
+            document.getElementById('sponsor-email-link').href = `mailto:${data.email}`;
+            if (document.getElementById('sponsor-email-text')) document.getElementById('sponsor-email-text').innerText = data.email;
+            document.getElementById('sponsor-avatar').innerText = data.full_name.substring(0, 1).toUpperCase();
+            
+            if (data.phone) {
+                document.getElementById('sponsor-phone-link').href = `tel:${data.phone}`;
+                if (document.getElementById('sponsor-phone-text')) document.getElementById('sponsor-phone-text').innerText = data.phone;
+            } else {
+                document.getElementById('sponsor-phone-link').style.display = 'none';
+            }
+
+            // Update Instructions
+            if (data.instructions) {
+                document.getElementById('sponsor-instructions-zone').classList.remove('hidden');
+                document.getElementById('team-message-text').innerText = data.instructions;
+            }
+        }
+      } catch (e) { console.warn("Sponsor Lookup Error", e); }
+    }
+    
+    lookupSponsor();
+  </script>
 
   <!-- TRACKING & AFFILIATE LOGIC -->
   <script src="tracking.js"></script>

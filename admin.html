@@ -219,12 +219,13 @@
         <div style="border-right: 1px solid var(--panel-border); padding-right: 40px;">
           <label style="display:block; font-size:0.7rem; font-weight:800; color:var(--text-muted); text-transform:uppercase; margin-bottom:8px;">Search Partner Database</label>
           <div style="display:flex; gap:10px;">
-            <input type="text" id="rotator-lookup" placeholder="Email or Ref Code..." style="flex:1; padding:12px; border-radius:10px; background:var(--bg-color); border:1px solid var(--panel-border); color:#fff; font-size:0.85rem;">
-            <button onclick="lookupUserForRotator()" style="padding:12px 20px; border-radius:10px; background:var(--aurum-blue); color:#fff; border:none; font-weight:700; cursor:pointer;">Lookup</button>
+            <input type="text" id="rotator-lookup" placeholder="Search by Email or Code..." style="flex:1; padding:12px; border-radius:10px; background:var(--bg-color); border:1px solid var(--panel-border); color:#fff; font-size:0.85rem;" onkeyup="if(event.key === 'Enter') lookupUserForRotator()">
+            <button onclick="lookupUserForRotator()" style="padding:12px 20px; border-radius:10px; background:var(--aurum-blue); color:#fff; border:none; font-weight:700; cursor:pointer;">Search</button>
           </div>
-          <div id="lookup-result" style="margin-top:20px; padding:15px; background:rgba(255,255,255,0.03); border-radius:12px; display:none;">
-            <p id="res-email" style="font-weight:700; font-size:0.9rem;"></p>
-            <p id="res-code" style="color:var(--text-muted); font-size:0.8rem;"></p>
+          <div id="lookup-result" style="margin-top:20px; padding:15px; background:rgba(0,115,255,0.05); border:1px solid var(--aurum-blue); border-radius:12px; display:none;">
+            <p id="res-email" style="font-weight:900; font-size:0.9rem; color: #fff;"></p>
+            <p id="res-name" style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase; font-weight:700;"></p>
+            <p id="res-code" style="color:var(--aurum-blue); font-size:0.8rem; font-weight:800; margin-top:4px;"></p>
           </div>
         </div>
 
@@ -377,24 +378,36 @@
       if(!input) return;
       
       try {
-        const { data, error } = await window.aurumDB
+        // Advanced Fuzzy Search: Look for partial matches on email OR name OR exact node code
+        const query = window.aurumDB
           .from('aurum_affiliates')
-          .select('email, affiliate_code')
-          .or(`email.eq.${input}, affiliate_code.eq.${input}`)
+          .select('email, affiliate_code, full_name');
+        
+        const { data, error } = await query
+          .or(`email.ilike.%${input}%, affiliate_code.eq.${input.toUpperCase()}, full_name.ilike.%${input}%`)
+          .limit(1)
           .single();
           
         if(error || !data) {
-          alert("User not found in partner database.");
-          resPanel.style.display = 'none';
+          resPanel.style.display = 'block';
+          resPanel.style.background = 'rgba(239, 68, 68, 0.05)';
+          resPanel.style.borderColor = '#ef4444';
+          document.getElementById('res-email').innerText = "No Partner Found";
+          document.getElementById('res-name').innerText = "SYSTEM ERROR";
+          document.getElementById('res-code').innerText = "Check spelling or ID";
           provisionBtn.style.opacity = '0.5';
           provisionBtn.disabled = true;
           return;
         }
         
         selectedUserForRotator = data;
-        document.getElementById('res-email').innerText = data.email;
-        document.getElementById('res-code').innerText = `Current Code: ${data.affiliate_code}`;
         resPanel.style.display = 'block';
+        resPanel.style.background = 'rgba(0,115,255,0.05)';
+        resPanel.style.borderColor = 'var(--aurum-blue)';
+        document.getElementById('res-email').innerText = data.email;
+        document.getElementById('res-name').innerText = data.full_name || 'Individual Partner';
+        document.getElementById('res-code').innerText = `NODE: ${data.affiliate_code}`;
+        
         provisionBtn.style.opacity = '1';
         provisionBtn.disabled = false;
         
