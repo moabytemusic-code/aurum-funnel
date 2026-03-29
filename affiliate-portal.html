@@ -250,23 +250,23 @@
 
         <!-- Sidebar: Stats -->
         <div class="col-span-1 border border-[#D4AF37]/20 bg-black/40 backdrop-blur-xl rounded-[32px] p-8 flex flex-col">
-           <h3 class="text-lg font-black uppercase text-white mb-8 tracker-widest">Performance</h3>
+           <h3 class="text-lg font-black uppercase text-white mb-8 tracker-widest">Live Performance</h3>
            
            <div class="flex flex-col gap-6 flex-grow">
              <div class="pb-6 border-b border-white/5">
-                <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Total Clicks</div>
-                <div class="text-3xl font-black text-white">0</div>
+                <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Network Clicks</div>
+                <div class="text-3xl font-black text-white" id="stat-clicks">0</div>
              </div>
              
              <div class="pb-6 border-b border-white/5">
                 <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Active Trials</div>
-                <div class="text-3xl font-black text-[#00F5FF]">0</div>
+                <div class="text-3xl font-black text-[#00F5FF]" id="stat-trials">0</div>
              </div>
              
              <div>
-                <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Estimated MRR</div>
-                <div class="text-4xl font-black text-[#D4AF37]">$0.00</div>
-                <div class="text-[10px] text-gray-400 mt-2">Payouts in MATIC/USDT</div>
+                <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Monthly Yield (Estimated)</div>
+                <div class="text-4xl font-black text-[#D4AF37]" id="stat-mrr">$0.00</div>
+                <div class="text-[10px] text-gray-400 mt-2">Payouts processed in MATIC/USDT</div>
              </div>
            </div>
 
@@ -546,6 +546,37 @@
       switchView('setup-view', 'dashboard-view');
       document.getElementById('gateway-view').classList.add('hidden'); // Safety
       document.getElementById('navLoginBtn').classList.remove('hidden');
+
+      // Fetch Real-time Stats
+      updateDashboardStats(affiliateCode);
+    }
+
+    async function updateDashboardStats(affiliateCode) {
+      if (!window.aurumDB) return;
+      
+      try {
+        // 1. Fetch Click Counts from aurum_tracking
+        const { count: clickCount } = await window.aurumDB
+          .from('aurum_tracking')
+          .select('*', { count: 'exact', head: true })
+          .eq('affiliate_code', affiliateCode);
+          
+        document.getElementById('stat-clicks').innerText = clickCount || 0;
+
+        // 2. Fetch Active Referrals from aurum_members
+        const { data: referrals, error } = await window.aurumDB
+          .from('aurum_members')
+          .select('id, status')
+          .eq('referred_by', affiliateCode);
+
+        if (referrals) {
+          const activeCount = referrals.filter(r => r.status === 'active' || r.status === 'trialing').length;
+          document.getElementById('stat-trials').innerText = activeCount;
+          document.getElementById('stat-mrr').innerText = `$${(activeCount * 10).toFixed(2)}`;
+        }
+      } catch (e) {
+        console.warn("Stats update failed:", e);
+      }
     }
 
     // Checkout Handling
