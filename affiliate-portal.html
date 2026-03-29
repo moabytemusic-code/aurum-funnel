@@ -383,7 +383,7 @@
               <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">AURUM Corporate Link</label>
               <p class="text-[9px] text-gray-400 mb-2 leading-tight">Paste your unique referral link (e.g. aurum.foundation/u/User123) to bridge your traffic directly to your tree.</p>
               <input type="text" id="setup-aff-id" placeholder="e.g. aurum.foundation/u/AlexR24"
-                class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl text-sm font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37] transition-all">
+                class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl text-sm font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37] transition-all" required>
             </div>
           </div>
 
@@ -803,6 +803,7 @@
                   full_name: fullName || 'Trial Partner',
                   email: emailToUse,
                   affiliate_code: affId,
+                  affiliate_id: document.getElementById('setup-aff-id')?.value || '', // The Dynamic Link Bridge
                   phone: document.getElementById('setup-phone')?.value || '',
                   instructions: document.getElementById('setup-instructions')?.value || '',
                   password: password,
