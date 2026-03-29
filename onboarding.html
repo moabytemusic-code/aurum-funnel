@@ -279,8 +279,15 @@
 
     async function lookupSponsor() {
       const urlParams = new URLSearchParams(window.location.search);
-      const ref = urlParams.get('ref');
-      if (!ref) return;
+      const ref = urlParams.get('ref') || localStorage.getItem('aurum_ref');
+      
+      if (!ref) {
+          console.warn("[AURUM] No sponsor reference found in URL or Storage.");
+          return;
+      }
+
+      // Lock it back into storage if it came from URL
+      localStorage.setItem('aurum_ref', ref);
 
       try {
         const { data, error } = await aurumDB

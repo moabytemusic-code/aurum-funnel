@@ -6,7 +6,13 @@ const SUPABASE_URL = 'https://cwdawyeiijbcoihobvpb.supabase.co/rest/v1/aurum_tra
 const SUPABASE_KEY = 'sb_publishable_7mcxzRZkMjQcK1CTZjUl_w_AGm9kisr';
 
 function trackEvent(page, event = 'View') {
-  const ref = localStorage.getItem('aurum_ref') || '1W145K';
+  // 1. Determine Referrer (Priority: URL > LocalStorage > Default)
+  const urlParams = new URLSearchParams(window.location.search);
+  const ref = urlParams.get('ref') || localStorage.getItem('aurum_ref') || '1W145K';
+  
+  // Sync to LocalStorage for persistence
+  localStorage.setItem('aurum_ref', ref);
+
   const org = localStorage.getItem('aurum_org') || 'Direct';
   const platform = window.innerWidth < 768 ? 'Mobile' : 'Desktop';
   
@@ -51,7 +57,20 @@ window.addEventListener('DOMContentLoaded', () => {
   
   trackEvent(pageName, 'View');
 
-  // If we're on the onboarding page, hook the final signup button
+  // 3. PERSISTENT NAVIGATION BRIDGE
+  // Automatically append ?ref= to all internal funnel links to prevent "leaky" tracking
+  const activeRef = localStorage.getItem('aurum_ref');
+  if (activeRef) {
+      document.querySelectorAll('a').forEach(link => {
+          const href = link.getAttribute('href');
+          if (href && (href.includes('.html') || href === '/') && !href.startsWith('http') && !href.includes('ref=')) {
+              const separator = href.includes('?') ? '&' : '?';
+              link.setAttribute('href', `${href}${separator}ref=${activeRef}`);
+          }
+      });
+  }
+
+  // 4. Hook signup button for onboarding specific tracking
   if (path === 'onboarding.html') {
     const signupBtn = document.getElementById('dynamic-join-btn');
     if (signupBtn) {
