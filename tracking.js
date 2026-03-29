@@ -72,7 +72,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // 4. Hook signup button for onboarding specific tracking
   if (path === 'onboarding.html') {
-    const signupBtn = document.getElementById('dynamic-join-btn');
+    const signupBtn = document.getElementById('dynamic-join-btn') || document.getElementById('final-join-btn');
     if (signupBtn) {
       signupBtn.addEventListener('click', () => {
         trackEvent('Onboarding', 'Signup Click');

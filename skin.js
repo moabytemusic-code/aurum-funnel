@@ -41,6 +41,14 @@
       h1: 'The Gold Standard of AI Finance',
       sub: 'Secure your financial future with AURUM\'s world-class AI liquidity bots.',
       videoId: 'hep0eYXJY8c'
+    },
+    'DIRECT': {
+      brand: 'AURUM<span>ECOSYSTEM</span>',
+      color: '#0073FF',
+      gradient: 'linear-gradient(135deg, #0073FF, #3898F8)',
+      h1: 'The AURUM Digital Banking Strategy',
+      sub: 'Join the AURUM digital banking ecosystem and automate your digital assets with institutional-grade AI.',
+      videoId: 'hep0eYXJY8c'
     }
   };
 
@@ -146,6 +154,21 @@
       console.warn('[AURUM-SKIN] Supabase fetch failed, falling back to local.', e);
     }
     
+    // E. Update Onboarding Link with Ref (Conversion)
+    const updateJoinButton = () => {
+      const joinBtn = document.getElementById('final-join-btn') || document.getElementById('dynamic-join-btn') || document.querySelector('.join-btn');
+      if (joinBtn) {
+        const finalRef = localStorage.getItem('aurum_ref') || '1W145K';
+        
+        // If we are in rotator mode or redirected session, overwrite the link
+        joinBtn.href = `https://backoffice.aurum.foundation/u/${finalRef}`;
+        console.log(`[AURUM-TRACKER] Conversion Link Finalized: ${joinBtn.href}`);
+      }
+    };
+
+    // --- EXECUTE UI UPDATES ---
+    updateJoinButton();
+
     if (!activeSkin) return;
 
     // A. Apply Styles
@@ -168,15 +191,6 @@
     const videoFrame = document.querySelector('#skin-video iframe');
     if (videoFrame && activeSkin.videoId) {
       videoFrame.src = `https://www.youtube.com/embed/${activeSkin.videoId}?rel=0`;
-    }
-
-    // E. Update Onboarding Link with Ref (Conversion)
-    const joinBtn = document.getElementById('dynamic-join-btn');
-    if (joinBtn) {
-      // Re-fetch current ref just in case of race conditions
-      const finalRef = localStorage.getItem('aurum_ref') || '1W145K';
-      joinBtn.href = `https://backoffice.aurum.foundation/u/${finalRef}`;
-      console.log(`[AURUM-TRACKER] Conversion Link Finalized: ${joinBtn.href}`);
     }
   });
 })();
