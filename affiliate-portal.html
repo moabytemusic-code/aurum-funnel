@@ -193,6 +193,62 @@
       #checkout-view h2 {
         font-size: 1.8rem;
       }
+
+      /* Genesis Card Mobile Optimization */
+      .digital-license-card {
+        padding: 1.5rem !important; /* From p-12 (3rem) to 1.5rem */
+        min-height: auto !important;
+        aspect-ratio: 4 / 5;
+        border-radius: 20px !important;
+      }
+
+      .digital-license-card .glass-footer {
+        margin-left: -1.5rem !important;
+        margin-right: -1.5rem !important;
+        margin-bottom: -1.5rem !important;
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
+        padding-bottom: 2rem !important;
+        border-radius: 0 0 20px 20px !important;
+      }
+
+      #qr-code-container {
+        width: 220px !important;
+        height: 220px !important;
+      }
+
+      #qr-code-container canvas {
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      .digital-license-card .qr-zone {
+        padding: 10px 0 !important;
+      }
+
+      .digital-license-card .shimmer-text {
+        font-size: 8px !important;
+      }
+
+      .status-badge-glow {
+        padding: 2px 8px !important;
+      }
+
+      #dashboard-view .flex.items-center.justify-between.mb-8 {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+      }
+
+      /* Gateway Activation Form Mobile Padding */
+      #gateway-view .max-w-xl {
+        padding: 2rem 1.5rem !important;
+        border-radius: 24px !important;
+      }
+
+      #gateway-view h1 {
+        font-size: 2.8rem !important;
+      }
     }
 
     /* === VIEW ENGINE === */
