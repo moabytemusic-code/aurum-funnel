@@ -169,7 +169,10 @@
       section { padding-bottom: 30px; }
       h2 { font-size: 1.9rem !important; }
       .cta-btn { width: auto; min-width: 250px; display: inline-block; padding: 14px 28px !important; font-size: 1.1rem !important; text-align: center; white-space: nowrap; margin-top: 10px; }
+      .hidden-mobile { display: none !important; }
+      .mobile-only { display: inline !important; }
     }
+    .mobile-only { display: none; }
   </style>
 </head>
 <body>
@@ -178,7 +181,7 @@
   <nav>
     <div class="nav-inner">
       <a href="index.html" class="nav-brand">TheAI<span>Finance</span>Breakdown</a>
-      <a href="onboarding.html" class="nav-cta">Complete Technical Checklist →</a>
+      <a href="onboarding.html" class="nav-cta"><span class="hidden-mobile">Complete Technical </span>Checklist →</a>
     </div>
   </nav>
 
@@ -261,7 +264,10 @@
         <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 16px;">Final Step: Start Your Activation</h2>
         <p style="font-size: 1.15rem; opacity: 0.8; max-width: 600px; margin: 0 auto 40px;">Follow the link below to initialize your digital banking node. This includes the institutional setup deposit required to bond your AI liquidity bots.</p>
         
-        <a href="onboarding.html" id="dynamic-onboard-btn" class="nav-cta cta-btn">Initialize Technical Setup →</a>
+        <a href="onboarding.html" id="dynamic-onboard-btn" class="nav-cta cta-btn">
+            <span class="hidden-mobile">Initialize Technical Setup</span>
+            <span class="mobile-only">Start Setup</span> →
+        </a>
       </div>
     </section>
 

@@ -146,7 +146,10 @@
       p { font-size: 1.05rem; margin-bottom: 16px; }
       .btn { width: auto; min-width: 250px; display: inline-block; padding: 14px 28px; font-size: 1.05rem; white-space: nowrap; margin: 24px 0 12px; }
       .faq-question { padding: 14px 18px; font-size: 0.95rem; }
+      .hidden-mobile { display: none !important; }
+      .mobile-only { display: inline !important; }
     }
+    .mobile-only { display: none; }
   </style>
 </head>
 <body>
@@ -155,7 +158,7 @@
   <nav>
     <div class="nav-inner">
       <a href="index.html" class="nav-brand">TheAI<span>Finance</span>Breakdown</a>
-      <a href="offer.html" class="nav-cta">Explore Digital Banking Ecosystem →</a>
+      <a href="offer.html" class="nav-cta">Explore <span class="hidden-mobile">Digital Banking </span>Ecosystem →</a>
     </div>
   </nav>
 
@@ -228,7 +231,7 @@
         <p>That's why I recommend watching the full presentation and deciding for yourself.</p>
         <p style="margin-top: 24px;">If you're even a little curious… just click below. At the very least, you'll understand what's happening in this space right now.</p>
 
-        <a href="offer.html" class="btn">Watch The Full AURUM Breakdown</a>
+        <a href="offer.html" class="btn">Watch <span class="hidden-mobile">The Full </span>AURUM Breakdown</a>
         <p class="btn-subtext">Takes you straight to the official presentation. No commitment.</p>
       </div>
 
