@@ -1072,6 +1072,9 @@
 
     function showDashboard(email, affiliateCode, paymentStatus = 'unpaid', name = '') {
       if (!email || !affiliateCode) return;
+      
+      // CRITICAL: Switch view FIRST so container is visible for rendering
+      switchView('', 'dashboard-view');
 
       const displayName = name || email.split('@')[0] || 'Partner';
       const nameEl = document.getElementById('dash-name-top');
