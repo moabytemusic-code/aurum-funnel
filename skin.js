@@ -43,11 +43,11 @@
       videoId: 'hep0eYXJY8c'
     },
     'DIRECT': {
-      brand: 'AURUM<span>ECOSYSTEM</span>',
+      brand: 'THE AI<span> FINANCE </span>BREAKDOWN',
       color: '#0073FF',
       gradient: 'linear-gradient(135deg, #0073FF, #3898F8)',
-      h1: 'The AURUM Digital Banking Strategy',
-      sub: 'Join the AURUM digital banking ecosystem and automate your digital assets with institutional-grade AI.',
+      h1: 'The AI Finance Breakdown: Digital Banking Ecosystem',
+      sub: 'Explore the AURUM digital banking ecosystem and automate your digital assets with institutional-grade AI.',
       videoId: 'hep0eYXJY8c'
     }
   };
