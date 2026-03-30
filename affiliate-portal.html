@@ -196,14 +196,44 @@
     }
 
     /* === VIEW ENGINE === */
-    .view-section {
-      display: none;
-      width: 100%;
+    /* --- FLAMBOYANT DIGITAL LICENSE CARD --- */
+    .digital-license-card {
+      background: radial-gradient(circle at top left, #0a192f, #000);
+      border: 3px solid #D4AF37;
+      border-radius: 28px;
+      box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.9);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+      perspective: 1000px;
+      cursor: pointer;
+      min-height: 580px;
+      display: flex;
+      flex-direction: column;
+      transform-style: preserve-3d;
+    }
+
+    .digital-license-card:hover {
+      box-shadow: 0 60px 120px -20px rgba(212, 175, 55, 0.3);
     }
     
-    .view-section.active {
-      display: block !important;
+    /* PREVENT EXPORT ARTIFACTS */
+    .exporting .holographic-overlay, 
+    .exporting .license-highlight { opacity: 0 !important; display: none !important; }
+    .exporting .shimmer-text { background: none !important; -webkit-background-clip: initial !important; background-clip: initial !important; color: #D4AF37 !important; }
+
+    .holographic-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(212,175,55,0.05) 50%, rgba(255,255,255,0) 100%);
+      mix-blend-mode: overlay;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
     }
+    
+    .view-section { display: none; }
+    .view-section.active { display: block !important; }
   </style>
 </head>
 
@@ -324,6 +354,7 @@
           </button>
         </form>
         <p class="text-[10px] text-gray-500 mt-8 uppercase tracking-widest font-bold">No Credit Card Required • Instant Activation</p>
+        <button onclick="showDirectLogin()" class="mt-6 text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.2em] hover:text-white transition-all cursor-pointer">Returning Member? Click Here →</button>
       </div>
 
     </div>
@@ -358,6 +389,13 @@
           corporate account.</p>
 
         <form id="setup-form">
+          <!-- EMAIL FIELD (Normally Hidden, shown for direct login) -->
+          <div id="setup-email-zone" class="hidden mb-5">
+            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Login Email</label>
+            <input type="email" id="setup-email-input" placeholder="name@example.com"
+              class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl text-sm font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37] transition-all">
+          </div>
+
           <!-- REGISTRATION ONLY FIELDS -->
           <div id="registration-fields-zone">
             <div class="mb-5">
@@ -416,10 +454,10 @@
       <!-- Top Bar: Dashboard Identity (Simplified) -->
       <div class="flex items-center justify-between mb-8">
         <div>
-          <h2 class="text-xs font-black uppercase text-[#D4AF37] tracking-[0.3em] mb-1">Partner Dashboard</h2>
+          <h2 class="text-xs font-black uppercase text-[#D4AF37] tracking-[0.4em] mb-1">Genesis Protocol Dashboard</h2>
           <div class="flex items-center gap-3">
-            <div class="w-2 h-2 rounded-full bg-[#00F5FF] shadow-[0_0_10px_rgba(0,245,255,0.5)]"></div>
-            <span class="text-white font-bold text-sm uppercase tracking-tight" id="dash-name-top">Welcome back, Partner</span>
+            <div class="w-2.5 h-2.5 rounded-full bg-[#00F5FF] shadow-[0_0_15px_#00F5FF]"></div>
+            <span class="text-white font-black text-sm tracking-[0.05em] uppercase" id="dash-name-top">PROTOCOL OPERATOR: Partner</span>
           </div>
         </div>
 
@@ -503,19 +541,50 @@
                 </div>
               </div>
 
-              <!-- QR CODE BLOCK -->
-              <div class="mt-6 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center gap-6">
-                <div class="w-32 h-32 bg-white rounded-xl p-2 shadow-glow flex-shrink-0">
-                  <img id="qr-code-img" src="" alt="QR Code" class="w-full h-full object-contain">
+              <!-- FLAMBOYANT DIGITAL LICENSE CARD -->
+              <div id="license-card" class="digital-license-card max-w-sm mx-auto md:mx-0 p-12 group">
+                <div class="holographic-overlay"></div>
+                <div class="license-highlight absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div class="flex justify-between items-start mb-12 relative z-10">
+                  <div>
+                    <div class="text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.4em] mb-1 shimmer-text">Genesis Protocol License</div>
+                    <div class="text-[11px] font-bold text-white/50 uppercase tracking-[0.1em]">AI Intelligence Node</div>
+                  </div>
+                  <div class="px-4 py-1.5 bg-green-500/10 border border-green-500/30 rounded-full flex items-center gap-2 status-badge-glow">
+                    <div class="w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e] animate-pulse"></div>
+                    <span class="text-[9px] font-black text-green-500 uppercase tracking-[0.2em]">Alpha Active</span>
+                  </div>
                 </div>
-                <div class="text-center md:text-left">
-                  <h4 class="font-bold text-white uppercase tracking-tight mb-2 text-lg">Personal QR Code</h4>
-                  <p class="text-[10px] text-gray-400 mb-4 max-w-sm">Scan to instantly open your mobile tracking link.
-                  </p>
-                  <a id="qr-download" href="#" target="_blank"
-                    class="text-[9px] font-black text-[#D4AF37] uppercase tracking-widest hover:text-white transition-colors bg-[#D4AF37]/10 px-3 py-2 rounded-lg border border-[#D4AF37]/20">Download
-                    Assets →</a>
+
+                <div class="qr-zone flex-1 flex justify-center items-center py-6 relative z-10" style="transform: translateZ(50px);">
+                  <div class="relative p-2 bg-gradient-to-br from-[#FFD700] via-[#D4AF37] to-[#B8860B] rounded-[52px] shadow-[0_30px_70px_rgba(0,0,0,0.7)] group-hover:scale-105 transition-transform duration-500">
+                    <div class="bg-white p-6 rounded-[48px]">
+                      <div id="qr-code-container" class="w-[300px] h-[300px] flex items-center justify-center"></div>
+                      <img id="qr-code-img" src="" alt="QR Code" class="hidden w-full h-full object-contain transition-transform duration-500 hover:scale-110">
+                    </div>
+                  </div>
                 </div>
+
+                <div class="mt-12 pt-8 border-t border-white/10 glass-footer -mx-12 -mb-12 px-12 pb-12 rounded-b-[28px] flex justify-between items-center relative z-10">
+                  <div>
+                    <div class="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1">Node Authority</div>
+                    <div id="license-brand-name" class="text-[11px] font-black text-white uppercase tracking-[0.25em] drop-shadow-md">PROTO-OPERATOR</div>
+                  </div>
+                  <div class="text-right">
+                    <div class="text-[9px] font-bold text-gray-500 uppercase tracking-widest mb-1">Protocol Clearance</div>
+                    <div class="text-[12px] font-black text-[#D4AF37] uppercase tracking-widest shimmer-text">LIFETIME ALPHA</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action: Download Asset -->
+              <div class="mt-10 text-center md:text-left">
+                <button id="qr-download"
+                  class="text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.3em] hover:text-white transition-all bg-[#D4AF37]/5 px-10 py-5 rounded-2xl border border-[#D4AF37]/30 cursor-pointer shadow-lg hover:shadow-[0_0_30px_rgba(212,175,55,0.3)] hover:scale-105 transform active:scale-95">
+                  Export License Asset →
+                </button>
+                <p class="text-[10px] text-gray-600 mt-5 uppercase tracking-widest font-bold opacity-80">High-Resolution Production Asset • HQ Export Enabled</p>
               </div>
 
             </div>
@@ -621,8 +690,10 @@
     </div>
   </main>
 
-  <!-- Load Supabase -->
+  <!-- Load Support Libs -->
+  <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
     // Initialize Supabase Client (REQUIRED FOR DATABASE OPS)
     const SUPABASE_URL_BASE = 'https://cwdawyeiijbcoihobvpb.supabase.co';
@@ -636,6 +707,58 @@
     window.isMasterRotator = false;
     window.currentRotatorPool = "";
 
+    // Multi-View Controller (Optimized Anti-Flicker)
+    function switchView(fromId, toId) {
+      if (!toId) return;
+      const allViews = ['gateway-view', 'setup-view', 'dashboard-view', 'checkout-view', 'forgot-view'];
+      
+      // 1. Force IMMEDIATE 'none' on every view
+      allViews.forEach(v => {
+        const el = document.getElementById(v);
+        if (el) el.style.display = 'none';
+        if (el) el.classList.remove('active');
+      });
+
+      // 2. Activate Target
+      const target = document.getElementById(toId);
+      if (target) {
+        target.style.display = 'block';
+        target.classList.add('active');
+        
+        // --- UX FIX: Navigation Button Visibility ---
+        const navBtn = document.getElementById('navLoginBtn');
+        if (navBtn) {
+          if (toId === 'dashboard-view') navBtn.classList.remove('hidden');
+          else navBtn.classList.add('hidden');
+        }
+      }
+      window.scrollTo(0, 0);
+    }
+
+    // Login Experience: Direct Shortcut
+    function showDirectLogin() {
+      isReturningUser = true;
+      currentEmail = ""; // Clear to allow manual entry in setup-view
+      const title = document.getElementById('setup-title');
+      const desc = document.getElementById('setup-desc');
+      const regZone = document.getElementById('registration-fields-zone');
+      const emailZone = document.getElementById('setup-email-zone');
+      const btnText = document.getElementById('setup-btn-text');
+      
+      if (title) title.innerText = "Account Login";
+      if (desc) desc.innerText = "Enter your credentials to access your partner dashboard.";
+      if (emailZone) emailZone.classList.remove('hidden');
+      if (btnText) btnText.innerText = "Login to Dashboard";
+      
+      if (regZone) {
+        regZone.style.display = 'none';
+        // CRITICAL FIX: Strip required attributes so the browser does not block login
+        regZone.querySelectorAll('input, select, textarea').forEach(el => el.removeAttribute('required'));
+      }
+      
+      switchView('gateway-view', 'setup-view');
+    }
+
     // Initialize Dashboard State
     (async function checkExistingSession() {
       const storedSession = localStorage.getItem('aurum_affiliate_session');
@@ -645,8 +768,7 @@
           currentEmail = session.email;
           const sessionName = session.name || session.email.split('@')[0] || 'Partner';
           window.isMasterRotator = session.is_rotator || false;
-          window.currentRotatorPool = session.instructions || ''; 
-          // Direct load to avoid timing issues
+          window.currentRotatorPool = session.rotator_pool || ''; 
           showDashboard(session.email, session.code, session.paymentStatus || 'unpaid', sessionName);
         } catch (e) { console.error("Session parse error", e); }
       }
@@ -655,36 +777,10 @@
     // Logout Logic (One-Click Hard Reset - No Flash)
     document.getElementById('navLoginBtn').addEventListener('click', function (e) {
       e.preventDefault();
-      localStorage.clear(); // Mass clear for safety
+      localStorage.clear();
       sessionStorage.clear();
       window.location.replace(window.location.pathname);
     });
-
-    // Helper: Absolute View Toggler (No-Flash Engine)
-    function switchView(fromId, toId) {
-      if (!toId) return;
-      const allViews = ['gateway-view', 'setup-view', 'dashboard-view', 'checkout-view'];
-
-      // 1. Force IMMEDIATE 'none' on every view
-      allViews.forEach(v => {
-        const el = document.getElementById(v);
-        if (el) {
-          el.style.display = 'none';
-          el.classList.add('hidden'); // Redundancy
-        }
-      });
-
-      // 2. Forced Re-render and Enable Target
-      const target = document.getElementById(toId);
-      if (target) {
-        if (toId === 'gateway-view') {
-          target.style.display = 'grid';
-        } else {
-          target.style.display = 'block';
-        }
-        target.classList.remove('hidden');
-      }
-    }
 
     // Capture Email Flow
     document.getElementById('checkout-form').addEventListener('submit', async function (e) {
@@ -694,7 +790,6 @@
       const email = emailInput.value.trim().toLowerCase();
       if (!email) return;
 
-      // Persist email globally for sub-forms
       currentEmail = email;
       sessionStorage.setItem('aurum_temp_email', email);
       const btn = document.getElementById('start-trial-btn');
@@ -720,18 +815,26 @@
           }
         }
 
-        // Configure Setup View
         document.getElementById('setup-title').innerText = isReturningUser ? "Login to Dashboard" : "Complete Setup";
         document.getElementById('setup-desc').innerText = isReturningUser ? "Enter your password to access your affiliate links." : "Secure your dashboard and link your AURUM corporate account.";
-        document.getElementById('registration-fields-zone').style.display = isReturningUser ? 'none' : 'block';
-        document.getElementById('setup-fullname').required = !isReturningUser;
-        document.getElementById('setup-btn-text').innerText = isReturningUser ? "Login" : "Save & Generate Dashboard";
+        
+        const regZone = document.getElementById('registration-fields-zone');
+        regZone.style.display = isReturningUser ? 'none' : 'block';
+        
+        regZone.querySelectorAll('input, select, textarea').forEach(el => {
+          if (isReturningUser) {
+            el.removeAttribute('required');
+          } else if (el.id === 'setup-fullname' || el.id === 'setup-aff-id') {
+            el.setAttribute('required', 'true');
+          }
+        });
 
+        document.getElementById('setup-btn-text').innerText = isReturningUser ? "Login" : "Save & Generate Dashboard";
         switchView('gateway-view', 'setup-view');
 
       } catch (err) {
         console.error("Gateway error:", err);
-        switchView('gateway-view', 'setup-view'); // Fallback to manual
+        switchView('gateway-view', 'setup-view');
       } finally {
         setTimeout(() => {
           btn.innerHTML = originalBtnHtml;
@@ -743,10 +846,9 @@
     document.getElementById('setup-form').addEventListener('submit', async function (e) {
       e.preventDefault();
 
-      const emailToUse = currentEmail || sessionStorage.getItem('aurum_temp_email');
+      let emailToUse = currentEmail || document.getElementById('setup-email-input')?.value || sessionStorage.getItem('aurum_temp_email');
       if (!emailToUse) {
-        alert("Session expired. Please start over.");
-        window.location.reload();
+        alert("Enter your email address first.");
         return;
       }
 
@@ -763,12 +865,14 @@
       try {
         let finalCode = affId;
         let finalName = fullName;
+        let finalPhone = document.getElementById('setup-phone')?.value || '';
+        let finalInstructions = document.getElementById('setup-instructions')?.value || '';
 
         if (window.aurumDB) {
           if (isReturningUser) {
             const { data, error } = await window.aurumDB
               .from('aurum_affiliates')
-              .select('affiliate_code, password, full_name, phone, instructions, is_rotator, rotator_pool')
+              .select('affiliate_code, password, full_name, phone, instructions, is_rotator, rotator_pool, status')
               .eq('email', emailToUse)
               .single();
 
@@ -780,9 +884,13 @@
             }
             finalCode = data.affiliate_code;
             finalName = data.full_name || emailToUse.split('@')[0];
-            currentPaymentStatus = 'unpaid';
-            isMasterRotator = data.is_rotator || false;
-            currentRotatorPool = data.rotator_pool || '';
+            finalPhone = data.phone || '';
+            finalInstructions = data.instructions || '';
+            
+            const dbStatus = (data.status || '').toLowerCase().trim();
+            currentPaymentStatus = (dbStatus === 'active' || dbStatus === 'paid') ? 'paid' : 'unpaid';
+            window.isMasterRotator = data.is_rotator || false;
+            window.currentRotatorPool = data.rotator_pool || '';
 
           } else {
             if (affId.includes('/u/')) {
@@ -795,7 +903,6 @@
               return;
             }
 
-            // 1. Mandatory Affiliate Record Write
             const { error: affError } = await window.aurumDB
               .from('aurum_affiliates')
               .insert([
@@ -803,7 +910,7 @@
                   full_name: fullName || 'Trial Partner',
                   email: emailToUse,
                   affiliate_code: affId,
-                  affiliate_id: document.getElementById('setup-aff-id')?.value || '', // The Dynamic Link Bridge
+                  affiliate_id: document.getElementById('setup-aff-id')?.value || '',
                   phone: document.getElementById('setup-phone')?.value || '',
                   instructions: document.getElementById('setup-instructions')?.value || '',
                   password: password,
@@ -813,14 +920,13 @@
 
             if (affError && affError.code !== '23505') throw affError;
 
-            // 2. Forced Parallel Member Record for CRM tracking (RELIANT ON STEP 1)
             const { error: memError } = await window.aurumDB
               .from('aurum_members')
               .insert([
                 {
                   full_name: fullName || 'Partner',
                   email: emailToUse,
-                  status: 'active', // Displayed as active trial in CRM
+                  status: 'active',
                   referred_by: 'AFFILIATE-PORTAL-SIGNUP',
                   plan_tier: '14-Day Trial'
                 }
@@ -828,44 +934,11 @@
             
             if (memError && memError.code !== '23505') console.warn("CRM Sync Delay:", memError);
 
-             // 3. Fire Instant Trial Welcome Email
-             try {
-                await fetch('/api/send-email', {
-                  method: 'POST',
-                  headers: { 'content-type': 'application/json' },
-                  body: JSON.stringify({
-                    to: [{ email: emailToUse }],
-                    subject: "AURUM Partner Node: Trial Activated",
-                    htmlContent: `
-                      <div style="font-family: sans-serif; padding: 40px; border: 1px solid #eee; border-radius: 12px; max-width: 600px; margin: 0 auto;">
-                        <h1 style="color: #D4AF37;">Partner Node: TRIAL ACTIVE</h1>
-                        <p>Welcome to AURUM. Your 14-day affiliate trial has officially started.</p>
-                        <p><b>Your Next Steps:</b></p>
-                        <ul>
-                          <li>Access your dashboard to copy your tracking links.</li>
-                          <li>Share your link to begin tracking referrals.</li>
-                          <li>Activate your full license before day 14 to avoid disruption.</li>
-                        </ul>
-                        <p><a href="${window.location.origin}/affiliate-portal.html" style="background: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block;">Go to Master Portal</a></p>
-                        <p style="font-size: 11px; color: #94A3B8; margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px;">
-                          This is an automated trial activation. Keep this email for your records.
-                        </p>
-                      </div>
-                    `
-                  })
-                });
-             } catch(e) { console.warn("Welcome Email failed:", e); }
-
-             finalCode = affId;
-             finalName = fullName || emailToUse.split('@')[0];
-             finalPhone = document.getElementById('setup-phone')?.value || '';
-             finalInstructions = document.getElementById('setup-instructions')?.value || '';
              currentPaymentStatus = 'unpaid';
            }
          }
 
-         // Save session locally
-         currentEmail = emailToUse; // Ensure global state is synced
+         currentEmail = emailToUse;
          const sessionNameForStorage = finalName || emailToUse.split('@')[0] || 'Partner';
          const sessionData = { 
             email: emailToUse, 
@@ -873,6 +946,7 @@
             code: finalCode, 
             phone: finalPhone || '',
             instructions: finalInstructions || '',
+            rotator_pool: window.currentRotatorPool || '',
             is_rotator: window.isMasterRotator || false,
             paymentStatus: currentPaymentStatus 
          };
@@ -881,12 +955,12 @@
         showDashboard(emailToUse, finalCode, currentPaymentStatus, sessionNameForStorage);
 
       } catch (err) {
-        console.warn("Database Sync Delayed. Saving Locally...", err);
-        // CRITICAL FALLBACK: If Supabase fails, save locally and proceed. Do NOT block the user.
+        console.error("Database Login Error:", err);
         try {
-          const sessionData = { email: emailToUse, name: fullName || 'Partner', code: affId || 'AURUM-99', paymentStatus: 'unpaid' };
+          const fallbackName = fullName || emailToUse.split('@')[0] || 'Partner';
+          const sessionData = { email: emailToUse, name: fallbackName, code: affId || 'AURUM-99', paymentStatus: 'unpaid' };
           localStorage.setItem('aurum_affiliate_session', JSON.stringify(sessionData));
-          showDashboard(emailToUse, affId || 'AURUM-99', 'unpaid', fullName || 'Partner');
+          showDashboard(emailToUse, affId || 'AURUM-99', 'unpaid', fallbackName);
         } catch (localErr) {
           alert("A connection error occurred. Please refresh and try again.");
           btnText.innerText = originalText;
@@ -895,43 +969,149 @@
       }
     });
 
+    function generateTextLogo(text) {
+      if (!text) return null;
+      const canvas = document.createElement('canvas');
+      canvas.width = 120;
+      canvas.height = 120;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#0a192f';
+      ctx.beginPath();
+      ctx.arc(60, 60, 58, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#D4AF37';
+      ctx.lineWidth = 6;
+      ctx.stroke();
+      ctx.fillStyle = '#D4AF37'; 
+      
+      const cleanText = text.replace('TEAM-', '').toUpperCase().substring(0, 12);
+      const fontSize = cleanText.length > 8 ? 16 : 22;
+      ctx.font = `bold ${fontSize}px Montserrat, Inter, sans-serif`; 
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(cleanText, 60, 60);
+      return canvas.toDataURL('image/png');
+    }
+
     function showDashboard(email, affiliateCode, paymentStatus = 'unpaid', name = '') {
       if (!email || !affiliateCode) return;
 
-      // Set display names (Safe Updates)
       const displayName = name || email.split('@')[0] || 'Partner';
-      
       const nameEl = document.getElementById('dash-name-top');
-      if (nameEl) nameEl.innerText = `Welcome back, ${displayName}`;
+      if (nameEl) {
+        const formattedName = displayName.trim().includes(' ') 
+          ? displayName 
+          : displayName.charAt(0).toUpperCase() + displayName.slice(1);
+        nameEl.innerText = `PROTOCOL OPERATOR: ${formattedName.toUpperCase()}`;
+      }
 
-      // Generate Links
       const urlRoot = window.location.origin;
       const fullLink = `${urlRoot}/index.html?ref=${affiliateCode}`;
       const affLinkInput = document.getElementById('aff-link');
       if (affLinkInput) affLinkInput.value = fullLink;
 
-      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(fullLink)}`;
-      document.getElementById('qr-code-img').src = qrUrl;
-      document.getElementById('qr-download').href = qrUrl;
-
-      // Payment Status UI
-      const activateBtn = document.getElementById('activate-node-btn');
-      const daysSubtext = document.getElementById('trial-days-subtext');
-
-      if (paymentStatus === 'paid') {
-        activateBtn.innerText = 'Node License: ACTIVE (VIP)';
-        activateBtn.classList.remove('bg-[#D4AF37]', 'hover:bg-white', 'text-[#001F3F]');
-        activateBtn.classList.add('bg-[#22c55e]', 'text-white', 'cursor-not-allowed', 'shadow-glow-teal');
-        activateBtn.onclick = null;
-        if (daysSubtext) daysSubtext.innerText = "Unlimited Lifetime Access";
-      } else if (paymentStatus === 'payment_pending') {
-        activateBtn.innerText = 'Verification Pending...';
-        activateBtn.classList.add('bg-[#22c55e]', 'opacity-60', 'cursor-not-allowed');
-        activateBtn.onclick = null;
-        if (daysSubtext) daysSubtext.innerText = "Processing Node activation...";
+      const agencyBrandName = localStorage.getItem('aurum_org') || (window.isMasterRotator ? affiliateCode : null);
+      const isAgency = agencyBrandName && agencyBrandName !== 'Direct';
+      let qrImage = "https://backoffice.aurum.foundation/assets/logo.png";
+      if (isAgency) {
+        qrImage = generateTextLogo(agencyBrandName);
       }
 
-      // SHOW ROTATOR IF APPLICABLE
+      const qrCode = new QRCodeStyling({
+        width: 300,
+        height: 300,
+        type: "canvas",
+        data: fullLink,
+        dotsOptions: { color: "#D4AF37", type: "rounded" },
+        backgroundOptions: { color: "#ffffff" },
+        cornersSquareOptions: { color: "#D4AF37", type: "extra-rounded" },
+        cornersDotOptions: { color: "#D4AF37", type: "dot" },
+        image: qrImage,
+        imageOptions: {
+          margin: 10,
+          imageSize: 0.5,
+          hideBackgroundDots: true
+        }
+      });
+      
+      const qrContainer = document.getElementById('qr-code-container');
+      const oldImg = document.getElementById('qr-code-img');
+      if (oldImg) oldImg.style.display = 'none'; 
+      if (qrContainer) {
+        qrContainer.innerHTML = ''; 
+        qrCode.append(qrContainer);
+      }
+      
+      const dlBtn = document.getElementById('qr-download');
+      if (dlBtn) {
+        dlBtn.onclick = async (e) => {
+          e.preventDefault();
+          const cardEl = document.querySelector('.digital-license-card');
+          if (!cardEl) return;
+          
+          const originalText = dlBtn.innerText;
+          dlBtn.innerText = "Generating Asset...";
+          
+          // --- CLEANUP FOR EXPORT ---
+          cardEl.classList.add('exporting');
+          
+          try {
+            const canvas = await html2canvas(cardEl, {
+              scale: 3, 
+              backgroundColor: null,
+              useCORS: true,
+              logging: false,
+              onclone: (clonedDoc) => {
+                // Ensure text is solid gold in clone
+                const shimmers = clonedDoc.querySelectorAll('.shimmer-text');
+                shimmers.forEach(s => s.style.color = '#D4AF37');
+              }
+            });
+            
+            const link = document.createElement('a');
+            link.download = `AURUM-LICENSE-${affiliateCode || 'PARTNER'}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+          } catch (err) {
+            console.error("Asset export failed:", err);
+            qrCode.download({ name: `AURUM-QR-${affiliateCode}`, extension: "png" });
+          } finally {
+            cardEl.classList.remove('exporting');
+            dlBtn.innerText = originalText;
+          }
+        };
+      }
+      
+      const licenseBrand = document.getElementById('license-brand-name');
+      if (licenseBrand) {
+        let brandName = (agencyBrandName || 'PROTO-OPERATOR').toUpperCase();
+        if (brandName.startsWith('TEAM-')) brandName = brandName.replace('TEAM-', '');
+        licenseBrand.innerText = brandName;
+      }
+
+      const activateBtn = document.getElementById('activate-node-btn');
+      const statusBadge = document.getElementById('trial-status-text');
+      const daysLabel = document.getElementById('trial-days-text');
+
+      if (paymentStatus === 'paid') {
+        if (statusBadge) statusBadge.innerText = "Full Access";
+        if (daysLabel) daysLabel.innerText = "Lifetime";
+        if (activateBtn) {
+          activateBtn.innerText = 'Node License: ACTIVE (VIP)';
+          activateBtn.classList.remove('bg-[#D4AF37]', 'hover:bg-white', 'text-[#001F3F]');
+          activateBtn.classList.add('bg-[#22c55e]', 'text-white', 'cursor-not-allowed', 'shadow-glow-teal');
+          activateBtn.onclick = null;
+        }
+      } else if (paymentStatus === 'payment_pending') {
+        if (statusBadge) statusBadge.innerText = "Verifying...";
+        if (daysLabel) daysLabel.innerText = "Pending";
+        if (activateBtn) {
+          activateBtn.innerText = 'Verification Pending...';
+          activateBtn.classList.add('bg-[#22c55e]', 'opacity-60', 'cursor-not-allowed');
+          activateBtn.onclick = null;
+        }
+      }
+
       if (window.isMasterRotator) {
         document.getElementById('standard-link-view').classList.add('hidden');
         document.getElementById('rotator-control-view').classList.remove('hidden');
@@ -940,26 +1120,38 @@
         document.getElementById('master-aff-link').value = `${urlRoot}/index.html?ref=${affiliateCode}`;
       }
 
-      // Transition View (Direct Switch to avoid flash)
       switchView('', 'dashboard-view');
-      document.getElementById('navLoginBtn').classList.remove('hidden');
-
-      // Fetch Real-time Stats
       updateDashboardStats(affiliateCode);
+      initLicenseCardTilt();
     }
 
-    // Multi-View Controller (Optimized Anti-Flicker)
-    function switchView(from, to) {
-      document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-      const target = document.getElementById(to);
-      if (target) {
-        target.classList.add('active');
-        if (to === 'dashboard-view') {
-          document.getElementById('navLoginBtn').classList.remove('hidden');
-        } else {
-          document.getElementById('navLoginBtn').classList.add('hidden');
+    function initLicenseCardTilt() {
+      const card = document.getElementById('license-card');
+      if (!card) return;
+
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * 15;
+        const rotateY = ((x - centerX) / centerX) * -15;
+
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        
+        const overlay = card.querySelector('.holographic-overlay');
+        if (overlay) {
+          overlay.style.opacity = '1';
+          overlay.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(212,175,55,0.15) 0%, transparent 80%)`;
         }
-      }
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+        const overlay = card.querySelector('.holographic-overlay');
+        if (overlay) overlay.style.opacity = '0';
+      });
     }
 
     function togglePasswordVisibility(id) {
@@ -985,6 +1177,11 @@
     }
 
     // Security Features
+    function logout() {
+      localStorage.removeItem('aurum_affiliate_session');
+      window.location.reload();
+    }
+
     function togglePasswordUpdate() {
       const form = document.getElementById('password-form-zone');
       const toggle = document.getElementById('password-toggle-zone');
@@ -1135,10 +1332,28 @@
             .update({ is_rotator: true, rotator_pool: poolInput, rotator_index: 0, affiliate_code: masterCode })
             .eq('email', currentEmail);
 
-          if (error && error.code === '23505') return alert("Custom name taken!");
+          if (error && error.code === '23505') {
+            btn.innerText = 'Save Rotator Configuration →';
+            btn.disabled = false;
+            return alert("Custom name taken!");
+          }
+
+          // UPDATE LOCAL SESSION SO UI REFLECTS CHANGES ON RELOAD
+          const stored = localStorage.getItem('aurum_affiliate_session');
+          if (stored) {
+            const session = JSON.parse(stored);
+            session.is_rotator = true;
+            session.rotator_pool = poolInput;
+            session.code = masterCode;
+            localStorage.setItem('aurum_affiliate_session', JSON.stringify(session));
+          }
         }
         location.reload();
-      } catch (e) { console.error(e); btn.disabled = false; }
+      } catch (e) { 
+        console.error("Upgrade error:", e); 
+        btn.innerText = 'Save Rotator Configuration →';
+        btn.disabled = false; 
+      }
     }
 
     const wallets = {
