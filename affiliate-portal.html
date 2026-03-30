@@ -250,10 +250,18 @@
         font-size: 2.8rem !important;
       }
 
+      @media (max-height: 700px) {
+        .digital-license-card {
+           transform: scale(0.85);
+           transform-origin: top center;
+           margin-bottom: -50px;
+        }
+      }
+
       /* Navbar Mobile Refinement */
       nav .max-w-6xl {
-        padding-left: 1.25rem !important;
-        padding-right: 1.25rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
       }
       nav a.text-xl {
         font-size: 0.95rem !important;
@@ -266,9 +274,11 @@
         font-size: 9px !important;
       }
       #navLoginBtn {
-        padding: 6px 12px !important;
-        font-size: 9px !important;
-        white-space: nowrap;
+        display: none !important; /* Hide in navbar on mobile */
+      }
+      
+      .mobile-logout-cta {
+        display: block !important;
       }
     }
 
@@ -332,7 +342,7 @@
       </div>
       <div>
         <button id="navLoginBtn"
-          class="hidden text-[11px] font-black uppercase text-gray-500 hover:text-[#00F5FF] transition-colors bg-white/5 px-4 py-2 rounded-lg border border-white/10">Log
+          class="hidden md:block text-[11px] font-black uppercase text-gray-500 hover:text-[#00F5FF] transition-colors bg-white/5 px-4 py-2 rounded-lg border border-white/10">Log
           Out</button>
       </div>
     </div>
@@ -704,6 +714,13 @@
              <div class="text-[9px] font-black text-gray-600 uppercase tracking-[0.2em] px-4">Earn 10% Recurring USDT</div>
         </div>
 
+        <!-- Mobile Logout Trigger -->
+        <div class="mobile-logout-cta hidden mt-8 pb-12 text-center">
+            <button onclick="handleLogout()" class="w-full py-5 rounded-2xl bg-white/5 border border-white/10 text-gray-500 font-black text-[11px] uppercase tracking-widest hover:text-white transition-all">
+                Close Protocol Session (Log Out)
+            </button>
+        </div>
+
       </div>
 
     </div>
@@ -852,12 +869,12 @@
     })();
 
     // Logout Logic (One-Click Hard Reset - No Flash)
-    document.getElementById('navLoginBtn').addEventListener('click', function (e) {
-      e.preventDefault();
-      localStorage.clear();
-      sessionStorage.clear();
-      window.location.replace(window.location.pathname);
-    });
+    function handleLogout() {
+      localStorage.removeItem('aurum_affiliate_session');
+      location.reload();
+    }
+
+    document.getElementById('navLoginBtn').addEventListener('click', handleLogout);
 
     // Capture Email Flow
     document.getElementById('checkout-form').addEventListener('submit', async function (e) {
