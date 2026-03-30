@@ -213,17 +213,21 @@
       }
 
       #qr-code-container {
-        width: 220px !important;
-        height: 220px !important;
+        width: 100% !important;
+        max-width: 300px !important;
+        height: auto !important;
+        aspect-ratio: 1/1;
+        margin: 0 auto;
       }
 
-      #qr-code-container canvas {
+      #qr-code-container canvas, #qr-code-img {
         width: 100% !important;
-        height: 100% !important;
+        height: auto !important;
+        border-radius: 40px;
       }
 
       .digital-license-card .qr-zone {
-        padding: 10px 0 !important;
+        padding: 20px 0 !important;
       }
 
       .digital-license-card .shimmer-text {
@@ -1117,14 +1121,12 @@
 
       const agencyBrandName = localStorage.getItem('aurum_org') || (window.isMasterRotator ? affiliateCode : null);
       const isAgency = agencyBrandName && agencyBrandName !== 'Direct';
-      let qrImage = "https://backoffice.aurum.foundation/assets/logo.png";
-      if (isAgency) {
-        qrImage = generateTextLogo(agencyBrandName);
-      }
+      // ENHANCED QR GENERATION: Using locally guaranteed assets and rendering delays for mobile
+      let qrImage = generateTextLogo(isAgency ? agencyBrandName : "AFB");
 
       const qrCode = new QRCodeStyling({
-        width: 300,
-        height: 300,
+        width: 600, // High res for export
+        height: 600,
         type: "canvas",
         data: fullLink,
         dotsOptions: { color: "#D4AF37", type: "rounded" },
@@ -1134,17 +1136,35 @@
         image: qrImage,
         imageOptions: {
           margin: 10,
-          imageSize: 0.5,
+          imageSize: 0.35,
           hideBackgroundDots: true
         }
       });
       
       const qrContainer = document.getElementById('qr-code-container');
-      const oldImg = document.getElementById('qr-code-img');
-      if (oldImg) oldImg.style.display = 'none'; 
+      const qrImg = document.getElementById('qr-code-img');
+      
       if (qrContainer) {
         qrContainer.innerHTML = ''; 
-        qrCode.append(qrContainer);
+        qrContainer.style.display = 'flex'; // Reset display
+        if (qrImg) qrImg.style.display = 'none'; // Hide image while regenerating
+
+        // CRITICAL: Delay render to ensure container sizing is initialized by browser
+        setTimeout(() => {
+          qrCode.append(qrContainer);
+          
+          // CRITICAL MOBILE FIX: Convert canvas to static <img> after render
+          // This allows users to "long-press" to save and ensures stable rendering
+          setTimeout(() => {
+            const canvas = qrContainer.querySelector('canvas');
+            if (canvas && qrImg) {
+              const dataUrl = canvas.toDataURL('image/png');
+              qrImg.src = dataUrl;
+              qrImg.style.display = 'block';
+              qrContainer.style.display = 'none'; // Hide the active canvas
+            }
+          }, 300);
+        }, 150);
       }
       
       const dlBtn = document.getElementById('qr-download');
