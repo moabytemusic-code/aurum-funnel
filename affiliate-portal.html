@@ -1435,7 +1435,7 @@
         const { count: clickCount } = await window.aurumDB
           .from('aurum_tracking')
           .select('*', { count: 'exact', head: true })
-          .eq('affiliate_code', affiliateCode)
+          .eq('ref', affiliateCode)
           .eq('event_type', 'entry_hit');
 
         document.getElementById('stat-clicks').innerText = clickCount || 0;
@@ -1444,7 +1444,7 @@
         const { count: conversionCount } = await window.aurumDB
           .from('aurum_tracking')
           .select('*', { count: 'exact', head: true })
-          .eq('affiliate_code', affiliateCode)
+          .eq('ref', affiliateCode)
           .eq('event_type', 'conversion_click');
 
         document.getElementById('stat-trials').innerText = conversionCount || 0;

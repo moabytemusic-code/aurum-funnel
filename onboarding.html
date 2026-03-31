@@ -390,9 +390,11 @@
           // Fire-and-forget — don't block navigation
           try {
             await aurumDB.from('aurum_tracking').insert([{
-              affiliate_code: sponsorCode,
+              ref: sponsorCode,
               event_type: 'conversion_click',
-              page_path: '/onboarding.html'
+              page: 'Onboarding',
+              org: localStorage.getItem('aurum_org') || 'Direct',
+              platform: window.innerWidth < 768 ? 'Mobile' : 'Desktop'
             }]);
             console.log(`[AURUM-TRACKER] Conversion Click recorded for: ${sponsorCode}`);
           } catch (err) {

@@ -136,9 +136,11 @@
            const { error: trackErr } = await supabase
               .from('aurum_tracking')
               .insert([{ 
-                  affiliate_code: ref, 
+                  ref: ref, 
                   event_type: 'entry_hit',
-                  page_path: window.location.pathname 
+                  page: 'Lander',
+                  org: org || 'Direct',
+                  platform: window.innerWidth < 768 ? 'Mobile' : 'Desktop'
               }]);
            if (!trackErr) {
               sessionStorage.setItem('aurum_click_tracked', ref);
