@@ -213,10 +213,13 @@
     let partnerName = activeSkin.brand || (org === 'Direct' ? 'THE AI FINANCE BREAKDOWN' : org);
     partnerName = partnerName.toUpperCase();
     
+    // Strip HTML for comparison (DIRECT skin includes <span> tags)
+    const cleanName = partnerName.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+    
     // Official Corporate Branding (No Prefix) vs. Partner Branding (Prefix)
-    const fullBrandHTML = (partnerName === 'THE AI FINANCE BREAKDOWN') 
+    const fullBrandHTML = (cleanName === 'THE AI FINANCE BREAKDOWN') 
         ? `THE AI<span> FINANCE </span>BREAKDOWN`
-        : `AURUM TEAM - ${partnerName}`;
+        : `AURUM TEAM - ${cleanName}`;
 
     document.querySelectorAll('.nav-brand').forEach(el => {
       el.innerHTML = fullBrandHTML;
