@@ -130,6 +130,22 @@
             }
         }
 
+        // --- GLOBAL CLICK TRACKING ENGINE ---
+        const lastTracked = sessionStorage.getItem('aurum_click_tracked');
+        if (!lastTracked || lastTracked !== ref) {
+           const { error: trackErr } = await supabase
+              .from('aurum_tracking')
+              .insert([{ 
+                  affiliate_code: ref, 
+                  event_type: 'entry_hit',
+                  page_path: window.location.pathname 
+              }]);
+           if (!trackErr) {
+              sessionStorage.setItem('aurum_click_tracked', ref);
+              console.log(`[AURUM-TRACKER] Performance Hit Recorded for: ${ref}`);
+           }
+        }
+
         // Apply Personal/Agency Skin Overrides if present
         if (affData) {
             if (!activeSkin) activeSkin = {}; // Ensure we have a skin object

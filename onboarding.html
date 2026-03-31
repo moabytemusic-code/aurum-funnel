@@ -379,6 +379,28 @@
     }
     
     lookupSponsor();
+
+    // --- CONVERSION CLICK TRACKER ---
+    // Records when a lead clicks the final "Join" button, attributed to sponsor
+    document.addEventListener('DOMContentLoaded', () => {
+      const joinBtn = document.getElementById('final-join-btn');
+      if (joinBtn) {
+        joinBtn.addEventListener('click', async (e) => {
+          const sponsorCode = localStorage.getItem('aurum_ref') || '1W145K';
+          // Fire-and-forget — don't block navigation
+          try {
+            await aurumDB.from('aurum_tracking').insert([{
+              affiliate_code: sponsorCode,
+              event_type: 'conversion_click',
+              page_path: '/onboarding.html'
+            }]);
+            console.log(`[AURUM-TRACKER] Conversion Click recorded for: ${sponsorCode}`);
+          } catch (err) {
+            console.warn('Conversion tracking failed:', err);
+          }
+        });
+      }
+    });
   </script>
 
   <!-- TRACKING & AFFILIATE LOGIC -->

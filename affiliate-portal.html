@@ -614,11 +614,22 @@
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-6 mb-8">
-                  <div class="bg-black/40 border border-white/10 p-6 rounded-2xl">
-                    <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 block">Sub-Affiliate Pool</label>
-                    <textarea id="rotator-pool" placeholder="e.g. JohnD123, SarahM99, AlexR01" 
-                      class="w-full h-32 bg-black/50 border border-white/10 p-4 rounded-xl text-sm font-bold text-white focus:outline-none focus:border-[#D4AF37] resize-none mb-3"></textarea>
-                    <p class="text-[9px] text-gray-500 uppercase leading-tight">Separate IDs with commas. Clicks will rotate through these partners sequentially.</p>
+                  <div class="bg-black/40 border border-white/10 p-6 rounded-2xl relative">
+                    <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 block">Add To Rotation Pool</label>
+                    <div class="relative mb-4">
+                      <input type="text" id="member-search" placeholder="Search Email or Name..." 
+                        class="w-full bg-black/60 border border-white/10 px-6 py-4 rounded-xl text-sm font-bold text-white focus:outline-none focus:border-[#00F5FF]"
+                        oninput="searchMembers(this.value)">
+                      <div id="search-results" class="absolute left-0 right-0 top-full mt-2 bg-[#001F3F] border border-white/10 rounded-xl hidden z-50 shadow-2xl max-h-48 overflow-y-auto">
+                        <!-- Results injected here -->
+                      </div>
+                    </div>
+                    
+                    <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 block">Current Team (<span id="pool-count">0</span> / <span id="pool-max">100</span>)</label>
+                    <div id="active-pool-list" class="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
+                       <!-- Active members as tags -->
+                    </div>
+                    <textarea id="rotator-pool" class="hidden"></textarea>
                   </div>
                   <div class="bg-black/40 border border-white/10 p-6 rounded-2xl flex flex-col justify-between">
                     <div>
@@ -710,11 +721,11 @@
               </div>
               <div class="bg-white/5 p-6 rounded-[24px] border border-white/5 flex items-center justify-between">
                 <div>
-                  <div class="text-[10px] font-bold text-gray-500 uppercase mb-1 tracking-widest">New Active Trials
+                  <div class="text-[10px] font-bold text-gray-500 uppercase mb-1 tracking-widest">Conversions
                   </div>
                   <div class="text-4xl font-black text-[#00F5FF]" id="stat-trials">0</div>
                 </div>
-                <div class="text-[#00F5FF] text-2xl opacity-20 hover:opacity-100 transition-opacity">🛡</div>
+                <div class="text-[#00F5FF] text-2xl opacity-20 hover:opacity-100 transition-opacity">🎯</div>
               </div>
             </div>
                </div>
@@ -812,6 +823,7 @@
     let currentPaymentStatus = 'unpaid';
     window.isMasterRotator = false;
     window.currentRotatorPool = "";
+    window.CURRENT_PARTNER_CODE = "";
 
     // Multi-View Controller (Optimized Anti-Flicker)
     function switchView(fromId, toId) {
@@ -1128,6 +1140,7 @@
 
     function showDashboard(email, affiliateCode, paymentStatus = 'unpaid', name = '') {
       if (!email || !affiliateCode) return;
+      window.CURRENT_PARTNER_CODE = affiliateCode;
       
       // Calculate Trial Days
       let trialDaysLeft = 14;
@@ -1325,6 +1338,7 @@
         document.getElementById('rotator-pool').value = window.currentRotatorPool || '';
         document.getElementById('rotator-name').value = affiliateCode.replace('TEAM-', '');
         document.getElementById('master-aff-link').value = `${urlRoot}/index.html?ref=${affiliateCode}`;
+        renderPoolList(window.currentRotatorPool);
       }
 
       switchView('', 'dashboard-view');
@@ -1417,24 +1431,23 @@
       if (!window.aurumDB) return;
 
       try {
-        // 1. Fetch Click Counts from aurum_tracking
+        // 1. Total Link Clicks (entry_hit events)
         const { count: clickCount } = await window.aurumDB
           .from('aurum_tracking')
           .select('*', { count: 'exact', head: true })
-          .eq('affiliate_code', affiliateCode);
+          .eq('affiliate_code', affiliateCode)
+          .eq('event_type', 'entry_hit');
 
         document.getElementById('stat-clicks').innerText = clickCount || 0;
 
-        // 2. Fetch Active Referrals from aurum_members
-        const { data: referrals, error: refError } = await window.aurumDB
-          .from('aurum_members')
-          .select('id, status')
-          .eq('referred_by', affiliateCode);
+        // 2. Conversions (Join button clicks)
+        const { count: conversionCount } = await window.aurumDB
+          .from('aurum_tracking')
+          .select('*', { count: 'exact', head: true })
+          .eq('affiliate_code', affiliateCode)
+          .eq('event_type', 'conversion_click');
 
-        if (referrals) {
-          const activeCount = referrals.filter(r => r.status === 'active' || r.status === 'pending').length;
-          document.getElementById('stat-trials').innerText = activeCount;
-        }
+        document.getElementById('stat-trials').innerText = conversionCount || 0;
       } catch (e) {
         console.warn("Stats update failed:", e);
       }
@@ -1518,11 +1531,123 @@
       document.getElementById('copyBtn').innerText = '✓ Copied';
       setTimeout(() => document.getElementById('copyBtn').innerText = 'Copy Address', 2000);
     }
+    async function searchMembers(query) {
+        const resultsBox = document.getElementById('search-results');
+        if (query.length < 3) {
+            resultsBox.classList.add('hidden');
+            return;
+        }
+
+        try {
+            const { data, error } = await window.aurumDB
+                .from('aurum_affiliates') // CROSS-FETCH FROM AFFILIATES
+                .select('email, full_name, affiliate_code')
+                .ilike('email', `%${query}%`)
+                .limit(5);
+
+            if (data && !error) {
+                resultsBox.innerHTML = '';
+                if (data.length === 0) {
+                    resultsBox.innerHTML = '<div class="p-4 text-xs text-gray-400 italic">No matching partners found.</div>';
+                } else {
+                    data.forEach(aff => {
+                        const div = document.createElement('div');
+                        div.className = "p-4 hover:bg-white/5 cursor-pointer border-b border-white/5 flex justify-between items-center";
+                        div.innerHTML = `
+                            <div class="text-left">
+                                <p class="text-xs font-bold text-white">${aff.email}</p>
+                                <p class="text-[9px] text-[#00F5FF] font-black uppercase tracking-widest">${aff.affiliate_code}</p>
+                            </div>
+                            <button onclick="addToPool('${aff.affiliate_code}', '${aff.email}')" class="px-3 py-1 bg-[#00F5FF]/10 text-[#00F5FF] text-[10px] font-black rounded-lg hover:bg-[#00F5FF] hover:text-black transition-all">ASSIGN</button>
+                        `;
+                        resultsBox.appendChild(div);
+                    });
+                }
+                resultsBox.classList.remove('hidden');
+            }
+        } catch (err) { console.error('Search failed:', err); }
+    }
+
+    async function addToPool(code, email) {
+        const input = document.getElementById('rotator-pool');
+        let poolArr = input.value ? input.value.split(',').map(s => s.trim()).filter(s => s) : [];
+        
+        // Determine capacity based on plan
+        const session = JSON.parse(localStorage.getItem('aurum_affiliate_session') || '{}');
+        const plan = session.plan || 'ROTATOR';
+        const max = (plan === 'AGENCY') ? 2500 : 100;
+
+        if (poolArr.length >= max) {
+            return alert(`Capacity reached (${max}). Please upgrade to Agency Pro for higher volume.`);
+        }
+
+        if (poolArr.includes(code)) return alert("Code already in pool.");
+        
+        poolArr.push(code);
+        const newPool = poolArr.join(',');
+        
+        try {
+            const { error } = await window.aurumDB
+                .from('aurum_affiliates')
+                .update({ rotator_pool: newPool })
+                .eq('email', session.email);
+
+            if (!error) {
+                input.value = newPool;
+                document.getElementById('member-search').value = '';
+                document.getElementById('search-results').classList.add('hidden');
+                
+                // Update local storage session
+                session.rotator_pool = newPool;
+                localStorage.setItem('aurum_affiliate_session', JSON.stringify(session));
+                
+                renderPoolList(newPool);
+            }
+        } catch (e) { alert("Error assigning member: " + e.message); }
+    }
+
+    function removeFromPool(email) {
+        const input = document.getElementById('rotator-pool');
+        let poolArr = input.value.split(',').map(s => s.trim()).filter(s => s && s !== email);
+        const newPool = poolArr.join(',');
+        
+        const session = JSON.parse(localStorage.getItem('aurum_affiliate_session') || '{}');
+        window.aurumDB.from('aurum_affiliates').update({ rotator_pool: newPool }).eq('email', session.email).then(() => {
+            input.value = newPool;
+            session.rotator_pool = newPool;
+            localStorage.setItem('aurum_affiliate_session', JSON.stringify(session));
+            renderPoolList(newPool);
+        });
+    }
+
+    function renderPoolList(poolString) {
+        const container = document.getElementById('active-pool-list');
+        const countLabel = document.getElementById('pool-count');
+        const maxLabel = document.getElementById('pool-max');
+        if (!container) return;
+
+        const pool = poolString ? poolString.split(',').map(s => s.trim()).filter(s => s) : [];
+        countLabel.innerText = pool.length;
+        
+        const session = JSON.parse(localStorage.getItem('aurum_affiliate_session') || '{}');
+        maxLabel.innerText = session.plan === 'AGENCY' ? '2,500' : '100';
+
+        container.innerHTML = '';
+        pool.forEach(email => {
+            const tag = document.createElement('div');
+            tag.className = "bg-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2 border border-white/5";
+            tag.innerHTML = `
+                <span class="text-[10px] font-bold text-white">${email}</span>
+                <button onclick="removeFromPool('${email}')" class="text-red-500 hover:text-white transition-colors">×</button>
+            `;
+            container.appendChild(tag);
+        });
+    }
 
     function toggleRotator() {
-      document.getElementById('rotator-setup').classList.remove('hidden');
-      document.getElementById('rotator-setup').classList.add('flex');
-      document.getElementById('rotator-toggle-btn').classList.add('hidden');
+        document.getElementById('rotator-setup').classList.remove('hidden');
+        document.getElementById('rotator-setup').classList.add('flex');
+        document.getElementById('rotator-toggle-btn').classList.add('hidden');
     }
 
     async function upgradeToRotator() {
