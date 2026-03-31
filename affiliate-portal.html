@@ -387,6 +387,28 @@
         </p>
       </div>
 
+      <!-- PART 1: ACTIVATION FORM (CENTRAL CTA) -->
+      <div class="max-w-xl mx-auto bg-[#001F3F] border border-[#D4AF37]/20 p-10 md:p-14 rounded-[40px] shadow-2xl relative mb-16 text-center">
+        <div class="absolute -top-4 -right-4 bg-[#00F5FF] text-[#001F3F] text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest shadow-glow-teal">
+          14-Day Free Entry</div>
+        
+        <h2 class="text-3xl font-black mb-2 text-white uppercase">Activate Affiliate Profile</h2>
+        <p class="text-sm text-gray-400 mb-10">Enter your email to initialize your 14-day free trial.</p>
+
+        <form id="checkout-form" class="flex flex-col gap-6">
+          <input type="email" id="aff-email" placeholder="name@example.com"
+            class="w-full bg-white/5 border border-white/10 px-8 py-5 rounded-2xl text-md font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37]"
+            required>
+
+          <button type="submit" id="start-trial-btn"
+            class="w-full bg-[#D4AF37] hover:bg-white text-[#001F3F] font-black text-lg md:text-xl py-4 md:py-6 rounded-2xl shadow-glow transition-all transform hover:scale-[1.02]">
+            Claim My 14-Day Trial →
+          </button>
+        </form>
+        <p class="text-[10px] text-gray-500 mt-8 uppercase tracking-widest font-bold">No Credit Card Required • Instant Activation</p>
+        <button onclick="showDirectLogin()" class="mt-6 text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.2em] hover:text-white transition-all cursor-pointer">Returning Member? Click Here →</button>
+      </div>
+
       <!-- PART 2: CORE VALUE GRID -->
       <div class="grid md:grid-cols-3 gap-6 text-left mb-10">
         <div class="bg-white/[0.03] border border-white/10 p-8 rounded-[32px] hover:border-[#D4AF37]/40 transition-all group">
@@ -432,28 +454,6 @@
               <p class="text-[10px] text-gray-400 leading-relaxed uppercase tracking-tighter">You earn 10% monthly USDT payouts on all active licenses.</p>
               <div class="mt-6 text-[10px] font-black text-gray-500 uppercase border-b border-white/10 inline-block">Earn 10% Recurring →</div>
           </div>
-      </div>
-
-      <!-- PART 4: ACTIVATION FORM (CENTRAL CTA) -->
-      <div class="max-w-xl mx-auto bg-[#001F3F] border border-[#D4AF37]/20 p-10 md:p-14 rounded-[40px] shadow-2xl relative mb-24 text-center">
-        <div class="absolute -top-4 -right-4 bg-[#00F5FF] text-[#001F3F] text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest shadow-glow-teal">
-          14-Day Free Entry</div>
-        
-        <h2 class="text-3xl font-black mb-2 text-white uppercase">Activate Affiliate Profile</h2>
-        <p class="text-sm text-gray-400 mb-10">Enter your email to initialize your 14-day free trial.</p>
-
-        <form id="checkout-form" class="flex flex-col gap-6">
-          <input type="email" id="aff-email" placeholder="name@example.com"
-            class="w-full bg-white/5 border border-white/10 px-8 py-5 rounded-2xl text-md font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37]"
-            required>
-
-          <button type="submit" id="start-trial-btn"
-            class="w-full bg-[#D4AF37] hover:bg-white text-[#001F3F] font-black text-lg md:text-xl py-4 md:py-6 rounded-2xl shadow-glow transition-all transform hover:scale-[1.02]">
-            Claim My 14-Day Trial →
-          </button>
-        </form>
-        <p class="text-[10px] text-gray-500 mt-8 uppercase tracking-widest font-bold">No Credit Card Required • Instant Activation</p>
-        <button onclick="showDirectLogin()" class="mt-6 text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.2em] hover:text-white transition-all cursor-pointer">Returning Member? Click Here →</button>
       </div>
 
     </div>
@@ -865,18 +865,44 @@
       switchView('gateway-view', 'setup-view');
     }
 
-    // Initialize Dashboard State
+    // Initialize Dashboard State (Refreshes from DB to ensure real-time status)
     (async function checkExistingSession() {
       const storedSession = localStorage.getItem('aurum_affiliate_session');
       if (storedSession) {
         try {
           const session = JSON.parse(storedSession);
+          
+          // RE-FETCH FROM DB TO SYNC STATUS
+          if (window.aurumDB) {
+            const { data, error } = await window.aurumDB
+              .from('aurum_affiliates')
+              .select('status, created_at, affiliate_code, is_rotator, rotator_pool')
+              .eq('email', session.email)
+              .single();
+
+            if (data && !error) {
+              const dbStatus = (data.status || '').toLowerCase().trim();
+              session.paymentStatus = (dbStatus === 'active' || dbStatus === 'paid') ? 'paid' : 
+                                      (dbStatus === 'grace') ? 'grace' :
+                                      (dbStatus === 'payment_pending') ? 'payment_pending' : 'unpaid';
+              session.created_at = data.created_at;
+              session.code = data.affiliate_code;
+              session.is_rotator = data.is_rotator;
+              session.rotator_pool = data.rotator_pool;
+              localStorage.setItem('aurum_affiliate_session', JSON.stringify(session));
+            }
+          }
+
           currentEmail = session.email;
           const sessionName = session.name || session.email.split('@')[0] || 'Partner';
           window.isMasterRotator = session.is_rotator || false;
           window.currentRotatorPool = session.rotator_pool || ''; 
           showDashboard(session.email, session.code, session.paymentStatus || 'unpaid', sessionName);
-        } catch (e) { console.error("Session parse error", e); }
+        } catch (e) { 
+          console.error("Session sync error", e);
+          const session = JSON.parse(storedSession);
+          showDashboard(session.email, session.code, session.paymentStatus || 'unpaid', session.name);
+        }
       }
     })();
 
@@ -978,7 +1004,7 @@
           if (isReturningUser) {
             const { data, error } = await window.aurumDB
               .from('aurum_affiliates')
-              .select('affiliate_code, password, full_name, phone, instructions, is_rotator, rotator_pool, status')
+              .select('affiliate_code, password, full_name, phone, instructions, is_rotator, rotator_pool, status, created_at')
               .eq('email', emailToUse)
               .single();
 
@@ -1054,7 +1080,8 @@
             instructions: finalInstructions || '',
             rotator_pool: window.currentRotatorPool || '',
             is_rotator: window.isMasterRotator || false,
-            paymentStatus: currentPaymentStatus 
+            paymentStatus: currentPaymentStatus,
+            created_at: (typeof data !== 'undefined' && data) ? data.created_at : new Date().toISOString()
          };
          localStorage.setItem('aurum_affiliate_session', JSON.stringify(sessionData));
 
@@ -1102,8 +1129,36 @@
     function showDashboard(email, affiliateCode, paymentStatus = 'unpaid', name = '') {
       if (!email || !affiliateCode) return;
       
+      // Calculate Trial Days
+      let trialDaysLeft = 14;
+      let isExpired = false;
+      const session = JSON.parse(localStorage.getItem('aurum_affiliate_session') || '{}');
+      if (session.created_at && paymentStatus !== 'paid') {
+        const createdDate = new Date(session.created_at);
+        const now = new Date();
+        const diffTime = now - createdDate;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        trialDaysLeft = 14 - diffDays;
+        if (trialDaysLeft <= 0) {
+          trialDaysLeft = 0;
+          isExpired = true;
+        }
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const forceExpire = urlParams.get('force_expire') === 'true';
+      if (forceExpire) isExpired = true;
+
+      // EXPOSE FOR GLOBAL ACCESS
+      window.isTrialExpired = isExpired;
+      window.currentPaymentStatus = paymentStatus;
+
       // CRITICAL: Switch view FIRST so container is visible for rendering
-      switchView('', 'dashboard-view');
+      if (isExpired && paymentStatus !== 'paid' && paymentStatus !== 'payment_pending') {
+         switchView('', 'checkout-view');
+      } else {
+         switchView('', 'dashboard-view');
+      }
 
       const displayName = name || email.split('@')[0] || 'Partner';
       const nameEl = document.getElementById('dash-name-top');
@@ -1227,14 +1282,38 @@
           activateBtn.classList.add('bg-[#22c55e]', 'text-white', 'cursor-not-allowed', 'shadow-glow-teal');
           activateBtn.onclick = null;
         }
+      } else if (paymentStatus === 'grace') {
+        if (statusBadge) {
+          statusBadge.innerText = "Grace Period";
+          statusBadge.classList.add('text-yellow-500');
+        }
+        if (daysLabel) {
+           daysLabel.innerText = "Action Needed";
+           daysLabel.classList.add('text-yellow-500');
+        }
       } else if (paymentStatus === 'payment_pending') {
         if (statusBadge) statusBadge.innerText = "Verifying...";
-        if (daysLabel) daysLabel.innerText = "Pending";
+        if (daysLabel) {
+           daysLabel.innerText = "Pending";
+           daysLabel.classList.add('text-yellow-500');
+        }
         if (activateBtn) {
           activateBtn.innerText = 'Verification Pending...';
           activateBtn.classList.add('bg-[#22c55e]', 'opacity-60', 'cursor-not-allowed');
           activateBtn.onclick = null;
         }
+      } else if (isExpired) {
+        if (statusBadge) {
+           statusBadge.innerText = "Trial Expired";
+           statusBadge.classList.add('text-red-500');
+        }
+        if (daysLabel) {
+           daysLabel.innerText = "0 Days";
+           daysLabel.classList.add('text-red-500');
+        }
+      } else {
+        if (statusBadge) statusBadge.innerText = "Trial Active";
+        if (daysLabel) daysLabel.innerText = `${trialDaysLeft} Days Remaining`;
       }
 
       if (window.isMasterRotator) {
@@ -1364,6 +1443,10 @@
     }
 
     function hideCheckout() {
+      if (window.isTrialExpired && window.currentPaymentStatus !== 'paid' && window.currentPaymentStatus !== 'payment_pending') {
+        alert("Trial Expired. Please activate your node to access the dashboard.");
+        return;
+      }
       switchView('checkout-view', 'dashboard-view');
     }
 

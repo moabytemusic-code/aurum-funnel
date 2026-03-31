@@ -164,6 +164,8 @@
           <label>Access Status</label>
           <select id="edit-status">
             <option value="active">Active (VIP)</option>
+            <option value="payment_pending">Payment Pending</option>
+            <option value="trialing">Trialing</option>
             <option value="grace">Grace Period</option>
             <option value="suspended">Suspended</option>
           </select>
@@ -368,12 +370,86 @@
       }
     }
 
-    async function suspendMember(id, currentStatus) {
+    async function suspendMember(id, currentStatus, email) {
       const newStatus = currentStatus === 'suspended' ? 'active' : 'suspended';
       try {
+        // 1. Update Members
         await window.aurumDB.from('aurum_members').update({ status: newStatus }).eq('id', id);
+        
+        // 2. Sync to Affiliates
+        if (email) {
+          await window.aurumDB.from('aurum_affiliates').update({ status: newStatus }).eq('email', email);
+        }
+
         location.reload();
       } catch (err) { alert(err.message); }
+    }
+
+    async function verifyPayment(id, email, name) {
+      if (!confirm(`Verify payment for ${email}? This will activate their VIP status and send a confirmation email.`)) return;
+      
+      try {
+        // 1. Update Members
+        await window.aurumDB.from('aurum_members').update({ status: 'active' }).eq('id', id);
+        
+        // 2. Update Affiliates
+        await window.aurumDB.from('aurum_affiliates').update({ status: 'active' }).eq('email', email);
+        
+        // 3. Send Confirmed Email
+        try {
+          await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              to: [{ email: email, name: name }],
+              subject: "Payment Verified: Your AURUM VIP Node is Active!",
+              htmlContent: `
+                <div style="font-family: sans-serif; padding: 40px; border: 1px solid #eee; border-radius: 12px; max-width: 600px; margin: 0 auto;">
+                  <h1 style="color: #22c55e;">Verification Successful</h1>
+                  <p>Hello ${name},</p>
+                  <p>Your activation deposit has been verified on the blockchain. Your <b>AURUM VIP Node</b> is now fully active with lifetime access.</p>
+                  <p>You can now access your master dashboard and start tracking your global network.</p>
+                  <p><a href="${window.location.origin}/affiliate-portal.html" style="background: #0073FF; color: #fff; padding: 14px 28px; text-decoration: none; border-radius: 10px; display: inline-block; font-weight: 800; margin-top: 20px;">Access Master Portal →</a></p>
+                </div>
+              `
+            })
+          });
+        } catch(e) { console.warn("Confirmation email failed:", e); }
+
+        alert("Member successfully verified and activated!");
+        location.reload();
+      } catch (err) {
+        alert("Verification failed: " + err.message);
+      }
+    }
+
+    async function sendTrialReminder(email, name, daysLeft) {
+      if (!confirm(`Send trial expiration reminder to ${email}?`)) return;
+      
+      try {
+        const portalLink = window.location.origin + '/affiliate-portal.html';
+        const res = await fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            to: [{ email: email, name: name }],
+            subject: `Trial Expiring Soon: ${daysLeft} Days Left for your AURUM Node`,
+            htmlContent: `
+              <div style="font-family: sans-serif; padding: 40px; border: 1px solid #eee; border-radius: 12px; max-width: 600px; margin: 0 auto;">
+                <h1 style="color: #0073FF;">Time is Running Out</h1>
+                <p>Hello ${name},</p>
+                <p>Your <b>AURUM Affiliate Node</b> trial has <b>${daysLeft} days remaining</b> before it locks.</p>
+                <p>To avoid losing your attribution data and tracking links, you can activate your Lifetime VIP Node now by clicking the link below.</p>
+                <p><a href="${portalLink}" style="background: #000; color: #fff; padding: 14px 28px; text-decoration: none; border-radius: 10px; display: inline-block; font-weight: 800; margin-top: 20px;">Activate Your Node Now →</a></p>
+                <p style="margin-top: 24px; font-size: 0.85rem; color: #64748b;">Once your activation deposit is confirmed, your node will be granted full lifetime VIP access.</p>
+              </div>
+            `
+          })
+        });
+
+        if (res.ok) alert("Reminder dispatch successful!");
+        else alert("Email dispatch failed.");
+      } catch (err) { alert("Error: " + err.message); }
     }
 
     async function updateMember() {
@@ -386,12 +462,22 @@
       btn.disabled = true;
 
       try {
+        const email = document.getElementById('edit-email').value;
+
+        // 1. Update Members
         const { error } = await window.aurumDB
           .from('aurum_members')
           .update({ full_name: name, status: status })
           .eq('id', id);
 
         if (error) throw error;
+
+        // 2. Sync to Affiliates
+        await window.aurumDB
+          .from('aurum_affiliates')
+          .update({ status: status })
+          .eq('email', email);
+
         location.reload();
       } catch (err) {
         alert("Update failed: " + err.message);
@@ -421,9 +507,30 @@
            if (member.status === 'active' || member.status === 'trialing') activeCount++;
            else if (member.status === 'grace') graceCount++;
            
-           const statusBadge = (member.status === 'active' || member.status === 'trialing') ? '<span class="status-badge status-active">VIP / Active</span>' : 
-                               member.status === 'grace' ? '<span class="status-badge status-grace">Grace</span>' : 
+           const status = (member.status || '').toLowerCase().trim();
+           let trialDaysLabel = '';
+           let daysLeft = 0;
+           
+           if (status === 'trialing' || (status === 'unpaid' && member.membership_start)) {
+             const start = new Date(member.membership_start);
+             const now = new Date();
+             const diff = now - start;
+             const daysPassed = Math.floor(diff / (1000 * 60 * 60 * 24));
+             daysLeft = Math.max(0, 14 - daysPassed);
+             trialDaysLabel = `<div style="font-size:0.7rem; color:var(--text-muted); margin-top:2px; font-weight:600;">${daysLeft} Days Remaining</div>`;
+           }
+
+           const statusBadge = (status === 'active') ? '<span class="status-badge status-active">VIP / Active</span>' : 
+                               (status === 'trialing') ? '<span class="status-badge status-active" style="background:rgba(0,115,255,0.1); color:var(--aurum-blue);">Trialing</span>' + trialDaysLabel :
+                               (status === 'payment_pending' || status === 'pending') ? '<span class="status-badge status-grace" style="background:rgba(245,158,11,0.1); color:var(--warning);">Payment Pending</span>' :
+                               status === 'grace' ? '<span class="status-badge status-grace">Grace</span>' : 
                                '<span class="status-badge status-expired">Suspended</span>';
+           
+           const nudgeBtn = (status === 'trialing') ? 
+                             `<button class="action-btn" style="border-color:var(--aurum-blue); color:var(--aurum-blue);" onclick="sendTrialReminder('${member.email}', '${member.full_name}', ${daysLeft || 0})">Send Nudge</button>` : '';
+
+           const verifyBtn = (status === 'payment_pending' || status === 'pending') ? 
+                             `<button class="action-btn" style="border-color:var(--success); color:var(--success);" onclick="verifyPayment('${member.id}', '${member.email}', '${member.full_name}')">Verify Payment</button>` : '';
            
            const tr = document.createElement('tr');
            const memberJson = encodeURIComponent(JSON.stringify(member));
@@ -437,8 +544,10 @@
             <td>${new Date(member.membership_start).toLocaleDateString()}</td>
             <td>${statusBadge}</td>
             <td>
+              ${nudgeBtn}
+              ${verifyBtn}
               <button class="action-btn" onclick="openEditModal('${memberJson}')">Edit</button>
-              <button class="action-btn btn-suspend" onclick="suspendMember('${member.id}', '${member.status}')">${member.status === 'suspended' ? 'Re-Activate' : 'Suspend'}</button>
+              <button class="action-btn btn-suspend" onclick="suspendMember('${member.id}', '${member.status}', '${member.email}')">${member.status === 'suspended' ? 'Re-Activate' : 'Suspend'}</button>
               <button class="action-btn btn-delete" onclick="openDeleteModal('${member.id}', '${member.email}')">Delete</button>
             </td>
            `;

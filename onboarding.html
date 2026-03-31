@@ -138,6 +138,7 @@
       .mobile-only { display: inline !important; }
     }
     .mobile-only { display: none; }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
@@ -149,8 +150,8 @@
     </div>
   </nav>
 
-  <!-- TOP SPONSOR BAR -->
-  <div id="sponsor-instructions-zone" class="animate-in fade-in slide-in-from-top-4 duration-1000">
+  <!-- TOP SPONSOR BAR (Hidden by default for Direct/1W145K traffic) -->
+  <div id="sponsor-instructions-zone" class="hidden animate-in fade-in slide-in-from-top-4 duration-1000">
       <div class="bg-gradient-to-r from-[#030712] via-[#0F172A] to-[#030712] border-b border-[#D4AF37]/20 py-6">
           <div class="max-w-[1100px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
               
@@ -282,14 +283,9 @@
 
     async function lookupSponsor() {
       const urlParams = new URLSearchParams(window.location.search);
-      const ref = urlParams.get('ref') || localStorage.getItem('aurum_ref');
+      const ref = urlParams.get('ref') || localStorage.getItem('aurum_ref') || '1W145K';
       
-      if (!ref) {
-          console.warn("[AURUM] No sponsor reference found in URL or Storage.");
-          return;
-      }
-
-      // Lock it back into storage if it came from URL
+      // Lock it back into storage if it came from URL or is the Default
       localStorage.setItem('aurum_ref', ref);
 
       try {
@@ -300,28 +296,27 @@
           .single();
 
         if (data && !error) {
-            // Update Contact Window
-            document.getElementById('sponsor-contact-window').classList.remove('hidden');
-            document.getElementById('sponsor-contact-window').classList.remove('hidden');
-            document.getElementById('sponsor-name').innerText = data.full_name;
-            document.getElementById('sponsor-email-link').href = `mailto:${data.email}`;
-            if (document.getElementById('sponsor-email-text')) document.getElementById('sponsor-email-text').innerText = data.email;
-            document.getElementById('sponsor-avatar').innerText = data.full_name.substring(0, 1).toUpperCase();
-            
-            if (data.phone) {
-                document.getElementById('sponsor-phone-link').href = `tel:${data.phone}`;
-                if (document.getElementById('sponsor-phone-text')) document.getElementById('sponsor-phone-text').innerText = data.phone;
-            } else {
-                document.getElementById('sponsor-phone-link').style.display = 'none';
-            }
-
-            // Update Instructions
-            if (data.instructions) {
+            // DYNAMIC UI: Only reveal and populate the sponsor bar if it's NOT the default Main Admin code
+            if (ref !== '1W145K') {
                 document.getElementById('sponsor-instructions-zone').classList.remove('hidden');
-                document.getElementById('team-message-text').innerText = data.instructions;
+                document.getElementById('sponsor-name').innerText = data.full_name;
+                document.getElementById('sponsor-email-link').href = `mailto:${data.email}`;
+                if (document.getElementById('sponsor-email-text')) document.getElementById('sponsor-email-text').innerText = data.email;
+                document.getElementById('sponsor-avatar').innerText = data.full_name.substring(0, 1).toUpperCase();
+                
+                if (data.phone) {
+                    document.getElementById('sponsor-phone-link').href = `tel:${data.phone}`;
+                    if (document.getElementById('sponsor-phone-text')) document.getElementById('sponsor-phone-text').innerText = data.phone;
+                } else {
+                    document.getElementById('sponsor-phone-link').style.display = 'none';
+                }
+
+                if (data.instructions) {
+                    document.getElementById('team-message-text').innerText = data.instructions;
+                }
             }
 
-            // DYNAMIC LINK BRIDGE: Update Final Join Button
+            // DYNAMIC LINK BRIDGE: Update Final Join Button (ALWAYS applies for correct attribution)
             if (data.affiliate_id) {
                 const finalBtn = document.getElementById('final-join-btn');
                 if (finalBtn) {

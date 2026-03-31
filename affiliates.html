@@ -141,6 +141,14 @@
           <input type="text" id="new-code" placeholder="e.g. ALPHA">
           <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">Leave blank to auto-generate standard `1W145K` style code.</p>
         </div>
+        <div class="form-group">
+          <label>Initial Node Status</label>
+          <select id="new-status">
+            <option value="active">Active (VIP)</option>
+            <option value="trialing">Trialing</option>
+            <option value="grace">Grace Period</option>
+          </select>
+        </div>
         
         <!-- NEW CONTACT FIELDS -->
         <div class="form-group">
@@ -181,6 +189,16 @@
         <div class="form-group">
           <label>Attribution ID (Node Code)</label>
           <input type="text" id="edit-code" placeholder="e.g. ALPHA">
+        </div>
+        <div class="form-group">
+          <label>Node Access Status</label>
+          <select id="edit-status">
+            <option value="active">Active (VIP)</option>
+            <option value="trialing">Trialing</option>
+            <option value="payment_pending">Payment Pending</option>
+            <option value="grace">Grace Period</option>
+            <option value="suspended">Suspended</option>
+          </select>
         </div>
 
         <div class="form-group" style="margin-bottom: 20px;">
@@ -325,7 +343,7 @@
              affiliate_code: customCode,
              phone: document.getElementById('new-phone').value.trim(),
              instructions: document.getElementById('new-instructions').value.trim(),
-             status: 'active',
+             status: document.getElementById('new-status').value,
              is_rotator: grantRotator,
              rotator_pool: null
           }]);
@@ -341,7 +359,7 @@
           .insert([{
              full_name: document.getElementById('new-code').value ? 'Agency Partner' : 'VIP Partner',
              email: email.toLowerCase(),
-             status: 'active',
+             status: document.getElementById('new-status').value,
              membership_start: new Date().toISOString()
           }]);
 
@@ -518,6 +536,7 @@
       document.getElementById('edit-original-email').value = aff.email;
       document.getElementById('edit-name').value = aff.full_name || '';
       document.getElementById('edit-code').value = aff.affiliate_code || '';
+      document.getElementById('edit-status').value = aff.status || 'trialing';
       document.getElementById('edit-is-rotator').checked = aff.is_rotator || false;
       document.getElementById('edit-pool').value = aff.rotator_pool || '';
       
@@ -540,17 +559,27 @@
       btn.disabled = true;
 
       try {
+        const status = document.getElementById('edit-status').value;
+
+        // 1. Update Affiliate Table
         const { error } = await window.aurumDB
           .from('aurum_affiliates')
           .update({
             full_name: name,
             affiliate_code: code,
+            status: status,
             is_rotator: isRotator,
             rotator_pool: isRotator ? pool : null
           })
           .eq('email', email);
 
         if (error) throw error;
+
+        // 2. Sync to Members Table
+        await window.aurumDB
+          .from('aurum_members')
+          .update({ full_name: name, status: status })
+          .eq('email', email);
 
         closeEditModal();
         fetchAffiliates();
