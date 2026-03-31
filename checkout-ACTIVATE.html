@@ -131,6 +131,20 @@
     }
 
     .footer { text-align: center; padding: 60px 24px; color: var(--text-muted); font-size: 0.85rem; }
+    .dash-container { grid-template-columns: 1.2fr 1fr; gap: 40px; }
+    
+    /* RADIO DOT STYLES */
+    .plan-card.active .radio-dot { border-color: #00F5FF; background: #00F5FF; }
+    .plan-card.active .highlight-dot { opacity: 1; background: #000; }
+
+    @media (max-width: 768px) {
+      .dash-container { grid-template-columns: 1fr !important; margin: 30px auto; gap: 24px; padding: 0 16px; }
+      .node-status { padding: 32px 24px; }
+      h1 { font-size: 1.8rem; }
+      .summary-card { order: 2; padding: 32px 24px; }
+      .coin-selector { grid-template-columns: repeat(2, 1fr); }
+      .plan-card { padding: 16px !important; }
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
@@ -173,6 +187,64 @@
           <label>Email Address</label>
           <input type="email" id="email" placeholder="john@example.com">
         </div>
+
+        <div style="margin-top: 32px; padding: 24px; background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid var(--panel-border);">
+            <div class="flex items-center justify-between mb-4">
+              <label style="font-size: 0.75rem; font-weight: 800; color: #D4AF37; text-transform: uppercase; letter-spacing: 0.1em;">Select Activation Tier</label>
+              <div id="billing-toggle-zone" class="flex items-center gap-3 bg-black/40 p-1 rounded-lg">
+                <span id="label-monthly" class="text-[9px] font-black text-white px-2">MONTHLY</span>
+                <button type="button" onclick="toggleBilling()" class="w-8 h-4 rounded-full bg-gray-700 relative transition-all" style="width: 32px; height: 16px;" id="bill-toggle">
+                  <div class="w-3 h-3 bg-white rounded-full absolute top-0.5 left-0.5 transition-all" id="toggle-knob"></div>
+                </button>
+                <span id="label-yearly" class="text-[9px] font-black text-gray-500 px-2">YEARLY</span>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-1 gap-3 mb-2">
+                <!-- BASE PLAN -->
+                <div onclick="selectPlan('BASE', this)" class="plan-card active p-5 border-2 border-[#00F5FF]/40 bg-[#00F5FF]/5 rounded-2xl cursor-pointer hover:bg-[#00F5FF]/10 transition-all flex items-center gap-4">
+                    <div class="w-6 h-6 rounded-full border-2 border-[#00F5FF] flex items-center justify-center bg-[#00F5FF]">
+                        <div class="w-2 h-2 bg-black rounded-full"></div>
+                    </div>
+                    <div class="flex-grow">
+                      <div class="flex justify-between items-start">
+                        <h4 class="font-black text-white text-md">Base User</h4>
+                        <span class="text-[#00F5FF] font-black text-xs" id="price-base">$10</span>
+                      </div>
+                      <p class="text-[9px] text-gray-400 uppercase font-black tracking-widest">Personal AI Liquidity Node</p>
+                    </div>
+                </div>
+
+                <!-- ROTATOR PLAN -->
+                <div onclick="selectPlan('ROTATOR', this)" class="plan-card p-5 border-2 border-white/5 bg-white/5 rounded-2xl cursor-pointer hover:bg-white/10 transition-all flex items-center gap-4">
+                    <div class="w-6 h-6 rounded-full border-2 border-white/20 flex items-center justify-center radio-dot">
+                        <div class="w-2 h-2 bg-white rounded-full opacity-0 highlight-dot"></div>
+                    </div>
+                    <div class="flex-grow">
+                      <div class="flex justify-between items-start">
+                        <h4 class="font-black text-white text-md">Rotator Service</h4>
+                        <span class="text-[#00F5FF] font-black text-xs">$49</span>
+                      </div>
+                      <p class="text-[9px] text-gray-400 uppercase font-black tracking-widest">Master Rotator Console (Up to 100 Users)</p>
+                    </div>
+                </div>
+
+                <!-- AGENCY PLAN -->
+                <div onclick="selectPlan('AGENCY', this)" class="plan-card p-5 border-2 border-white/5 bg-white/5 rounded-2xl cursor-pointer hover:bg-white/10 transition-all flex items-center gap-4">
+                    <div class="w-6 h-6 rounded-full border-2 border-white/20 flex items-center justify-center radio-dot">
+                        <div class="w-2 h-2 bg-white rounded-full opacity-0 highlight-dot"></div>
+                    </div>
+                    <div class="flex-grow">
+                      <div class="flex justify-between items-start">
+                        <h4 class="font-black text-white text-md">Agency Pro</h4>
+                        <span class="text-[#00F5FF] font-black text-xs">$999</span>
+                      </div>
+                      <p class="text-[9px] text-gray-400 uppercase font-black tracking-widest">Full White-Labeling (Up to 2,500 Users)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <button class="action-btn" onclick="nextStep(2)">Proceed to Activation →</button>
       </div>
 
@@ -205,18 +277,17 @@
 
     <!-- SUMMARY -->
     <div class="summary-card">
-      <h3 style="margin-bottom: 24px; font-weight: 800;">Node Configuration</h3>
-      <div class="item-row"><span class="item-label">Institutional Setup</span><span class="item-price">$497.00</span></div>
-      <div class="item-row"><span class="item-label">1st Month License</span><span class="item-price">$49.00</span></div>
+      <h3 style="margin-bottom: 24px; font-weight: 800;">Order Configuration</h3>
+      <div class="item-row"><span class="item-label" id="summary-tier-name">Base User Plan</span><span class="item-price" id="summary-tier-price">$10.00</span></div>
       <div class="total-row">
         <span style="font-weight: 800;">Deposit Amount</span>
-        <div class="total-price">$546</div>
+        <div class="total-price" id="display-total">$10</div>
       </div>
-      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 12px; text-align: right;">Includes setup + first month activation.</p>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 12px; text-align: right;" id="summary-period">Billed Monthly</p>
       
       <div style="margin-top: 40px; padding: 20px; background: rgba(0, 115, 255, 0.05); border-radius: 16px;">
         <p style="font-size: 0.85rem; color: var(--aurum-blue); font-weight: 700;">After Activation:</p>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">You will be redirected to the **Onboarding Checklist** to prepare your wallet/VPN and bond your AI liquidity bots.</p>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">Your node attribution will be initialized and you will be redirected to the **Onboarding Checklist** to connect your liquidity.</p>
       </div>
     </div>
 
@@ -229,6 +300,81 @@
       'ETH': '0x4b5C494a822E9B1876C8B879fE65b1F0Aba9c4BC',
       'XRP': 'rG2fVzHf6r5deG9epCfbZ29TYnC6u2oWe8'
     };
+
+    let CURRENT_TOTAL = 10;
+    let ACTIVE_PLAN = 'BASE';
+    let IS_YEARLY = false;
+
+    function toggleBilling() {
+        if (ACTIVE_PLAN !== 'BASE') return; // Only Base has yearly toggle for now
+        IS_YEARLY = !IS_YEARLY;
+        
+        const knob = document.getElementById('toggle-knob');
+        const lMonthly = document.getElementById('label-monthly');
+        const lYearly = document.getElementById('label-yearly');
+        
+        if (IS_YEARLY) {
+            knob.style.left = '18px';
+            lYearly.style.color = '#fff';
+            lMonthly.style.color = '#4b5563';
+            document.getElementById('price-base').innerText = '$100';
+        } else {
+            knob.style.left = '2px';
+            lMonthly.style.color = '#fff';
+            lYearly.style.color = '#4b5563';
+            document.getElementById('price-base').innerText = '$10';
+        }
+        updateTotal();
+    }
+
+    function selectPlan(plan, el) {
+        ACTIVE_PLAN = plan;
+        
+        // UI Highlight
+        document.querySelectorAll('.plan-card').forEach(p => {
+          p.classList.remove('active');
+          p.style.borderColor = 'rgba(255,255,255,0.05)';
+          p.style.background = 'rgba(255,255,255,0.05)';
+        });
+        
+        el.classList.add('active');
+        el.style.borderColor = '#00F5FF66';
+        el.style.background = '#00F5FF11';
+        
+        // Hide/Show Yearly Toggle (Only for Base)
+        document.getElementById('billing-toggle-zone').style.opacity = (plan === 'BASE') ? '1' : '0.2';
+        document.getElementById('billing-toggle-zone').style.pointerEvents = (plan === 'BASE') ? 'all' : 'none';
+        
+        updateTotal();
+    }
+
+    function updateTotal() {
+        let price = 0;
+        let pName = "";
+        let period = "Billed Monthly";
+
+        if (ACTIVE_PLAN === 'BASE') {
+            price = IS_YEARLY ? 100 : 10;
+            pName = "Base User Plan";
+            period = IS_YEARLY ? "Billed Yearly (Save 20%)" : "Billed Monthly";
+        } else if (ACTIVE_PLAN === 'ROTATOR') {
+            price = 49;
+            pName = "Rotator Service (100 Users)";
+        } else if (ACTIVE_PLAN === 'AGENCY') {
+            price = 999;
+            pName = "Agency Pro (2,500 Users)";
+        }
+
+        CURRENT_TOTAL = price;
+        document.getElementById('display-total').innerText = `$${price}`;
+        document.getElementById('summary-tier-name').innerText = pName;
+        document.getElementById('summary-tier-price').innerText = `$${price}.00`;
+        document.getElementById('summary-period').innerText = period;
+        
+        // Update payment area UI
+        const paymentLabel = document.querySelector('#paymentArea p b');
+        if (paymentLabel) paymentLabel.innerText = `$${price} USD`;
+    }
 
     function nextStep(step) {
       if (step === 2) {
@@ -275,10 +421,13 @@
         const BREVO_KEY = window.AURUM_CONFIG?.BREVO_KEY || '';
         if (window.aurumDB) {
         // 1. Send Transactional Welcome Email
+        const pName = document.getElementById('summary-tier-name').innerText;
+        const period = document.getElementById('summary-period').innerText;
+
         const emailBody = {
           sender: { name: "TheAI Finance Breakdown", email: "onboarding@smarthustlermarketing.com" },
           to: [{ email: email, name: name }],
-          subject: "Activation Initialized: Welcome to the AI Finance Digital Banking Ecosystem",
+          subject: `Activation Initialized: ${pName} Subscription`,
           htmlContent: `
             <div style="font-family: sans-serif; line-height: 1.6; color: #334155; padding: 40px; border: 1px solid #E2E8F0; border-radius: 12px; max-width: 600px; margin: 0 auto;">
               <h1 style="color: #0F172A; font-size: 24px; margin-bottom: 20px;">Welcome to The AI Finance Breakdown, ${name}!</h1>
@@ -286,8 +435,9 @@
               <div style="background: #F8FAFC; padding: 20px; border-radius: 8px; margin: 24px 0;">
                 <p style="margin: 0; font-weight: 700; color: #0073FF;">ACTIVATION SUMMARY:</p>
                 <ul style="margin-top: 10px; padding-left: 20px;">
-                  <li>Node Type: Institutional Setup</li>
-                  <li>Deposit Amount: <b>$546.00</b> ($497 Setup + $49 1st Month)</li>
+                  <li>Selected Plan: <b>${pName}</b></li>
+                  <li>Billing Cycle: <b>${period}</b></li>
+                  <li>Total Deposit: <b>$${CURRENT_TOTAL}.00</b></li>
                   <li>Network: <b>${coin}</b></li>
                 </ul>
               </div>
@@ -320,12 +470,17 @@
             'api-key': BREVO_KEY,
             'content-type': 'application/json'
           },
-          body: JSON.stringify({
-            email: email,
-            attributes: { FIRSTNAME: name.split(' ')[0], FULLNAME: name, STATUS: 'Payment Pending' },
-            listIds: [67],
-            updateEnabled: true
-          })
+            body: JSON.stringify({
+              email: email,
+              attributes: { 
+                  FIRSTNAME: name.split(' ')[0], 
+                  FULLNAME: name, 
+                  STATUS: 'Payment Pending',
+                  PLAN_DETAILS: `Tier: ${ACTIVE_PLAN}, Total: $${CURRENT_TOTAL}, Yearly: ${IS_YEARLY}`
+              },
+              listIds: [67],
+              updateEnabled: true
+            })
         });
         }
       } catch (err) {

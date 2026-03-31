@@ -283,36 +283,81 @@
 
     async function lookupSponsor() {
       const urlParams = new URLSearchParams(window.location.search);
-      const ref = urlParams.get('ref') || localStorage.getItem('aurum_ref') || '1W145K';
+      const ref = (urlParams.get('ref') || localStorage.getItem('aurum_ref') || '1W145K').toUpperCase();
+      let activeCode = ref;
       
       // Lock it back into storage if it came from URL or is the Default
       localStorage.setItem('aurum_ref', ref);
 
       try {
+        // 1. Check if the initial code is a rotator
+        const { data: node } = await aurumDB
+          .from('aurum_affiliates')
+          .select('is_rotator, rotator_pool, rotator_index, status, plan')
+          .eq('affiliate_code', ref)
+          .single();
+
+        if (node && node.is_rotator && node.rotator_pool) {
+            let pool = node.rotator_pool.split(',').map(s => s.trim());
+            
+            // Tiered Capacity Enforcement
+            if (node.plan === 'ROTATOR' && pool.length > 100) {
+               console.warn('[AURUM-LIMIT] Capacity peak reached. Rotation restricted to first 100 nodes.');
+               pool = pool.slice(0, 100); 
+            } else if (node.plan === 'AGENCY' && pool.length > 2500) {
+               pool = pool.slice(0, 2500);
+            }
+            
+            if (pool.length > 0) {
+                let lastIdx = parseInt(localStorage.getItem(`rot_idx_${ref}`) || '-1');
+                let nextIdx = (lastIdx + 1) % pool.length;
+                localStorage.setItem(`rot_idx_${ref}`, nextIdx);
+                activeCode = pool[nextIdx];
+                console.log(`[ROTATOR] Traffic assigned to sub-node: ${activeCode}`);
+            }
+        }
+
+        // 2. Fetch the ACTIVE partner's details for the UI
         const { data, error } = await aurumDB
           .from('aurum_affiliates')
-          .select('full_name, email, phone, instructions, affiliate_id')
-          .eq('affiliate_code', ref)
+          .select('full_name, email, phone, instructions, affiliate_id, hero_title, hero_subtitle, hero_video')
+          .eq('affiliate_code', activeCode)
           .single();
 
         if (data && !error) {
             // DYNAMIC UI: Only reveal and populate the sponsor bar if it's NOT the default Main Admin code
-            if (ref !== '1W145K') {
+            if (activeCode !== '1W145K') {
                 document.getElementById('sponsor-instructions-zone').classList.remove('hidden');
                 document.getElementById('sponsor-name').innerText = data.full_name;
                 document.getElementById('sponsor-email-link').href = `mailto:${data.email}`;
                 if (document.getElementById('sponsor-email-text')) document.getElementById('sponsor-email-text').innerText = data.email;
-                document.getElementById('sponsor-avatar').innerText = data.full_name.substring(0, 1).toUpperCase();
+                document.getElementById('sponsor-avatar').innerText = (data.full_name || 'V').substring(0, 1).toUpperCase();
                 
                 if (data.phone) {
                     document.getElementById('sponsor-phone-link').href = `tel:${data.phone}`;
                     if (document.getElementById('sponsor-phone-text')) document.getElementById('sponsor-phone-text').innerText = data.phone;
+                    document.getElementById('sponsor-phone-link').style.display = 'flex';
                 } else {
                     document.getElementById('sponsor-phone-link').style.display = 'none';
                 }
 
                 if (data.instructions) {
                     document.getElementById('team-message-text').innerText = data.instructions;
+                }
+
+                // === FULL AGENCY SKIN OVERRIDES ===
+                // If the partner has provided custom branding in the DB, we swap the Hero
+                if (data.hero_title) {
+                    document.getElementById('skin-h1').innerText = data.hero_title;
+                }
+                if (data.hero_subtitle) {
+                    document.getElementById('skin-sub').innerText = data.hero_subtitle;
+                }
+                if (data.hero_video) {
+                    const videoIframe = document.querySelector('iframe[title="Onboarding Guide"]');
+                    if (videoIframe) {
+                        videoIframe.src = data.hero_video;
+                    }
                 }
             }
 

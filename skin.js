@@ -94,7 +94,7 @@
       try {
         const { data: affData, error: affErr } = await supabase
           .from('aurum_affiliates')
-          .select('is_rotator, rotator_pool, rotator_index, status')
+          .select('is_rotator, rotator_pool, rotator_index, status, brand_name, hero_title, hero_subtitle, hero_video')
           .eq('affiliate_code', ref)
           .single();
           
@@ -129,6 +129,22 @@
                console.log(`[AURUM-ROTATOR] Master Link parsed! Session Attribution rewritten to: ${ref}`);
             }
         }
+
+        // Apply Personal/Agency Skin Overrides if present
+        if (affData) {
+            if (!activeSkin) activeSkin = {}; // Ensure we have a skin object
+            if (affData.brand_name) activeSkin.brand = affData.brand_name;
+            if (affData.hero_title) activeSkin.h1 = affData.hero_title;
+            if (affData.hero_subtitle) activeSkin.sub = affData.hero_subtitle;
+            if (affData.hero_video) {
+                // If hero_video contains a vimeo/youtube URL prefix, extract the ID or use full URL
+                if (affData.hero_video.includes('youtube.com/embed/')) {
+                   activeSkin.videoId = affData.hero_video.split('embed/')[1].split('?')[0];
+                } else {
+                   activeSkin.videoFullUrl = affData.hero_video;
+                }
+            }
+        }
       } catch (secErr) {
         console.warn('Security intercept failed:', secErr);
       }
@@ -136,7 +152,7 @@
       
       const { data, error } = await supabase
         .from('aurum_organizations')
-        .select('*')
+        .select('brand, color, h1, sub, video_id')
         .eq('code', org.toUpperCase())
         .single();
         
@@ -175,10 +191,23 @@
     document.documentElement.style.setProperty('--aurum-blue', activeSkin.color);
     document.documentElement.style.setProperty('--accent-grad', activeSkin.gradient);
 
-    // B. Apply Brand Name
+    // B. Apply Brand Name (Conditional Branding)
+    let partnerName = activeSkin.brand || (org === 'Direct' ? 'THE AI FINANCE BREAKDOWN' : org);
+    partnerName = partnerName.toUpperCase();
+    
+    // Official Corporate Branding (No Prefix) vs. Partner Branding (Prefix)
+    const fullBrandHTML = (partnerName === 'THE AI FINANCE BREAKDOWN') 
+        ? `THE AI<span> FINANCE </span>BREAKDOWN`
+        : `AURUM TEAM - ${partnerName}`;
+
     document.querySelectorAll('.nav-brand').forEach(el => {
-      el.innerHTML = activeSkin.brand;
+      el.innerHTML = fullBrandHTML;
     });
+
+    // B2. Update Browser Tab Title
+    if (activeSkin.h1) {
+       document.title = activeSkin.h1;
+    }
 
     // C. Apply Content Overrides (if IDs exist on page)
     const h1 = document.getElementById('skin-h1');
@@ -188,9 +217,13 @@
     if (sub && activeSkin.sub) sub.innerText = activeSkin.sub;
 
     // D. Apply Video Override
-    const videoFrame = document.querySelector('#skin-video iframe');
-    if (videoFrame && activeSkin.videoId) {
-      videoFrame.src = `https://www.youtube.com/embed/${activeSkin.videoId}?rel=0`;
+    const videoFrame = document.querySelector('#skin-video iframe') || document.querySelector('.video-wrapper iframe');
+    if (videoFrame) {
+      if (activeSkin.videoFullUrl) {
+         videoFrame.src = activeSkin.videoFullUrl;
+      } else if (activeSkin.videoId) {
+         videoFrame.src = `https://www.youtube.com/embed/${activeSkin.videoId}?rel=0`;
+      }
     }
   });
 })();

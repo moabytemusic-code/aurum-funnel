@@ -50,6 +50,7 @@
     .modal-content {
       background: var(--panel-bg); padding: 40px; border-radius: var(--radius);
       border: 1px solid var(--panel-border); width: 100%; max-width: 480px;
+      max-height: 90vh; overflow-y: auto; position: relative;
     }
     .form-group { margin-bottom: 20px; text-align: left; }
     label { display: block; font-size: 0.75rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
@@ -190,15 +191,25 @@
           <label>Attribution ID (Node Code)</label>
           <input type="text" id="edit-code" placeholder="e.g. ALPHA">
         </div>
-        <div class="form-group">
-          <label>Node Access Status</label>
-          <select id="edit-status">
-            <option value="active">Active (VIP)</option>
-            <option value="trialing">Trialing</option>
-            <option value="payment_pending">Payment Pending</option>
-            <option value="grace">Grace Period</option>
-            <option value="suspended">Suspended</option>
-          </select>
+        <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label>Node Access Status</label>
+            <select id="edit-status">
+              <option value="active">Active (VIP)</option>
+              <option value="trialing">Trialing</option>
+              <option value="payment_pending">Payment Pending</option>
+              <option value="grace">Grace Period</option>
+              <option value="suspended">Suspended</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Subscription Tier</label>
+            <select id="edit-plan">
+              <option value="BASE">Base ($10)</option>
+              <option value="ROTATOR">Rotator ($49 - 100)</option>
+              <option value="AGENCY">Agency ($999 - 2500)</option>
+            </select>
+          </div>
         </div>
 
         <div class="form-group" style="margin-bottom: 20px;">
@@ -211,6 +222,26 @@
           <label>Rotator Pool (Comma Separated IDs)</label>
           <textarea id="edit-pool" placeholder="User1, User2, User3" style="width: 100%; height: 80px; padding: 12px; border: 1px solid var(--panel-border); border-radius: 8px; background: #fff; font-family: inherit; font-size: 0.9rem; resize: none;"></textarea>
           <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">Traffic will rotate sequentially through these IDs.</p>
+        </div>
+
+        <div class="form-group" style="padding-top: 20px; border-top: 1px solid var(--panel-border); margin-top: 20px;">
+          <h4 class="text-[10px] font-black uppercase text-[#D4AF37] tracking-[0.2em] mb-4">Agency Skin Overrides</h4>
+          <div class="form-group">
+            <label>Agency Name (Top-Left Logo)</label>
+            <input type="text" id="edit-brand-name" placeholder="e.g. OMEGA">
+          </div>
+          <div class="form-group">
+            <label>Custom Hero Title</label>
+            <input type="text" id="edit-hero-title" placeholder="e.g. Join the OMEGA Master Network">
+          </div>
+          <div class="form-group">
+            <label>Custom Hero Subtext</label>
+            <textarea id="edit-hero-subtitle" placeholder="Custom welcome message..." style="width: 100%; height: 60px; padding: 12px; border: 1px solid var(--panel-border); border-radius: 8px; background: var(--bg-color); color:#fff; font-family: inherit; font-size: 0.85rem; resize: none;"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Custom Welcome Video (Vimeo/YouTube URL)</label>
+            <input type="text" id="edit-hero-video" placeholder="https://player.vimeo.com/video/...">
+          </div>
         </div>
 
         <button onclick="saveEditAffiliate()" id="editSaveBtn" style="width: 100%; padding: 16px; border-radius: 12px; background: var(--aurum-blue); color: #fff; font-weight: 800; border: none; cursor: pointer; margin-top: 10px;">Save Node Changes →</button>
@@ -539,6 +570,13 @@
       document.getElementById('edit-status').value = aff.status || 'trialing';
       document.getElementById('edit-is-rotator').checked = aff.is_rotator || false;
       document.getElementById('edit-pool').value = aff.rotator_pool || '';
+
+      // Agency Skin
+      document.getElementById('edit-plan').value = aff.plan || 'BASE';
+      document.getElementById('edit-brand-name').value = aff.brand_name || '';
+      document.getElementById('edit-hero-title').value = aff.hero_title || '';
+      document.getElementById('edit-hero-subtitle').value = aff.hero_subtitle || '';
+      document.getElementById('edit-hero-video').value = aff.hero_video || '';
       
       toggleEditPool(aff.is_rotator);
       document.getElementById('editAffiliateModal').style.display = 'flex';
@@ -560,6 +598,11 @@
 
       try {
         const status = document.getElementById('edit-status').value;
+        const plan = document.getElementById('edit-plan').value;
+        const brandName = document.getElementById('edit-brand-name').value;
+        const heroTitle = document.getElementById('edit-hero-title').value;
+        const heroSubtitle = document.getElementById('edit-hero-subtitle').value;
+        const heroVideo = document.getElementById('edit-hero-video').value;
 
         // 1. Update Affiliate Table
         const { error } = await window.aurumDB
@@ -568,8 +611,13 @@
             full_name: name,
             affiliate_code: code,
             status: status,
+            plan: plan,
             is_rotator: isRotator,
-            rotator_pool: isRotator ? pool : null
+            rotator_pool: isRotator ? pool : null,
+            brand_name: brandName,
+            hero_title: heroTitle,
+            hero_subtitle: heroSubtitle,
+            hero_video: heroVideo
           })
           .eq('email', email);
 
