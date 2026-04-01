@@ -880,7 +880,7 @@
 
     // Multi-Campaign Rotator State
     window.campaignGroups = {};       // { "default": ["User1", "User2"], "youtube": ["User3"] }
-    window.activeCampaign = 'default'; // Currently selected tab
+    window.activeCampaign = null;      // Initialized to null to force first render
 
     // Multi-View Controller (Optimized Anti-Flicker)
     function switchView(fromId, toId) {
