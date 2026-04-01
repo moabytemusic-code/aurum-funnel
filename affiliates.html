@@ -219,9 +219,13 @@
         </div>
 
         <div class="form-group" id="edit-pool-zone" style="display:none;">
-          <label>Rotator Pool (Comma Separated IDs)</label>
-          <textarea id="edit-pool" placeholder="User1, User2, User3" style="width: 100%; height: 80px; padding: 12px; border: 1px solid var(--panel-border); border-radius: 8px; background: #fff; font-family: inherit; font-size: 0.9rem; resize: none;"></textarea>
-          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">Traffic will rotate sequentially through these IDs.</p>
+          <label>Campaign Rotator Groups</label>
+          <div id="edit-pool-display" style="margin-bottom: 12px;"></div>
+          <details style="margin-top: 8px;">
+            <summary style="font-size: 0.75rem; color: var(--text-muted); cursor: pointer; font-weight: 700;">Edit Raw JSON</summary>
+            <textarea id="edit-pool" placeholder='{"default": ["User1", "User2"], "youtube": ["User3"]}' style="width: 100%; height: 100px; padding: 12px; border: 1px solid var(--panel-border); border-radius: 8px; background: var(--bg-color); color: #fff; font-family: monospace; font-size: 0.8rem; resize: vertical; margin-top: 8px;"></textarea>
+          </details>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">Traffic rotates per-campaign group. Each group has its own round-robin index.</p>
         </div>
 
         <div class="form-group" style="padding-top: 20px; border-top: 1px solid var(--panel-border); margin-top: 20px;">
@@ -492,9 +496,21 @@
         
         const pwDisplay = aff.password ? `<span style="font-family:monospace; color:var(--text-muted);">••••${aff.password.slice(-2) || aff.password}</span>` : '<em style="color:#475569; font-size:0.8rem;">None</em>';
 
-        const poolDisplay = aff.is_rotator && aff.rotator_pool 
-            ? `<span class="rotator-pool-text" title="${aff.rotator_pool}">${aff.rotator_pool}</span>` 
-            : `<em style="color:#475569; font-size:0.8rem;">Standard Link</em>`;
+        let poolDisplay = `<em style="color:#475569; font-size:0.8rem;">Standard Link</em>`;
+        if (aff.is_rotator && aff.rotator_pool) {
+          try {
+            const parsed = JSON.parse(aff.rotator_pool);
+            if (typeof parsed === 'object' && !Array.isArray(parsed)) {
+              const campaigns = Object.keys(parsed);
+              const totalMembers = Object.values(parsed).reduce((s, a) => s + a.length, 0);
+              poolDisplay = `<span class="rotator-pool-text" title="${campaigns.join(', ')}">${campaigns.length} campaign${campaigns.length > 1 ? 's' : ''} • ${totalMembers} members</span>`;
+            } else {
+              poolDisplay = `<span class="rotator-pool-text" title="${aff.rotator_pool}">${aff.rotator_pool}</span>`;
+            }
+          } catch (_) {
+            poolDisplay = `<span class="rotator-pool-text" title="${aff.rotator_pool}">${aff.rotator_pool}</span>`;
+          }
+        }
 
         const row = `
           <tr>
@@ -571,6 +587,9 @@
       document.getElementById('edit-is-rotator').checked = aff.is_rotator || false;
       document.getElementById('edit-pool').value = aff.rotator_pool || '';
 
+      // Render campaign group viewer
+      renderEditPoolDisplay(aff.rotator_pool);
+
       // Agency Skin
       document.getElementById('edit-plan').value = aff.plan || 'BASE';
       document.getElementById('edit-brand-name').value = aff.brand_name || '';
@@ -580,6 +599,46 @@
       
       toggleEditPool(aff.is_rotator);
       document.getElementById('editAffiliateModal').style.display = 'flex';
+    }
+
+    function renderEditPoolDisplay(poolData) {
+      const container = document.getElementById('edit-pool-display');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (!poolData) {
+        container.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem; font-style:italic;">No campaigns configured.</p>';
+        return;
+      }
+
+      let groups;
+      try {
+        const parsed = JSON.parse(poolData);
+        if (typeof parsed === 'object' && !Array.isArray(parsed)) {
+          groups = parsed;
+        } else if (Array.isArray(parsed)) {
+          groups = { default: parsed };
+        } else {
+          groups = { default: String(parsed).split(',').map(s => s.trim()).filter(Boolean) };
+        }
+      } catch (_) {
+        // Legacy flat comma-separated string
+        groups = { default: poolData.split(',').map(s => s.trim()).filter(Boolean) };
+      }
+
+      Object.entries(groups).forEach(([key, members]) => {
+        const section = document.createElement('div');
+        section.style.cssText = 'background: rgba(255,255,255,0.03); border: 1px solid var(--panel-border); border-radius: 10px; padding: 12px 16px; margin-bottom: 8px;';
+        const memberTags = members.map(m => `<span style="display:inline-block; background:rgba(0,115,255,0.1); color:var(--aurum-blue); padding:2px 8px; border-radius:6px; font-size:0.75rem; font-weight:700; margin:2px;">${m}</span>`).join('');
+        section.innerHTML = `
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:0.8rem; font-weight:800; text-transform:uppercase; color:${key === 'default' ? '#D4AF37' : 'var(--text-main)'};">${key}</span>
+            <span style="font-size:0.7rem; color:var(--text-muted); font-weight:700;">${members.length} member${members.length !== 1 ? 's' : ''}</span>
+          </div>
+          <div>${memberTags || '<em style="color:var(--text-muted); font-size:0.75rem;">Empty</em>'}</div>
+        `;
+        container.appendChild(section);
+      });
     }
 
     function closeEditModal() { document.getElementById('editAffiliateModal').style.display = 'none'; }

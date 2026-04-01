@@ -298,22 +298,40 @@
           .single();
 
         if (node && node.is_rotator && node.rotator_pool) {
-            let pool = node.rotator_pool.split(',').map(s => s.trim());
+            const campaignGroup = urlParams.get('group') || 'default';
+
+            // Parse pool — backward compat for old comma-separated strings
+            let pools;
+            try {
+              const parsed = JSON.parse(node.rotator_pool);
+              if (typeof parsed === 'object' && !Array.isArray(parsed)) {
+                pools = parsed;
+              } else if (Array.isArray(parsed)) {
+                pools = { default: parsed };
+              } else {
+                pools = { default: String(parsed).split(',').map(s => s.trim()).filter(Boolean) };
+              }
+            } catch (_) {
+              pools = { default: node.rotator_pool.split(',').map(s => s.trim()).filter(Boolean) };
+            }
+
+            let pool = pools[campaignGroup] || pools['default'] || [];
             
-            // Tiered Capacity Enforcement
-            if (node.plan === 'ROTATOR' && pool.length > 100) {
-               console.warn('[AURUM-LIMIT] Capacity peak reached. Rotation restricted to first 100 nodes.');
-               pool = pool.slice(0, 100); 
-            } else if (node.plan === 'AGENCY' && pool.length > 2500) {
-               pool = pool.slice(0, 2500);
+            // Tiered Capacity Enforcement (Global Cap)
+            const totalMembers = Object.values(pools).reduce((s, a) => s + (Array.isArray(a) ? a.length : 0), 0);
+            const max = (node.plan === 'AGENCY') ? 2500 : 100;
+
+            if (totalMembers > max) {
+               console.warn(`[AURUM-LIMIT] Global capacity exceeded (${totalMembers}/${max}). Slicing traffic.`);
+               if (pool.length > max) pool = pool.slice(0, max);
             }
             
             if (pool.length > 0) {
-                let lastIdx = parseInt(localStorage.getItem(`rot_idx_${ref}`) || '-1');
+                let lastIdx = parseInt(localStorage.getItem(`rot_idx_${ref}_${campaignGroup}`) || '-1');
                 let nextIdx = (lastIdx + 1) % pool.length;
-                localStorage.setItem(`rot_idx_${ref}`, nextIdx);
+                localStorage.setItem(`rot_idx_${ref}_${campaignGroup}`, nextIdx);
                 activeCode = pool[nextIdx];
-                console.log(`[ROTATOR] Traffic assigned to sub-node: ${activeCode}`);
+                console.log(`[ROTATOR] Campaign [${campaignGroup}] traffic assigned to sub-node: ${activeCode}`);
             }
         }
 

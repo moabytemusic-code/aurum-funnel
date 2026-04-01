@@ -603,51 +603,102 @@
                 </div>
               </div>
 
-              <!-- ROTATOR CONTROL VIEW (HIDDEN BY DEFAULT) -->
+              <!-- ROTATOR CONTROL VIEW — MULTI-CAMPAIGN TABS (HIDDEN BY DEFAULT) -->
               <div id="rotator-control-view" class="hidden">
                 <div class="flex justify-between items-start mb-6">
                   <div>
                     <h3 class="text-xl font-black uppercase text-[#D4AF37] mb-1">Master Rotator Control</h3>
-                    <p class="text-[10px] text-gray-500 uppercase tracking-widest font-black">Active Agency Node</p>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest font-black">Campaign-Based Traffic Distribution</p>
                   </div>
-                  <div class="px-3 py-1 bg-[#D4AF37]/10 border border-[#D4AF37]/20 rounded-lg text-[#D4AF37] text-[10px] font-black uppercase">TEAM MASTER</div>
+                  <div id="master-id-badge" class="px-4 py-2 bg-[#D4AF37]/10 border border-[#D4AF37]/20 rounded-xl text-[#D4AF37] text-[11px] font-black uppercase tracking-widest">NODE ID: ...</div>
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-6 mb-8">
-                  <div class="bg-black/40 border border-white/10 p-6 rounded-2xl relative">
-                    <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 block">Add To Rotation Pool</label>
-                    <div class="relative mb-4">
-                      <input type="text" id="member-search" placeholder="Search Email or Name..." 
-                        class="w-full bg-black/60 border border-white/10 px-6 py-4 rounded-xl text-sm font-bold text-white focus:outline-none focus:border-[#00F5FF]"
-                        oninput="searchMembers(this.value)">
-                      <div id="search-results" class="absolute left-0 right-0 top-full mt-2 bg-[#001F3F] border border-white/10 rounded-xl hidden z-50 shadow-2xl max-h-48 overflow-y-auto">
-                        <!-- Results injected here -->
+                <!-- CAMPAIGN TAB BAR -->
+                <div class="flex items-center gap-2 mb-6 overflow-x-auto pb-2" id="campaign-tab-bar" style="scrollbar-width: thin;">
+                  <!-- Tabs injected dynamically -->
+                </div>
+
+                <!-- NEW CAMPAIGN FORM (hidden by default) -->
+                <div id="new-campaign-form" class="hidden mb-6 bg-black/40 border border-[#D4AF37]/20 p-5 rounded-2xl">
+                  <label class="text-[10px] font-black text-[#D4AF37] uppercase tracking-widest mb-3 block">New Campaign Name</label>
+                  <div class="flex gap-3">
+                    <input type="text" id="new-campaign-name" placeholder="e.g. YouTube Q2 Push"
+                      class="flex-1 bg-black/60 border border-white/10 px-5 py-3 rounded-xl text-sm font-bold text-white focus:outline-none focus:border-[#D4AF37]">
+                    <button onclick="createCampaign()" class="bg-[#D4AF37] text-[#001F3F] font-black px-6 py-3 rounded-xl uppercase text-[10px] tracking-widest hover:scale-[1.02] transition-transform">Create</button>
+                    <button onclick="toggleNewCampaignForm()" class="text-gray-500 hover:text-white text-lg font-bold px-3">×</button>
+                  </div>
+                  <p class="text-[9px] text-gray-500 mt-2 uppercase tracking-wide">Auto-slugified: "YouTube Q2 Push" → youtube-q2-push</p>
+                </div>
+
+                <!-- ACTIVE CAMPAIGN PANEL (content switches per tab) -->
+                <div id="campaign-panel">
+                  <div class="mb-4 px-1">
+                    <div class="text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.2em] mb-1">Configuration Area</div>
+                    <h4 id="active-campaign-title" class="text-lg font-black text-white uppercase italic">Active Campaign: Default</h4>
+                  </div>
+                  <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="bg-black/40 border border-white/10 p-8 rounded-2xl relative">
+                      <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 block">Manage Sub-Affiliates</label>
+                      <div class="relative mb-4">
+                        <input type="text" id="member-search" placeholder="Search Email or Name..." autocomplete="new-password" name="member-search-nofill" readonly onfocus="this.removeAttribute('readonly');"
+                          class="w-full bg-black/60 border border-white/10 px-6 py-4 rounded-xl text-sm font-bold text-white focus:outline-none focus:border-[#00F5FF]"
+                          oninput="searchMembers(this.value)">
+                        <div id="search-results" class="absolute left-0 right-0 top-full mt-2 bg-[#001F3F] border border-white/10 rounded-xl hidden z-50 shadow-2xl max-h-48 overflow-y-auto">
+                          <!-- Results injected here -->
+                        </div>
+                      </div>
+                      
+                      <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 block">Current Pool (<span id="pool-count">0</span> / <span id="pool-max">100</span>)</label>
+                      <div id="active-pool-list" class="flex flex-wrap gap-2 max-h-48 overflow-y-auto">
+                         <!-- Active members as tags -->
+                      </div>
+                      <textarea id="rotator-pool" class="hidden"></textarea>
+                    </div>
+
+                    <div class="bg-black/40 border border-white/10 p-8 rounded-2xl flex flex-col justify-between">
+                      <div>
+                        <div class="text-[10px] font-black text-[#D4AF37] uppercase tracking-widest mb-2">Campaign Tracking Link</div>
+                        <div class="bg-black/40 border border-white/5 p-5 rounded-xl mb-6">
+                           <div class="text-[9px] text-gray-500 uppercase mb-3 font-bold" id="campaign-link-label">Default Group — no &group= needed</div>
+                           <div class="flex gap-3">
+                              <input type="text" id="master-aff-link" readonly 
+                                 class="flex-1 bg-transparent border-none text-[11px] text-[#00F5FF] font-mono focus:outline-none overflow-hidden text-ellipsis">
+                              <button onclick="copyCampaignLink()" class="text-[#00F5FF] text-[10px] font-bold uppercase tracking-widest hover:text-white transition-colors">Copy</button>
+                           </div>
+                        </div>
+                        <p class="text-[9px] text-gray-500 uppercase leading-relaxed">This link points directly to this campaign's rotation pool. Share it to start tracking hits for this specific group.</p>
+                      </div>
+
+                      <!-- DELETE CAMPAIGN (only visible on non-default tabs) -->
+                      <div id="delete-campaign-zone" class="hidden pt-6 border-t border-white/5">
+                        <button onclick="showDeleteModal()" class="w-full bg-red-500/10 text-red-500/80 text-[10px] font-black uppercase tracking-widest hover:bg-red-500/20 transition-colors py-4 rounded-xl border border-red-500/20">
+                          🗑 Delete This Campaign
+                        </button>
+                      </div>
+
+                      <!-- Custom Delete Confirmation Modal -->
+                      <div id="delete-confirm-modal" class="hidden fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm" style="touch-action:none;">
+                        <div class="bg-[#0a192f] border border-red-500/30 rounded-2xl p-8 mx-6 max-w-sm w-full shadow-2xl text-center">
+                          <div class="text-4xl mb-4">⚠️</div>
+                          <h3 class="text-white font-black text-sm uppercase tracking-widest mb-2">Delete Campaign</h3>
+                          <p id="delete-modal-msg" class="text-gray-400 text-xs mb-6">Are you sure?</p>
+                          <div class="flex gap-3">
+                            <button onclick="hideDeleteModal()" class="flex-1 py-3 rounded-xl bg-white/10 text-gray-300 text-[10px] font-black uppercase tracking-widest hover:bg-white/20 transition-colors">Cancel</button>
+                            <button onclick="confirmDeleteCampaign()" class="flex-1 py-3 rounded-xl bg-red-500/20 text-red-400 text-[10px] font-black uppercase tracking-widest border border-red-500/30 hover:bg-red-500/30 transition-colors">Delete</button>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                    
-                    <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 block">Current Team (<span id="pool-count">0</span> / <span id="pool-max">100</span>)</label>
-                    <div id="active-pool-list" class="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
-                       <!-- Active members as tags -->
-                    </div>
-                    <textarea id="rotator-pool" class="hidden"></textarea>
                   </div>
-                  <div class="bg-black/40 border border-white/10 p-6 rounded-2xl flex flex-col justify-between">
-                    <div>
-                      <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 block">Agency Brand ID</label>
-                      <input type="text" id="rotator-name" placeholder="e.g. ALPHA" 
-                        class="w-full bg-black/50 border border-white/10 px-6 py-4 rounded-xl text-sm font-bold text-[#D4AF37] focus:outline-none focus:border-[#D4AF37] mb-3 uppercase">
-                      <p class="text-[9px] text-gray-500 uppercase leading-tight">Your marketing link: ?ref=TEAM-[NAME]</p>
-                    </div>
-                    <button onclick="upgradeToRotator()" id="rotator-btn"
-                      class="w-full bg-[#D4AF37] text-[#001F3F] font-black py-4 rounded-xl uppercase text-[11px] tracking-widest mt-4 shadow-glow hover:scale-[1.02] transition-transform">
-                      Save Rotator Configuration →
-                    </button>
-                  </div>
-                </div>
 
-                <div class="bg-[#D4AF37]/5 border border-[#D4AF37]/20 p-4 rounded-xl flex items-center justify-between">
-                   <div class="text-[10px] font-black text-[#D4AF37] uppercase tracking-widest">Master Rotator Link</div>
-                   <input type="text" readonly id="master-aff-link" class="bg-transparent border-none text-right font-bold text-white text-xs w-2/3 focus:outline-none" value="...">
+                <!-- GLOBAL SAVE ACTION (Floating or pinned to bottom) -->
+                <div class="mt-8 pt-8 border-t border-white/5 flex justify-end">
+                   <button onclick="upgradeToRotator()" id="rotator-btn"
+                      class="w-full md:w-auto bg-[#D4AF37] text-[#001F3F] font-black px-12 py-4 rounded-xl uppercase text-[11px] tracking-widest shadow-glow hover:scale-[1.02] transition-transform">
+                      Save All Campaigns & Changes →
+                   </button>
+                   <!-- Hidden field for background sync -->
+                   <input type="hidden" id="rotator-name">
                 </div>
               </div>
 
@@ -692,7 +743,7 @@
               <div class="mt-10 text-center md:text-left">
                 <button id="qr-download"
                   class="text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.3em] hover:text-white transition-all bg-[#D4AF37]/5 px-10 py-5 rounded-2xl border border-[#D4AF37]/30 cursor-pointer shadow-lg hover:shadow-[0_0_30px_rgba(212,175,55,0.3)] hover:scale-105 transform active:scale-95">
-                  Export License Asset →
+                  Export QR Code →
                 </button>
                 <p class="text-[10px] text-gray-600 mt-5 uppercase tracking-widest font-bold opacity-80">High-Resolution Production Asset • HQ Export Enabled</p>
               </div>
@@ -812,6 +863,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
+    window._isProcessingUI = false;
+
     // Initialize Supabase Client (REQUIRED FOR DATABASE OPS)
     const SUPABASE_URL_BASE = 'https://cwdawyeiijbcoihobvpb.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_7mcxzRZkMjQcK1CTZjUl_w_AGm9kisr';
@@ -824,6 +877,10 @@
     window.isMasterRotator = false;
     window.currentRotatorPool = "";
     window.CURRENT_PARTNER_CODE = "";
+
+    // Multi-Campaign Rotator State
+    window.campaignGroups = {};       // { "default": ["User1", "User2"], "youtube": ["User3"] }
+    window.activeCampaign = 'default'; // Currently selected tab
 
     // Multi-View Controller (Optimized Anti-Flicker)
     function switchView(fromId, toId) {
@@ -886,10 +943,11 @@
           
           // RE-FETCH FROM DB TO SYNC STATUS
           if (window.aurumDB) {
+            const userEmail = (session.email || "").toLowerCase().trim();
             const { data, error } = await window.aurumDB
               .from('aurum_affiliates')
               .select('status, created_at, affiliate_code, is_rotator, rotator_pool')
-              .eq('email', session.email)
+              .ilike('email', userEmail)
               .single();
 
             if (data && !error) {
@@ -1120,21 +1178,36 @@
       canvas.width = 120;
       canvas.height = 120;
       const ctx = canvas.getContext('2d');
-      ctx.fillStyle = '#0a192f';
-      ctx.beginPath();
-      ctx.arc(60, 60, 58, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = '#D4AF37';
-      ctx.lineWidth = 6;
-      ctx.stroke();
-      ctx.fillStyle = '#D4AF37'; 
       
-      const cleanText = text.replace('TEAM-', '').toUpperCase().substring(0, 12);
-      const fontSize = cleanText.length > 8 ? 16 : 22;
-      ctx.font = `bold ${fontSize}px Montserrat, Inter, sans-serif`; 
+      // Outer Ring
+      ctx.fillStyle = '#0a192f';
+      ctx.beginPath(); ctx.arc(60, 60, 56, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#D4AF37';
+      ctx.lineWidth = 5; ctx.stroke();
+      
+      // Smart Abbreviation Map
+      const map = {
+        'YOUTUBE': 'YT',
+        'TIKTOK': 'TT',
+        'INSTAGRAM': 'IG',
+        'FACEBOOK': 'FB',
+        'DEFAULT': 'MST',
+        'MARKETING': 'MARK',
+        'INFLUENCER': 'INFL',
+        'CAMPAIGN': 'CAMP'
+      };
+
+      let raw = text.replace('TEAM-', '').toUpperCase();
+      let display = map[raw] || raw.substring(0, 5);
+      
+      // High-Impact Sizing
+      ctx.fillStyle = '#D4AF37'; 
+      let fontSize = (display.length <= 2) ? 36 : (display.length <= 4) ? 28 : 22;
+      
+      ctx.font = `900 ${fontSize}px Montserrat, Inter, sans-serif`; 
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(cleanText, 60, 60);
+      ctx.fillText(display, 60, 60);
       return canvas.toDataURL('image/png');
     }
 
@@ -1189,10 +1262,12 @@
 
       const agencyBrandName = localStorage.getItem('aurum_org') || (window.isMasterRotator ? affiliateCode : null);
       const isAgency = agencyBrandName && agencyBrandName !== 'Direct';
-      // ENHANCED QR GENERATION: Using locally guaranteed assets and rendering delays for mobile
-      let qrImage = generateTextLogo(isAgency ? agencyBrandName : "AFB");
+      
+      // Dynamic Logo Label based on context
+      const initialLogoText = isAgency ? agencyBrandName : affiliateCode;
+      let qrImage = generateTextLogo(initialLogoText);
 
-      const qrCode = new QRCodeStyling({
+      window._qrCodeInstance = new QRCodeStyling({
         width: 600, // High res for export
         height: 600,
         type: "canvas",
@@ -1208,6 +1283,8 @@
           hideBackgroundDots: true
         }
       });
+      const qrCode = window._qrCodeInstance;
+      window._qrImageAsset = qrImage; // Stash for regeneration
       
       const qrContainer = document.getElementById('qr-code-container');
       const qrImg = document.getElementById('qr-code-img');
@@ -1335,10 +1412,18 @@
       if (window.isMasterRotator) {
         document.getElementById('standard-link-view').classList.add('hidden');
         document.getElementById('rotator-control-view').classList.remove('hidden');
-        document.getElementById('rotator-pool').value = window.currentRotatorPool || '';
-        document.getElementById('rotator-name').value = affiliateCode.replace('TEAM-', '');
-        document.getElementById('master-aff-link').value = `${urlRoot}/index.html?ref=${affiliateCode}`;
-        renderPoolList(window.currentRotatorPool);
+        
+        // Update Read-Only Badge and Hidden Var
+        const cleanID = affiliateCode.replace('TEAM-', '');
+        const badgeEl = document.getElementById('master-id-badge');
+        if (badgeEl) badgeEl.innerText = `NODE ID: ${cleanID}`;
+        document.getElementById('rotator-name').value = cleanID;
+
+        // Parse campaign groups from JSON (backward compat)
+        parseCampaignGroups(window.currentRotatorPool);
+        window.activeCampaign = 'default';
+        renderCampaignTabs(affiliateCode);
+        switchCampaignTab('default', affiliateCode);
       }
 
       switchView('', 'dashboard-view');
@@ -1568,77 +1653,365 @@
         } catch (err) { console.error('Search failed:', err); }
     }
 
+    // ==============================
+    // MULTI-CAMPAIGN ROTATOR ENGINE
+    // ==============================
+
+    function slugify(str) {
+      return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    }
+
+    function parseCampaignGroups(poolData) {
+      if (!poolData) {
+        window.campaignGroups = { default: [] };
+        return;
+      }
+      try {
+        const parsed = JSON.parse(poolData);
+        if (typeof parsed === 'object' && !Array.isArray(parsed)) {
+          window.campaignGroups = parsed;
+        } else if (Array.isArray(parsed)) {
+          window.campaignGroups = { default: parsed };
+        } else {
+          window.campaignGroups = { default: String(parsed).split(',').map(s => s.trim()).filter(Boolean) };
+        }
+      } catch (_) {
+        // Legacy flat comma-separated string
+        window.campaignGroups = { default: poolData.split(',').map(s => s.trim()).filter(Boolean) };
+      }
+      // Ensure 'default' always exists
+      if (!window.campaignGroups.default) window.campaignGroups.default = [];
+    }
+
+    function serializeCampaignGroups() {
+      return JSON.stringify(window.campaignGroups);
+    }
+
+    function renderCampaignTabs(affiliateCode) {
+      const tabBar = document.getElementById('campaign-tab-bar');
+      if (!tabBar) return;
+      tabBar.innerHTML = '';
+
+      const groups = Object.keys(window.campaignGroups);
+      groups.forEach(groupKey => {
+        const isActive = groupKey === window.activeCampaign;
+        const count = (window.campaignGroups[groupKey] || []).length;
+        const tab = document.createElement('button');
+        tab.className = `flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
+          isActive 
+            ? 'bg-[#D4AF37] text-[#001F3F] shadow-[0_0_20px_rgba(212,175,55,0.3)]' 
+            : 'bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 hover:text-white'
+        }`;
+        tab.innerHTML = `${groupKey} <span class="${
+          isActive ? 'bg-[#001F3F]/20 text-[#001F3F]' : 'bg-white/10 text-gray-500'
+        } px-1.5 py-0.5 rounded text-[8px]">${count}</span>`;
+        tab.onclick = () => switchCampaignTab(groupKey, affiliateCode);
+        tabBar.appendChild(tab);
+      });
+
+      // "+ New" button
+      const addBtn = document.createElement('button');
+      addBtn.className = 'px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap bg-white/5 text-[#D4AF37] border border-[#D4AF37]/20 hover:bg-[#D4AF37]/10 transition-all';
+      addBtn.innerHTML = '+ New';
+      addBtn.onclick = () => toggleNewCampaignForm();
+      tabBar.appendChild(addBtn);
+    }
+
+    function switchCampaignTab(groupKey, affiliateCode) {
+      if (!groupKey || window._isProcessingUI) return;
+      
+      // Prevent redundant re-renders if tab is already active
+      if (window.activeCampaign === groupKey && document.getElementById('campaign-tab-bar')?.children.length > 0) {
+        return;
+      }
+
+      if (!affiliateCode) {
+        const sessionArr = JSON.parse(localStorage.getItem('aurum_affiliate_session') || '{}');
+        affiliateCode = sessionArr.code || window.CURRENT_PARTNER_CODE;
+      }
+      
+      window.activeCampaign = groupKey;
+      console.log(`[AURUM-UI] Switching to: ${groupKey}`);
+      
+      const pool = window.campaignGroups[groupKey] || [];
+
+      // Update pool textarea (hidden, used by addToPool)
+      const poolEl = document.getElementById('rotator-pool');
+      if (poolEl) poolEl.value = pool.join(',');
+      
+      const searchEl = document.getElementById('member-search');
+      if (searchEl) searchEl.value = '';
+      
+      const searchResults = document.getElementById('search-results');
+      if (searchResults) searchResults.classList.add('hidden');
+
+      // Render pool tags
+      renderPoolList(pool);
+
+      // Update campaign link
+      const urlRoot = window.location.origin;
+      const linkEl = document.getElementById('master-aff-link');
+      const labelEl = document.getElementById('campaign-link-label');
+      if (linkEl && labelEl) {
+        if (groupKey === 'default') {
+          linkEl.value = `${urlRoot}/index.html?ref=${affiliateCode}`;
+          labelEl.innerText = 'Default Group — no &group= needed';
+        } else {
+          linkEl.value = `${urlRoot}/index.html?ref=${affiliateCode}&group=${groupKey}`;
+          labelEl.innerText = `Campaign: ${groupKey}`;
+        }
+      }
+
+      // Update campaign header title
+      const titleEl = document.getElementById('active-campaign-title');
+      if (titleEl) titleEl.innerText = `Active Campaign: ${groupKey}`;
+
+      // Show/hide delete zone
+      const deleteZone = document.getElementById('delete-campaign-zone');
+      if (deleteZone) {
+        deleteZone.classList.toggle('hidden', groupKey === 'default');
+      }
+
+      // Regenerate QR code for this campaign's link + dynamic branding
+      if (linkEl) {
+        const logoText = groupKey === 'default' ? affiliateCode : groupKey;
+        regenerateQRForCampaign(linkEl.value, logoText);
+      }
+
+      // Re-render tabs to update active state
+      renderCampaignTabs(affiliateCode);
+    }
+
+    function toggleNewCampaignForm() {
+      const form = document.getElementById('new-campaign-form');
+      form.classList.toggle('hidden');
+      if (!form.classList.contains('hidden')) {
+        document.getElementById('new-campaign-name').focus();
+      }
+    }
+
+    async function createCampaign() {
+      const nameInput = document.getElementById('new-campaign-name');
+      const rawName = nameInput.value.trim();
+      if (!rawName) return alert('Enter a campaign name');
+
+      const slug = slugify(rawName);
+      if (!slug) return alert('Invalid campaign name');
+      if (window.campaignGroups[slug]) return alert(`Campaign "${slug}" already exists`);
+
+      // Max 10 campaigns for now
+      if (Object.keys(window.campaignGroups).length >= 10) {
+        return alert('Maximum 10 campaign groups reached.');
+      }
+
+      window.campaignGroups[slug] = [];
+
+      // Save to DB
+      await saveCampaignGroupsToDB();
+
+      nameInput.value = '';
+      document.getElementById('new-campaign-form').classList.add('hidden');
+
+      const session = JSON.parse(localStorage.getItem('aurum_affiliate_session') || '{}');
+      switchCampaignTab(slug, session.code);
+    }
+
+    function showDeleteModal() {
+      const group = window.activeCampaign;
+      if (!group || group === 'default') return alert('Select a non-default campaign to delete.');
+      const msg = document.getElementById('delete-modal-msg');
+      msg.textContent = `This will permanently delete "${group.toUpperCase()}" and all its members.`;
+      document.getElementById('delete-confirm-modal').classList.remove('hidden');
+    }
+
+    function hideDeleteModal() {
+      document.getElementById('delete-confirm-modal').classList.add('hidden');
+    }
+
+    async function confirmDeleteCampaign() {
+      hideDeleteModal();
+      
+      try {
+        const groupToDelete = window.activeCampaign;
+        if (!groupToDelete || groupToDelete === 'default') return;
+
+        console.log(`[AURUM-PURGE] Starting purge for: ${groupToDelete}`);
+        
+        // 1. Remove from local memory state
+        delete window.campaignGroups[groupToDelete];
+        
+        // 2. IMMEDIATE LOCAL PERSISTENCE
+        const sessionStr = localStorage.getItem('aurum_affiliate_session');
+        if (sessionStr) {
+          const session = JSON.parse(sessionStr);
+          const serialized = JSON.stringify(window.campaignGroups);
+          session.rotator_pool = serialized;
+          window.currentRotatorPool = serialized;
+          localStorage.setItem('aurum_affiliate_session', JSON.stringify(session));
+        }
+
+        // 3. UI Reset (Switch back to Default)
+        const affCode = window.CURRENT_PARTNER_CODE || "AURUM";
+        switchCampaignTab('default', affCode);
+        renderCampaignTabs(affCode);
+        
+        // 4. Background sync
+        console.log('[AURUM-PURGE] Data purged locally. Syncing to cloud...');
+        await saveCampaignGroupsToDB();
+        console.log('[AURUM-PURGE] Complete.');
+      } catch (err) {
+        console.error('[AURUM-PURGE] Error:', err);
+        alert(`Delete error: ${err.message}`);
+      }
+    }
+
+    async function saveCampaignGroupsToDB() {
+      // Respect Global UI Lock
+      if (window._isProcessingUI) return;
+
+      const sessionStr = localStorage.getItem('aurum_affiliate_session');
+      if (!sessionStr) return;
+      
+      const session = JSON.parse(sessionStr);
+      const serialized = serializeCampaignGroups();
+      
+      // 1. CONSTANT LOCAL TRUTH: Update local session immediately
+      session.rotator_pool = serialized;
+      window.currentRotatorPool = serialized;
+      localStorage.setItem('aurum_affiliate_session', JSON.stringify(session));
+      console.log('[AURUM-LOCAL] Session updated with new pool data.');
+
+      // 2. CLOUD SYNC WITH ENHANCED HEADERS
+      try {
+        if (!window.aurumDB) return;
+        
+        // Ensure email is lowercase for matching
+        const userEmail = (session.email || "").toLowerCase().trim();
+        if (!userEmail) throw new Error("No session email found for sync.");
+
+        const { data, error, status } = await window.aurumDB
+          .from('aurum_affiliates')
+          .update({ rotator_pool: serialized }) 
+          .ilike('email', userEmail);
+        
+        if (error) {
+          console.error(`[AURUM-SYNC] Database Error (${status}):`, error);
+          throw error;
+        }
+        
+        console.log('[AURUM-SYNC] Cloud storage synchronized successfully.');
+      } catch (e) {
+        console.error('Failed to sync to cloud:', e);
+      }
+    }
+
+    function copyCampaignLink() {
+      const link = document.getElementById('master-aff-link').value;
+      navigator.clipboard.writeText(link).then(() => {
+        const btn = event.target;
+        const origText = btn.innerText;
+        btn.innerText = 'Copied!';
+        setTimeout(() => btn.innerText = origText, 1500);
+      });
+    }
+
+    // Regenerate QR code for active campaign link
+    function regenerateQRForCampaign(campaignLink, logoLabel = 'AURUM') {
+      const qrContainer = document.getElementById('qr-code-container');
+      const qrImg = document.getElementById('qr-code-img');
+      if (!qrContainer) return;
+
+      // Generate a group-specific logo
+      const campaignLogo = generateTextLogo(logoLabel);
+
+      const newQR = new QRCodeStyling({
+        width: 600,
+        height: 600,
+        type: "canvas",
+        data: campaignLink,
+        dotsOptions: { color: "#D4AF37", type: "rounded" },
+        backgroundOptions: { color: "#ffffff" },
+        cornersSquareOptions: { color: "#D4AF37", type: "extra-rounded" },
+        cornersDotOptions: { color: "#D4AF37", type: "dot" },
+        image: campaignLogo,
+        imageOptions: { margin: 10, imageSize: 0.35, hideBackgroundDots: true }
+      });
+      window._qrCodeInstance = newQR;
+
+      qrContainer.innerHTML = '';
+      qrContainer.style.display = 'flex';
+      if (qrImg) qrImg.style.display = 'none';
+
+      setTimeout(() => {
+        newQR.append(qrContainer);
+        setTimeout(() => {
+          const canvas = qrContainer.querySelector('canvas');
+          if (canvas && qrImg) {
+            qrImg.src = canvas.toDataURL('image/png');
+            qrImg.style.display = 'block';
+            qrContainer.style.display = 'none';
+          }
+        }, 300);
+      }, 150);
+    }
+
     async function addToPool(code, email) {
-        const input = document.getElementById('rotator-pool');
-        let poolArr = input.value ? input.value.split(',').map(s => s.trim()).filter(s => s) : [];
+        const group = window.activeCampaign;
+        const pool = window.campaignGroups[group] || [];
         
         // Determine capacity based on plan
         const session = JSON.parse(localStorage.getItem('aurum_affiliate_session') || '{}');
         const plan = session.plan || 'ROTATOR';
         const max = (plan === 'AGENCY') ? 2500 : 100;
 
-        if (poolArr.length >= max) {
-            return alert(`Capacity reached (${max}). Please upgrade to Agency Pro for higher volume.`);
+        // Total across ALL campaigns
+        const totalMembers = Object.values(window.campaignGroups).reduce((sum, arr) => sum + arr.length, 0);
+        if (totalMembers >= max) {
+            return alert(`Total capacity reached (${max} across all campaigns). Upgrade to Agency Pro for higher volume.`);
         }
 
-        if (poolArr.includes(code)) return alert("Code already in pool.");
+        if (pool.includes(code)) return alert(`${code} already in this campaign.`);
         
-        poolArr.push(code);
-        const newPool = poolArr.join(',');
-        
-        try {
-            const { error } = await window.aurumDB
-                .from('aurum_affiliates')
-                .update({ rotator_pool: newPool })
-                .eq('email', session.email);
+        pool.push(code);
+        window.campaignGroups[group] = pool;
 
-            if (!error) {
-                input.value = newPool;
-                document.getElementById('member-search').value = '';
-                document.getElementById('search-results').classList.add('hidden');
-                
-                // Update local storage session
-                session.rotator_pool = newPool;
-                localStorage.setItem('aurum_affiliate_session', JSON.stringify(session));
-                
-                renderPoolList(newPool);
-            }
-        } catch (e) { alert("Error assigning member: " + e.message); }
+        await saveCampaignGroupsToDB();
+
+        document.getElementById('member-search').value = '';
+        document.getElementById('search-results').classList.add('hidden');
+
+        switchCampaignTab(group, session.code);
     }
 
-    function removeFromPool(email) {
-        const input = document.getElementById('rotator-pool');
-        let poolArr = input.value.split(',').map(s => s.trim()).filter(s => s && s !== email);
-        const newPool = poolArr.join(',');
-        
-        const session = JSON.parse(localStorage.getItem('aurum_affiliate_session') || '{}');
-        window.aurumDB.from('aurum_affiliates').update({ rotator_pool: newPool }).eq('email', session.email).then(() => {
-            input.value = newPool;
-            session.rotator_pool = newPool;
-            localStorage.setItem('aurum_affiliate_session', JSON.stringify(session));
-            renderPoolList(newPool);
+    function removeFromPool(code) {
+        const group = window.activeCampaign;
+        window.campaignGroups[group] = (window.campaignGroups[group] || []).filter(c => c !== code);
+        saveCampaignGroupsToDB().then(() => {
+          const session = JSON.parse(localStorage.getItem('aurum_affiliate_session') || '{}');
+          switchCampaignTab(group, session.code);
         });
     }
 
-    function renderPoolList(poolString) {
+    function renderPoolList(pool) {
         const container = document.getElementById('active-pool-list');
         const countLabel = document.getElementById('pool-count');
         const maxLabel = document.getElementById('pool-max');
         if (!container) return;
 
-        const pool = poolString ? poolString.split(',').map(s => s.trim()).filter(s => s) : [];
-        countLabel.innerText = pool.length;
+        // Accept array directly (new) or legacy string
+        const poolArr = Array.isArray(pool) ? pool : (pool ? pool.split(',').map(s => s.trim()).filter(Boolean) : []);
+        countLabel.innerText = poolArr.length;
         
         const session = JSON.parse(localStorage.getItem('aurum_affiliate_session') || '{}');
         maxLabel.innerText = session.plan === 'AGENCY' ? '2,500' : '100';
 
         container.innerHTML = '';
-        pool.forEach(email => {
+        poolArr.forEach(code => {
             const tag = document.createElement('div');
             tag.className = "bg-white/10 px-3 py-1.5 rounded-lg flex items-center gap-2 border border-white/5";
             tag.innerHTML = `
-                <span class="text-[10px] font-bold text-white">${email}</span>
-                <button onclick="removeFromPool('${email}')" class="text-red-500 hover:text-white transition-colors">×</button>
+                <span class="text-[10px] font-bold text-white">${code}</span>
+                <button onclick="removeFromPool('${code}')" class="text-red-500 hover:text-white transition-colors">×</button>
             `;
             container.appendChild(tag);
         });
@@ -1651,21 +2024,27 @@
     }
 
     async function upgradeToRotator() {
-      const poolInput = document.getElementById('rotator-pool').value.trim();
+      // Collect current campaign's pool from state
+      const currentPool = window.campaignGroups[window.activeCampaign] || [];
       let customNameInput = document.getElementById('rotator-name').value.trim().toUpperCase().replace(/[^A-Z0-9-]/g, '');
-      if (!poolInput) return alert('Enter at least one sub-affiliate ID');
+
+      // Ensure at least one member in at least one campaign
+      const totalMembers = Object.values(window.campaignGroups).reduce((sum, arr) => sum + arr.length, 0);
+      if (totalMembers === 0) return alert('Add at least one sub-affiliate to any campaign');
 
       const btn = document.getElementById('rotator-btn');
-      btn.innerText = 'Upgrading...';
+      btn.innerText = 'Saving...';
       btn.disabled = true;
 
       let masterCode = customNameInput ? (customNameInput.startsWith('TEAM-') ? customNameInput : 'TEAM-' + customNameInput) : 'TEAM-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+
+      const serializedPool = serializeCampaignGroups();
 
       try {
         if (window.aurumDB) {
           const { error } = await window.aurumDB
             .from('aurum_affiliates')
-            .update({ is_rotator: true, rotator_pool: poolInput, rotator_index: 0, affiliate_code: masterCode })
+            .update({ is_rotator: true, rotator_pool: serializedPool, rotator_index: JSON.stringify({}), affiliate_code: masterCode })
             .eq('email', currentEmail);
 
           if (error && error.code === '23505') {
@@ -1674,12 +2053,12 @@
             return alert("Custom name taken!");
           }
 
-          // UPDATE LOCAL SESSION SO UI REFLECTS CHANGES ON RELOAD
+          // UPDATE LOCAL SESSION
           const stored = localStorage.getItem('aurum_affiliate_session');
           if (stored) {
             const session = JSON.parse(stored);
             session.is_rotator = true;
-            session.rotator_pool = poolInput;
+            session.rotator_pool = serializedPool;
             session.code = masterCode;
             localStorage.setItem('aurum_affiliate_session', JSON.stringify(session));
           }

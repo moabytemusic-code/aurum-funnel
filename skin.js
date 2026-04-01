@@ -109,24 +109,66 @@
             ref = '1W145K';
             localStorage.setItem('aurum_ref', ref);
         } else if (affData.is_rotator && affData.rotator_pool) {
-            // VALID ROTATOR: Execute Hijack
-            const pool = affData.rotator_pool.split(',').map(s => s.trim()).filter(Boolean);
+            // VALID ROTATOR: Execute Hijack (Multi-Campaign Group Support)
+            const campaignGroup = urlParams.get('group') || 'default';
+
+            // Parse pool — backward compat for old comma-separated strings
+            let pools;
+            try {
+              const parsed = JSON.parse(affData.rotator_pool);
+              if (typeof parsed === 'object' && !Array.isArray(parsed)) {
+                pools = parsed; // JSON campaign groups
+              } else if (Array.isArray(parsed)) {
+                pools = { default: parsed }; // JSON array → wrap as default
+              } else {
+                pools = { default: String(parsed).split(',').map(s => s.trim()).filter(Boolean) };
+              }
+            } catch (_) {
+              // Legacy flat comma-separated string
+              pools = { default: affData.rotator_pool.split(',').map(s => s.trim()).filter(Boolean) };
+            }
+
+            // Select target campaign pool (fallback to default)
+            let pool = pools[campaignGroup] || pools['default'] || [];
+
+            // Tiered Capacity Enforcement (Global Cap)
+            const totalMembers = Object.values(pools).reduce((s, a) => s + (Array.isArray(a) ? a.length : 0), 0);
+            const plan = affData.plan || 'ROTATOR';
+            const max = (plan === 'AGENCY') ? 2500 : 100;
+
+            if (totalMembers > max) {
+                console.warn(`[AURUM-LIMIT] Global capacity exceeded (${totalMembers}/${max}). Slicing traffic.`);
+                if (pool.length > max) pool = pool.slice(0, max);
+            }
+
+            // Parse per-group rotator index
+            let indices;
+            try {
+              indices = JSON.parse(affData.rotator_index);
+              if (typeof indices !== 'object' || Array.isArray(indices)) {
+                indices = { default: parseInt(affData.rotator_index) || 0 };
+              }
+            } catch (_) {
+              indices = { default: parseInt(affData.rotator_index) || 0 };
+            }
+
             if (pool.length > 0) {
-               let idx = affData.rotator_index || 0;
+               let idx = indices[campaignGroup] || 0;
                if (idx >= pool.length) idx = 0;
                
                // Hijack Session Attribution
                ref = pool[idx];
                localStorage.setItem('aurum_ref', ref);
                
-               // Increment Rotator Index in DB for next hit
+               // Increment only this campaign group's index in DB
                const nextIndex = (idx + 1) >= pool.length ? 0 : idx + 1;
+               indices[campaignGroup] = nextIndex;
                await supabase
                   .from('aurum_affiliates')
-                  .update({ rotator_index: nextIndex })
+                  .update({ rotator_index: JSON.stringify(indices) })
                   .eq('affiliate_code', urlParams.get('ref'));
                   
-               console.log(`[AURUM-ROTATOR] Master Link parsed! Session Attribution rewritten to: ${ref}`);
+               console.log(`[AURUM-ROTATOR] Campaign [${campaignGroup}] parsed! Session Attribution rewritten to: ${ref}`);
             }
         }
 
