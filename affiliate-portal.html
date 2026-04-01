@@ -1424,6 +1424,12 @@
         window.activeCampaign = 'default';
         renderCampaignTabs(affiliateCode);
         switchCampaignTab('default', affiliateCode);
+        
+        // Auto-migrate legacy pools to new JSON format in DB
+        if (window._legacyPoolDetected) {
+          console.log('[AURUM-MIGRATE] Legacy pool detected. Auto-converting to JSON...');
+          saveCampaignGroupsToDB();
+        }
       }
 
       switchView('', 'dashboard-view');
@@ -1662,6 +1668,7 @@
     }
 
     function parseCampaignGroups(poolData) {
+      window._legacyPoolDetected = false;
       if (!poolData) {
         window.campaignGroups = { default: [] };
         return;
@@ -1672,12 +1679,15 @@
           window.campaignGroups = parsed;
         } else if (Array.isArray(parsed)) {
           window.campaignGroups = { default: parsed };
+          window._legacyPoolDetected = true;
         } else {
           window.campaignGroups = { default: String(parsed).split(',').map(s => s.trim()).filter(Boolean) };
+          window._legacyPoolDetected = true;
         }
       } catch (_) {
         // Legacy flat comma-separated string
         window.campaignGroups = { default: poolData.split(',').map(s => s.trim()).filter(Boolean) };
+        window._legacyPoolDetected = true;
       }
       // Ensure 'default' always exists
       if (!window.campaignGroups.default) window.campaignGroups.default = [];
@@ -2045,7 +2055,7 @@
           const { error } = await window.aurumDB
             .from('aurum_affiliates')
             .update({ is_rotator: true, rotator_pool: serializedPool, rotator_index: JSON.stringify({}), affiliate_code: masterCode })
-            .eq('email', currentEmail);
+            .ilike('email', currentEmail);
 
           if (error && error.code === '23505') {
             btn.innerText = 'Save Rotator Configuration →';
