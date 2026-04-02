@@ -1646,8 +1646,9 @@
                         div.className = "p-4 hover:bg-white/5 cursor-pointer border-b border-white/5 flex justify-between items-center";
                         div.innerHTML = `
                             <div class="text-left">
-                                <p class="text-xs font-bold text-white">${aff.email}</p>
+                                <p class="text-xs font-bold text-white">${aff.full_name || aff.email}</p>
                                 <div class="flex items-center gap-2 mt-1">
+                                  <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">${aff.email}</p>
                                   <p class="text-[9px] text-[#00F5FF] font-black uppercase tracking-widest">${aff.affiliate_code}</p>
                                   <span class="text-[8px] font-bold uppercase py-0.5 px-2 rounded-full ${aff.status === 'active' ? 'bg-green-500/10 text-green-500' : 'bg-white/10 text-gray-400'}">
                                     ${aff.status === 'active' ? 'VIP' : 'GUEST'}
