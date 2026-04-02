@@ -48,7 +48,7 @@
       gradient: 'linear-gradient(135deg, #0073FF, #3898F8)',
       h1: 'The AI Finance Breakdown: Digital Banking Ecosystem',
       sub: 'Explore the AURUM digital banking ecosystem and automate your digital assets with institutional-grade AI.',
-      videoId: 'TL5LHCLY7eA'
+      videoId: 'hep0eYXJY8c'
     }
   };
 
