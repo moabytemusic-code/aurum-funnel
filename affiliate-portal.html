@@ -1733,11 +1733,11 @@
       tabBar.appendChild(addBtn);
     }
 
-    function switchCampaignTab(groupKey, affiliateCode) {
+    function switchCampaignTab(groupKey, affiliateCode, forceRefresh = false) {
       if (!groupKey || window._isProcessingUI) return;
       
-      // Prevent redundant re-renders if tab is already active
-      if (window.activeCampaign === groupKey && document.getElementById('campaign-tab-bar')?.children.length > 0) {
+      // Prevent redundant re-renders unless forced
+      if (!forceRefresh && window.activeCampaign === groupKey && document.getElementById('campaign-tab-bar')?.children.length > 0) {
         return;
       }
 
@@ -1996,7 +1996,7 @@
         document.getElementById('member-search').value = '';
         document.getElementById('search-results').classList.add('hidden');
 
-        switchCampaignTab(group, session.code);
+        switchCampaignTab(group, session.code, true);
     }
 
     function removeFromPool(code) {
@@ -2004,7 +2004,7 @@
         window.campaignGroups[group] = (window.campaignGroups[group] || []).filter(c => c !== code);
         saveCampaignGroupsToDB().then(() => {
           const session = JSON.parse(localStorage.getItem('aurum_affiliate_session') || '{}');
-          switchCampaignTab(group, session.code);
+          switchCampaignTab(group, session.code, true);
         });
     }
 
