@@ -1632,8 +1632,8 @@
         try {
             const { data, error } = await window.aurumDB
                 .from('aurum_affiliates')
-                .select('email, full_name, affiliate_code, status') // Include status
-                .or(`email.ilike.%${query}%, affiliate_code.ilike.%${query}%`) // Search email OR code
+                .select('email, full_name, affiliate_code, status') 
+                .or(`email.ilike.%${query}%, affiliate_code.ilike.%${query}%, full_name.ilike.%${query}%`) 
                 .limit(5);
 
             if (data && !error) {
