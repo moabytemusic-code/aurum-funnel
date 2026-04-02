@@ -192,64 +192,12 @@
           <input type="text" id="aurum_node_id" placeholder="e.g. USER-12345">
         </div>
 
-        <div style="margin-top: 32px; padding: 24px; background: rgba(255,255,255,0.03); border-radius: 20px; border: 1px solid var(--panel-border);">
-            <div class="flex items-center justify-between mb-4">
-              <label style="font-size: 0.75rem; font-weight: 800; color: #D4AF37; text-transform: uppercase; letter-spacing: 0.1em;">Select Activation Tier</label>
-              <div id="billing-toggle-zone" class="flex items-center gap-3 bg-black/40 p-1 rounded-lg">
-                <span id="label-monthly" class="text-[9px] font-black text-white px-2">MONTHLY</span>
-                <button type="button" onclick="toggleBilling()" class="w-8 h-4 rounded-full bg-gray-700 relative transition-all" style="width: 32px; height: 16px;" id="bill-toggle">
-                  <div class="w-3 h-3 bg-white rounded-full absolute top-0.5 left-0.5 transition-all" id="toggle-knob"></div>
-                </button>
-                <span id="label-yearly" class="text-[9px] font-black text-gray-500 px-2">YEARLY</span>
-              </div>
-            </div>
-            
-            <div class="grid grid-cols-1 gap-3 mb-2">
-                <!-- BASE PLAN -->
-                <div onclick="selectPlan('BASE', this)" class="plan-card active p-5 border-2 border-[#00F5FF]/40 bg-[#00F5FF]/5 rounded-2xl cursor-pointer hover:bg-[#00F5FF]/10 transition-all flex items-center gap-4">
-                    <div class="w-6 h-6 rounded-full border-2 border-[#00F5FF] flex items-center justify-center bg-[#00F5FF]">
-                        <div class="w-2 h-2 bg-black rounded-full"></div>
-                    </div>
-                    <div class="flex-grow">
-                      <div class="flex justify-between items-start">
-                        <h4 class="font-black text-white text-md">Base User</h4>
-                        <span class="text-[#00F5FF] font-black text-xs" id="price-base">$10</span>
-                      </div>
-                      <p class="text-[9px] text-gray-400 uppercase font-black tracking-widest">Personal AI Liquidity Node</p>
-                    </div>
-                </div>
-
-                <!-- ROTATOR PLAN -->
-                <div onclick="selectPlan('ROTATOR', this)" class="plan-card p-5 border-2 border-white/5 bg-white/5 rounded-2xl cursor-pointer hover:bg-white/10 transition-all flex items-center gap-4">
-                    <div class="w-6 h-6 rounded-full border-2 border-white/20 flex items-center justify-center radio-dot">
-                        <div class="w-2 h-2 bg-white rounded-full opacity-0 highlight-dot"></div>
-                    </div>
-                    <div class="flex-grow">
-                      <div class="flex justify-between items-start">
-                        <h4 class="font-black text-white text-md">Rotator Service</h4>
-                        <span class="text-[#00F5FF] font-black text-xs">$49</span>
-                      </div>
-                      <p class="text-[9px] text-gray-400 uppercase font-black tracking-widest">Master Rotator Console (Up to 100 Users)</p>
-                    </div>
-                </div>
-
-                <!-- AGENCY PLAN -->
-                <div onclick="selectPlan('AGENCY', this)" class="plan-card p-5 border-2 border-white/5 bg-white/5 rounded-2xl cursor-pointer hover:bg-white/10 transition-all flex items-center gap-4">
-                    <div class="w-6 h-6 rounded-full border-2 border-white/20 flex items-center justify-center radio-dot">
-                        <div class="w-2 h-2 bg-white rounded-full opacity-0 highlight-dot"></div>
-                    </div>
-                    <div class="flex-grow">
-                      <div class="flex justify-between items-start">
-                        <h4 class="font-black text-white text-md">Agency Pro</h4>
-                        <span class="text-[#00F5FF] font-black text-xs">$999</span>
-                      </div>
-                      <p class="text-[9px] text-gray-400 uppercase font-black tracking-widest">Full White-Labeling (Up to 2,500 Users)</p>
-                    </div>
-                </div>
-            </div>
+        <div class="form-group">
+          <label>AURUM Node ID / Code</label>
+          <input type="text" id="aurum_node_id" placeholder="e.g. USER-12345">
         </div>
 
-        <button class="action-btn" onclick="nextStep(2)">Proceed to Activation →</button>
+        <button class="action-btn" onclick="nextStep(2)">Register My Node ID →</button>
       </div>
 
       <!-- SUCCESS SCREEN (GUEST) -->
@@ -263,50 +211,8 @@
           <p style="margin-top: 32px; font-size: 11px; color: var(--text-muted);">Want to activate Institutional Features? <a href="#" onclick="showPaymentArea()" style="color: #D4AF37; font-weight: 700; text-decoration: underline;">Open Activation Deposit</a></p>
       </div>
 
-      <!-- STEP 2 -->
-      <div id="step-2" class="step-box">
-        <label style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Select Payment Network</label>
-        <div class="coin-selector">
-          <div class="coin-opt" onclick="selectCoin('BTC', this)"><span class="icon">₿</span><span>BTC</span></div>
-          <div class="coin-opt" onclick="selectCoin('USDT', this)"><span class="icon">₮</span><span>USDT</span></div>
-          <div class="coin-opt" onclick="selectCoin('ETH', this)"><span class="icon">Ξ</span><span>ETH</span></div>
-          <div class="coin-opt" onclick="selectCoin('XRP', this)"><span class="icon">✕</span><span>XRP</span></div>
-        </div>
-
-        <div id="paymentArea" class="payment-details">
-          <p style="font-size: 0.9rem; font-weight: 600; color: #64748B;">Send exactly <b style="color:#000;">$546 USD</b> value to:</p>
-          <div id="walletAddr" class="wallet-addr">...</div>
-          <button onclick="copyAddr()" id="copyBtn" style="background:none; border:none; color:var(--aurum-blue); font-weight:800; cursor:pointer; font-size:0.85rem;">Copy Address</button>
-          
-          <button class="action-btn" style="background:#22c55e;" onclick="confirmPayment()">I Have Sent Payment →</button>
-          
-          <p style="margin-top: 20px; font-size: 0.75rem; color: #94A3B8;">Once detected on-chain, you will proceed to the setup checklist.</p>
-        </div>
-
-        <div style="margin-top: 40px; border-top: 1px dotted rgba(255,255,255,0.1); padding-top: 30px; text-align: center;">
-          <p style="font-size: 0.85rem; color: #94A3B8; margin-bottom: 12px;">Already a previously verified member?</p>
-          <a href="javascript:void(0)" onclick="openModal()" style="font-size: 0.95rem; font-weight: 800; color: var(--aurum-blue); text-decoration: none; display: inline-block; padding: 12px 24px; border: 1px solid rgba(0, 115, 255, 0.2); border-radius: 12px; transition: 0.2s;">Verify & Proceed (Bypass) →</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- SUMMARY -->
-    <div class="summary-card">
-      <h3 style="margin-bottom: 24px; font-weight: 800;">Order Configuration</h3>
-      <div class="item-row"><span class="item-label" id="summary-tier-name">Base User Plan</span><span class="item-price" id="summary-tier-price">$10.00</span></div>
-      <div class="total-row">
-        <span style="font-weight: 800;">Deposit Amount</span>
-        <div class="total-price" id="display-total">$10</div>
-      </div>
-      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 12px; text-align: right;" id="summary-period">Billed Monthly</p>
-      
-      <div style="margin-top: 40px; padding: 20px; background: rgba(0, 115, 255, 0.05); border-radius: 16px;">
-        <p style="font-size: 0.85rem; color: var(--aurum-blue); font-weight: 700;">After Activation:</p>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;">Your node attribution will be initialized and you will be redirected to the **Onboarding Checklist** to connect your liquidity.</p>
-      </div>
-    </div>
-
-  </div>
+    </div> <!-- end node status center -->
+  </div> <!-- end dash container -->
 
   <script>
     const wallets = {
