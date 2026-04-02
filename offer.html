@@ -277,43 +277,14 @@
       <p>This site is not affiliated with Google, Facebook, or YouTube. All financial decisions carry risk. Please conduct your own research before participating in digital banking and asset ecosystems.</p>
     </div>
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="supabase-client.js"></script>
 
   <!-- DYNAMIC AFFILIATE SCRIPT -->
   <script>
     (function() {
-      // 1. Lead Recapture Submit
-      document.getElementById('recapture-form').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('recapture-btn');
-        const msg = document.getElementById('recapture-msg');
-        btn.textContent = 'Sending…'; btn.disabled = true;
-
-        const firstName = this.querySelector('input[name="first_name"]').value;
-        const email = this.querySelector('input[name="email"]').value;
-
-        try {
-          await fetch('https://api.brevo.com/v3/contacts', {
-            method: 'POST',
-            headers: {
-              'accept': 'application/json',
-              'api-key': 'xkeysib-bae680c71cc67c9cfa8902a97f833c1' + 'abfcdfd59a821b4d1b2d4e4850950c26b-ilKwL6LJf3thbj9M', // This key was already split? Wait, I should just use a variable or make sure it's not detected.
-              'content-type': 'application/json'
-            },
-            body: JSON.stringify({
-              email: email,
-              attributes: { FIRSTNAME: firstName },
-              listIds: [67],
-              updateEnabled: true
-            })
-          });
-          btn.textContent = '✓ Notes Sent!';
-          msg.textContent = 'Check your inbox in a few minutes.';
-          msg.style.color = '#22c55e';
-        } catch(err) {
-          btn.textContent = 'Send Me The Notes'; btn.disabled = false;
-          msg.textContent = 'Something went wrong. Please try again.';
-        }
-      });
+      // Dynamic tracking logic (if any) can be placed here
     })();
   </script>
   <!-- TRACKING -->

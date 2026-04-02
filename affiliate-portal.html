@@ -1631,9 +1631,9 @@
 
         try {
             const { data, error } = await window.aurumDB
-                .from('aurum_affiliates') // CROSS-FETCH FROM AFFILIATES
-                .select('email, full_name, affiliate_code')
-                .ilike('email', `%${query}%`)
+                .from('aurum_affiliates')
+                .select('email, full_name, affiliate_code, status') // Include status
+                .or(`email.ilike.%${query}%, affiliate_code.ilike.%${query}%`) // Search email OR code
                 .limit(5);
 
             if (data && !error) {
@@ -1647,7 +1647,12 @@
                         div.innerHTML = `
                             <div class="text-left">
                                 <p class="text-xs font-bold text-white">${aff.email}</p>
-                                <p class="text-[9px] text-[#00F5FF] font-black uppercase tracking-widest">${aff.affiliate_code}</p>
+                                <div class="flex items-center gap-2 mt-1">
+                                  <p class="text-[9px] text-[#00F5FF] font-black uppercase tracking-widest">${aff.affiliate_code}</p>
+                                  <span class="text-[8px] font-bold uppercase py-0.5 px-2 rounded-full ${aff.status === 'active' ? 'bg-green-500/10 text-green-500' : 'bg-white/10 text-gray-400'}">
+                                    ${aff.status === 'active' ? 'VIP' : 'GUEST'}
+                                  </span>
+                                </div>
                             </div>
                             <button onclick="addToPool('${aff.affiliate_code}', '${aff.email}')" class="px-3 py-1 bg-[#00F5FF]/10 text-[#00F5FF] text-[10px] font-black rounded-lg hover:bg-[#00F5FF] hover:text-black transition-all">ASSIGN</button>
                         `;

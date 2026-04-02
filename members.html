@@ -86,6 +86,7 @@
     .status-active { background: rgba(34, 197, 94, 0.1); color: var(--success); }
     .status-grace { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
     .status-expired { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+    .status-guest { background: rgba(255, 255, 255, 0.05); color: var(--text-muted); border: 1px solid var(--panel-border); }
 
     .action-btn {
       padding: 6px 12px; border-radius: 6px; border: 1px solid var(--panel-border);
@@ -166,6 +167,7 @@
             <option value="active">Active (VIP)</option>
             <option value="payment_pending">Payment Pending</option>
             <option value="trialing">Trialing</option>
+            <option value="guest">Guest / Lead</option>
             <option value="grace">Grace Period</option>
             <option value="suspended">Suspended</option>
           </select>
@@ -194,6 +196,7 @@
           <label>Initial Status</label>
           <select id="new-status">
             <option value="active" selected>Active / VIP</option>
+            <option value="guest">Guest / Lead</option>
             <option value="grace">Grace Period</option>
           </select>
         </div>
@@ -293,14 +296,15 @@
         if (memError) throw memError;
 
         // 2. Insert into Affiliates Table (So they have a tracking link)
-        const customCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+        const customCode = status === 'guest' ? 'GST-' + Math.random().toString(36).substring(2, 8).toUpperCase() : 'TEAM-' + Math.random().toString(36).substring(2, 8).toUpperCase();
         const { error: affError } = await window.aurumDB
           .from('aurum_affiliates')
           .insert([{
              email: email.trim().toLowerCase(),
-             password: 'vip-' + Math.floor(Math.random() * 9000 + 1000), // temp password
-             affiliate_code: 'TEAM-' + customCode,
-             status: 'active'
+             password: 'node-' + Math.floor(Math.random() * 9000 + 1000), 
+             full_name: name,
+             affiliate_code: customCode,
+             status: status
           }]);
 
         if (affError) console.warn("Affiliate sync failed:", affError);
@@ -475,7 +479,10 @@
         // 2. Sync to Affiliates
         await window.aurumDB
           .from('aurum_affiliates')
-          .update({ status: status })
+          .update({ 
+             full_name: name,
+             status: status 
+          })
           .eq('email', email);
 
         location.reload();

@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onboarding Checklist | AURUM Ecosystem</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg-color: #F8FAFC;
+      --bg-gradient: radial-gradient(circle at top, #FFFFFF 0%, #F1F5F9 100%);
+      --text-main: #0F172A;
+      --text-muted: #475569;
+      --aurum-blue: #0073FF;
+      --aurum-blue-hover: #3898F8;
+      --glass-bg: rgba(255, 255, 255, 0.8);
+      --glass-border: rgba(0, 0, 0, 0.05);
+      --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+      --accent-grad: linear-gradient(135deg, var(--aurum-blue), var(--aurum-blue-hover));
+      --dark-panel: #030712;
+      --radius: 20px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-color) var(--bg-gradient);
+      color: var(--text-main); line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    .shadow-glow {
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    }
+
+    /* === NAV === */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--glass-border); padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; height: 72px;
+    }
+    .nav-brand { font-size: 1.1rem; font-weight: 800; color: var(--text-main); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+    .nav-brand span { color: var(--aurum-blue); }
+
+    /* === LAYOUT === */
+    .container { max-width: 900px; margin: 0 auto; padding: 60px 24px; }
+    .header { text-align: center; margin-bottom: 60px; }
+    h1 { font-size: clamp(2.2rem, 5vw, 3rem); font-weight: 900; letter-spacing: -0.03em; margin-bottom: 16px; }
+    .subtitle { font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+
+    /* === CHECKLIST STEPS === */
+    .steps { display: flex; flex-direction: column; gap: 32px; margin-bottom: 60px; }
+    .step-card {
+      background: #FFFFFF; border-radius: var(--radius); padding: 40px;
+      border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);
+      position: relative;
+    }
+    .step-num {
+      position: absolute; top: 40px; left: -20px;
+      width: 40px; height: 40px; border-radius: 12px;
+      background: var(--accent-grad); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1.2rem; box-shadow: 0 4px 12px rgba(0, 115, 255, 0.3);
+    }
+    h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
+    .step-content p { margin-bottom: 16px; font-size: 1.1rem; color: var(--text-muted); }
+    
+    .crypto-list {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+      padding: 20px; background: #F8FAFC; border-radius: 16px; margin-top: 20px;
+    }
+    .crypto-item { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.95rem; }
+    .crypto-item svg { color: var(--aurum-blue); }
+
+    .vpn-note {
+      background: #FFFBEB; border: 1px solid #FEF3C7;
+      padding: 20px; border-radius: 16px; color: #92400E;
+      font-size: 0.95rem; margin-top: 20px;
+    }
+
+    /* === VIDEO === */
+    .video-wrapper {
+      position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+      border-radius: 16px; background: #000; margin-top: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+    .video-wrapper iframe { position: absolute; top:0; left:0; width:100%; height:100%; border:0; }
+
+    .join-btn {
+      display: inline-block; padding: 22px 64px; border-radius: 99px;
+      background: var(--accent-grad); color: #fff;
+      font-size: 1.25rem; font-weight: 800; text-decoration: none;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+      box-shadow: 0 15px 35px rgba(0, 115, 255, 0.4);
+      margin-top: 40px; position: relative; z-index: 2;
+    }
+    .join-btn:hover { 
+      transform: translateY(-5px) scale(1.02); 
+      box-shadow: 0 25px 50px rgba(0, 115, 255, 0.5); 
+    }
+
+    .foot { text-align: center; margin-top: 60px; color: var(--text-muted); font-size: 0.9rem; opacity: 0.6; }
+
+    /* === ANIMATIONS === */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideInFromTop { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .animate-in { animation: fadeIn 0.5s ease-out forwards; }
+    .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+    .slide-in-from-top-4 { animation: slideInFromTop 0.5s ease-out forwards; }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 16px; }
+      .nav-inner { height: 60px; }
+      .nav-brand { font-size: 0.85rem; white-space: nowrap; }
+      .nav-cta { padding: 8px 16px; font-size: 0.8rem; white-space: nowrap; }
+
+      .container { padding: 40px 16px; }
+      .header { margin-bottom: 40px; }
+      h1 { font-size: 1.8rem; }
+      .subtitle { font-size: 1.05rem; }
+
+      .step-num { left: 50%; top: -20px; transform: translateX(-50%); }
+      .step-card { padding: 40px 20px 24px; text-align: center; }
+      .step-card h2 { font-size: 1.25rem; margin-top: 10px; }
+      
+      .crypto-list { grid-template-columns: 1fr; padding: 16px; text-align: left; }
+      .crypto-item { font-size: 0.9rem; }
+      
+      .final-cta { padding: 40px 20px; border-radius: 20px; }
+      .final-cta h2 { font-size: 1.6rem; }
+      .join-btn { width: auto; min-width: 250px; padding: 14px 28px; font-size: 1.1rem; white-space: nowrap; display: inline-block; margin-top: 24px; }
+      .hidden-mobile { display: none !important; }
+      .mobile-only { display: inline !important; }
+    }
+    .mobile-only { display: none; }
+    .hidden { display: none !important; }
+
+    /* === GUIDE STYLES === */
+    .guide-list {
+      margin-top: 32px; padding: 24px; background: #F8FAFC; border-radius: 16px;
+      border: 1px solid var(--glass-border); text-align: left;
+    }
+    .guide-list h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 16px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+    .guide-item { display: flex; gap: 12px; margin-bottom: 12px; font-size: 0.95rem; line-height: 1.4; color: var(--text-muted); }
+    .guide-num { 
+      min-width: 24px; height: 24px; border-radius: 6px; background: #E2E8F0;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.8rem; color: var(--text-main);
+    }
+
+    /* === STICKY CTA === */
+    .sticky-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--glass-border);
+      padding: 16px 24px; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
+    }
+    .sticky-bar.visible { transform: translateY(0); }
+    .sticky-bar-text { font-weight: 700; color: var(--text-main); font-size: 1rem; }
+    .sticky-bar-btn { 
+      padding: 12px 32px; border-radius: 99px; background: var(--accent-grad);
+      color: #fff; font-weight: 800; text-decoration: none; font-size: 0.9rem;
+      box-shadow: 0 8px 20px rgba(0, 115, 255, 0.3);
+    }
+
+    .hero-actions {
+      display: flex; gap: 16px; justify-content: center; margin-top: 32px;
+    }
+    .btn-secondary {
+      background: white; color: var(--aurum-blue); border: 2px solid var(--aurum-blue);
+      padding: 12px 24px; border-radius: 99px; font-weight: 700; text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .btn-secondary:hover { background: var(--bg-color); transform: translateY(-2px); }
+
+    @media (max-width: 768px) {
+      .sticky-bar { padding: 12px 20px; }
+      .sticky-bar-text { display: none; }
+      .sticky-bar-btn { width: 100%; text-align: center; }
+      .hero-actions { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">TheAI<span>Finance</span>Breakdown</a>
+      <a href="offer.html" class="nav-cta">Explore <span class="hidden-mobile">Digital Banking </span>Ecosystem →</a>
+    </div>
+  </nav>
+
+  <!-- TOP SPONSOR BAR (Hidden by default for Direct/1W145K traffic) -->
+  <div id="sponsor-instructions-zone" class="hidden animate-in fade-in slide-in-from-top-4 duration-1000">
+      <div class="bg-gradient-to-r from-[#030712] via-[#0F172A] to-[#030712] border-b border-[#D4AF37]/20 py-6">
+          <div class="max-w-[1100px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+              
+              <div class="flex items-center gap-6">
+                  <div id="sponsor-avatar" class="w-16 h-16 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#E5C04A] flex items-center justify-center text-[#001F3F] font-black text-2xl shadow-glow shrink-0">...</div>
+                  <div>
+                      <div class="flex items-center gap-2 mb-1">
+                          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                          <h4 class="text-[10px] font-black uppercase text-[#D4AF37] tracking-[0.2em]">Your Aurum Sponsor</h4>
+                      </div>
+                      <p id="sponsor-name" class="text-xl font-black text-white leading-none">...</p>
+                  </div>
+              </div>
+
+              <div class="bg-white/5 border border-white/10 px-6 py-3 rounded-2xl flex-1 max-w-md">
+                  <p id="team-message-text" class="text-gray-300 text-xs font-medium italic leading-relaxed text-center md:text-left">...</p>
+              </div>
+
+              <div id="sponsor-contact-window" class="flex flex-col gap-2 items-end">
+                  <a id="sponsor-email-link" href="#" class="flex items-center gap-2 text-[11px] font-black text-white/50 hover:text-[#D4AF37] transition-all uppercase tracking-tighter">
+                      <span class="text-xs">📧</span> <span id="sponsor-email-text">...</span>
+                  </a>
+                  <a id="sponsor-phone-link" href="#" class="flex items-center gap-2 text-[11px] font-black text-white/50 hover:text-[#D4AF37] transition-all uppercase tracking-tighter">
+                      <span class="text-xs">📱</span> <span id="sponsor-phone-text">...</span>
+                  </a>
+              </div>
+
+          </div>
+      </div>
+  </div>
+
+  <div class="container">
+
+    <div class="header">
+      <h1 id="skin-h1">Onboarding Checklist</h1>
+      <p id="skin-sub" class="subtitle">Complete these 3 essential steps before creating your AURUM account within our digital banking ecosystem.</p>
+      
+    </div>
+
+
+
+    <div class="steps">
+      <!-- OVERVIEW / FREE TO JOIN -->
+      <div class="step-card bg-gradient-to-br from-blue-50 to-white border-blue-200">
+        <h2 style="font-size: 1.25rem; margin-bottom: 12px; color: var(--aurum-blue);">Free to Join & Explore</h2>
+        <div class="step-content">
+          <p style="font-size: 1rem; color: var(--text-main); font-weight: 500;">
+            It is <strong>completely free</strong> to join and explore the AURUM ecosystem. However, to start generating returns, you will need <strong>$19.99</strong> for the annual membership fee, and a minimum of <strong>$100 USD</strong> for the trading bot.
+          </p>
+        </div>
+      </div>
+
+      <!-- STEP 1 -->
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h2>Prepare Your Crypto</h2>
+        <div class="step-content">
+          <p>Ensure you have your funds ready in a compatible wallet before proceeding with the activation steps.</p>
+          <div class="crypto-list">
+            <div class="crypto-item">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707l-4.5 4.5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L8.5 9.586l3.793-3.793a1 1 0 011.414 1.414z"></path></svg>
+              USDT (TRC20 / BEP20)
+            </div>
+            <div class="crypto-item">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707l-4.5 4.5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L8.5 9.586l3.793-3.793a1 1 0 011.414 1.414z"></path></svg>
+              USDC (BEP20 / ERC20 / Polygon)
+            </div>
+            <div class="crypto-item">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707l-4.5 4.5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L8.5 9.586l3.793-3.793a1 1 0 011.414 1.414z"></path></svg>
+              Standard Web3 Wallets
+            </div>
+            <div class="crypto-item">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707l-4.5 4.5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L8.5 9.586l3.793-3.793a1 1 0 011.414 1.414z"></path></svg>
+              BNB / ETH / MATIC for Gas
+            </div>
+          </div>
+          <div class="vpn-note" style="background: #FFFBEB; border: 1px solid #FEF3C7; color: #92400E;">
+            <strong>Pro Tip:</strong> Do not send money from Crypto Exchanges. Always use a personal Wallet like <strong>Exodus</strong> or <strong>Metamask</strong> to send funds to Aurum.
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h2>VPN Setup (US / CA Users)</h2>
+        <div class="step-content">
+          <p>If you are located in the US, Canada, or Mexico, you <strong>must</strong> use a VPN set to a country outside these regions (e.g., Europe) to access the registration page.</p>
+          <p><strong>Recommendations:</strong></p>
+          <ul style="list-style: none; margin-bottom: 20px;">
+            <li style="margin-bottom: 8px;">🔹 <strong>ProtonVPN.com</strong> - Free version available.</li>
+            <li style="margin-bottom: 8px;">🔹 <strong>Windscribe.com</strong> - Great free tier (10GB/mo).</li>
+            <li style="margin-bottom: 8px;">🔹 <strong>Opera Browser</strong> - Built-in free VPN (select "Europe").</li>
+            <li style="margin-bottom: 8px;">🔹 <strong>NordVPN / ExpressVPN</strong> - Best premium paid options.</li>
+          </ul>
+          <div class="vpn-note">
+            <strong>Pro Tip: Always disconnect VPN before communicating with exchanges</strong> to ensure your account remains in good standing.
+          </div>
+          <div style="margin-top: 24px;">
+            <a href="#step-3-guide" class="text-xs font-bold text-blue-600 uppercase tracking-widest hover:underline">Finished Setup? Go to Step 3 →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div id="step-3-guide" class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="guide-list" style="margin-top: 0; margin-bottom: 32px;">
+            <h3>
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                Step-by-Step Instructions
+            </h3>
+            <div class="guide-item"><span class="guide-num">1</span><span><strong>Contact Info:</strong> Enter your email and phone number.</span></div>
+            <div class="guide-item"><span class="guide-num">2</span><span><strong>Security:</strong> Create a secure password.</span></div>
+            <div class="guide-item"><span class="guide-num">3</span><span><strong>Invite:</strong> Your Aurum Sponsor will be displayed here.</span></div>
+            <div class="guide-item"><span class="guide-num">4</span><span><strong>Details:</strong> Provide your name and unique username.</span></div>
+            <div class="guide-item"><span class="guide-num">5</span><span><strong>Profile:</strong> Set your birthday and country to "CRYPTONATION".</span></div>
+            <div class="guide-item"><span class="guide-num">6</span><span><strong>Agreement:</strong> Review and accept the Terms of Use.</span></div>
+            <div class="guide-item"><span class="guide-num">7</span><span><strong>Sign Up:</strong> Submit the registration form.</span></div>
+            <div class="guide-item"><span class="guide-num">8</span><span><strong>Verification:</strong> Retrieve the code from your email.</span></div>
+            <div class="guide-item"><span class="guide-num">9</span><span><strong>Activation:</strong> Enter the code to finalize your account.</span></div>
+          </div>
+
+          <h2 style="margin-top: 32px; font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">Watch the Step-by-Step Guide</h2>
+          <p style="margin-bottom: 24px; color: var(--text-muted);">Follow the 5-minute video below strictly to ensure your account is activated correctly. <strong>Wait until the video finishes before proceeding.</strong></p>
+
+          <div class="video-wrapper">
+            <iframe src="https://www.youtube.com/embed/TL5LHCLY7eA?rel=0" title="Onboarding Guide" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <!-- FINAL CTA SECTION -->
+    <div class="header" style="margin-top: 80px; margin-bottom: 20px;">
+        <h2 style="font-size: 2rem; margin-bottom: 15px;">Ready to Begin?</h2>
+        <p class="subtitle" style="margin-bottom: 40px;">Click the button below to create your official account using your sponsor's link.</p>
+        
+        <a href="https://backoffice.aurum.foundation/register" id="final-join-btn" class="join-btn" style="text-decoration: none;">
+            Create My AURUM Account →
+        </a>
+        
+        <p style="margin-top: 30px; font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">
+            ⚠️ Ensure your VPN is ACTIVE before clicking if you are in the US/CA.
+        </p>
+    </div>
+
+
+
+    <footer class="foot">
+      <p>© 2026 The AI Finance Breakdown. All rights reserved.</p>
+      <p style="margin-top: 10px;">Review the official terms on the Aurum backoffice before participating.</p>
+    </footer>
+  </div>
+
+  <!-- STICKY BOTTOM BAR -->
+  <div id="sticky-cta" class="sticky-bar">
+    <div class="sticky-bar-text">Ready to automate your digital assets?</div>
+    <a href="https://backoffice.aurum.foundation/register" id="sticky-join-btn" class="sticky-bar-btn">Create My AURUM Account →</a>
+  </div>
+
+  <!-- Load Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Initialize Supabase (Global lookup)
+    const SUPABASE_URL_BASE = 'https://cwdawyeiijbcoihobvpb.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_7mcxzRZkMjQcK1CTZjUl_w_AGm9kisr';
+    const aurumDB = supabase.createClient(SUPABASE_URL_BASE, SUPABASE_ANON_KEY);
+
+    async function lookupSponsor() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const ref = (urlParams.get('ref') || localStorage.getItem('aurum_ref') || '1W145K').toUpperCase();
+      let activeCode = ref;
+      
+      // Lock it back into storage if it came from URL or is the Default
+      localStorage.setItem('aurum_ref', ref);
+
+      try {
+        // 1. Check if the initial code is a rotator
+        const { data: node } = await aurumDB
+          .from('aurum_affiliates')
+          .select('is_rotator, rotator_pool, rotator_index, status, plan')
+          .eq('affiliate_code', ref)
+          .single();
+
+        if (node && node.is_rotator && node.rotator_pool) {
+            const campaignGroup = urlParams.get('group') || 'default';
+
+            // Parse pool — backward compat for old comma-separated strings
+            let pools;
+            try {
+              const parsed = JSON.parse(node.rotator_pool);
+              if (typeof parsed === 'object' && !Array.isArray(parsed)) {
+                pools = parsed;
+              } else if (Array.isArray(parsed)) {
+                pools = { default: parsed };
+              } else {
+                pools = { default: String(parsed).split(',').map(s => s.trim()).filter(Boolean) };
+              }
+            } catch (_) {
+              pools = { default: node.rotator_pool.split(',').map(s => s.trim()).filter(Boolean) };
+            }
+
+            let pool = pools[campaignGroup] || pools['default'] || [];
+            
+            // Tiered Capacity Enforcement (Global Cap)
+            const totalMembers = Object.values(pools).reduce((s, a) => s + (Array.isArray(a) ? a.length : 0), 0);
+            const max = (node.plan === 'AGENCY') ? 2500 : 100;
+
+            if (totalMembers > max) {
+               console.warn(`[AURUM-LIMIT] Global capacity exceeded (${totalMembers}/${max}). Slicing traffic.`);
+               if (pool.length > max) pool = pool.slice(0, max);
+            }
+            
+            if (pool.length > 0) {
+                let lastIdx = parseInt(localStorage.getItem(`rot_idx_${ref}_${campaignGroup}`) || '-1');
+                let nextIdx = (lastIdx + 1) % pool.length;
+                localStorage.setItem(`rot_idx_${ref}_${campaignGroup}`, nextIdx);
+                activeCode = pool[nextIdx];
+                console.log(`[ROTATOR] Campaign [${campaignGroup}] traffic assigned to sub-node: ${activeCode}`);
+            }
+        }
+
+        // 2. Fetch the ACTIVE partner's details for the UI
+        const { data, error } = await aurumDB
+          .from('aurum_affiliates')
+          .select('full_name, email, phone, instructions, affiliate_id, hero_title, hero_subtitle, hero_video')
+          .eq('affiliate_code', activeCode)
+          .single();
+
+        if (data && !error) {
+            // DYNAMIC UI: Only reveal and populate the sponsor bar if it's NOT the default Main Admin code
+            if (activeCode !== '1W145K') {
+                document.getElementById('sponsor-instructions-zone').classList.remove('hidden');
+                document.getElementById('sponsor-name').innerText = data.full_name;
+                document.getElementById('sponsor-email-link').href = `mailto:${data.email}`;
+                if (document.getElementById('sponsor-email-text')) document.getElementById('sponsor-email-text').innerText = data.email;
+                document.getElementById('sponsor-avatar').innerText = (data.full_name || 'V').substring(0, 1).toUpperCase();
+                
+                if (data.phone) {
+                    document.getElementById('sponsor-phone-link').href = `tel:${data.phone}`;
+                    if (document.getElementById('sponsor-phone-text')) document.getElementById('sponsor-phone-text').innerText = data.phone;
+                    document.getElementById('sponsor-phone-link').style.display = 'flex';
+                } else {
+                    document.getElementById('sponsor-phone-link').style.display = 'none';
+                }
+
+                if (data.instructions) {
+                    document.getElementById('team-message-text').innerText = data.instructions;
+                }
+
+                // === FULL AGENCY SKIN OVERRIDES ===
+                // If the partner has provided custom branding in the DB, we swap the Hero
+                if (data.hero_title) {
+                    document.getElementById('skin-h1').innerText = data.hero_title;
+                }
+                if (data.hero_subtitle) {
+                    document.getElementById('skin-sub').innerText = data.hero_subtitle;
+                }
+                if (data.hero_video) {
+                    const videoIframe = document.querySelector('iframe[title="Onboarding Guide"]');
+                    if (videoIframe) {
+                        videoIframe.src = data.hero_video;
+                    }
+                }
+            }
+
+            // DYNAMIC LINK BRIDGE: Update Final Join Button (ALWAYS applies for correct attribution)
+            if (data.affiliate_id) {
+                const finalBtn = document.getElementById('final-join-btn');
+                if (finalBtn) {
+                   // Clean the URL to ensure it starts with https:// if it's a domain
+                   let targetUrl = data.affiliate_id.trim();
+                   if (!targetUrl.startsWith('http')) {
+                       targetUrl = `https://${targetUrl}`;
+                   }
+                   finalBtn.href = targetUrl;
+                   console.log("Tracking Bridge Established:", targetUrl);
+                }
+            }
+        }
+      } catch (e) { console.warn("Sponsor Lookup Error", e); }
+    }
+    
+    lookupSponsor();
+
+    // --- CONVERSION CLICK TRACKER ---
+    // Records when a lead clicks the final "Join" button, attributed to sponsor
+    document.addEventListener('DOMContentLoaded', () => {
+      const joinBtn = document.getElementById('final-join-btn');
+      if (joinBtn) {
+        joinBtn.addEventListener('click', async (e) => {
+          const sponsorCode = localStorage.getItem('aurum_ref') || '1W145K';
+          // Fire-and-forget — don't block navigation
+          try {
+            await aurumDB.from('aurum_tracking').insert([{
+              ref: sponsorCode,
+              event_type: 'conversion_click',
+              page: 'Onboarding',
+              org: localStorage.getItem('aurum_org') || 'Direct',
+              platform: window.innerWidth < 768 ? 'Mobile' : 'Desktop'
+            }]);
+            console.log(`[AURUM-TRACKER] Conversion Click recorded for: ${sponsorCode}`);
+          } catch (err) {
+            console.warn('Conversion tracking failed:', err);
+          }
+        });
+      }
+    });
+  // --- STICKY BAR VISIBILITY ---
+    window.addEventListener('scroll', () => {
+      const stickyBar = document.getElementById('sticky-cta');
+      const finalSection = document.querySelector('.header[style*="margin-top: 80px"]');
+      
+      if (window.scrollY > 400) {
+        if (finalSection) {
+          const rect = finalSection.getBoundingClientRect();
+          if (rect.top < window.innerHeight) {
+            stickyBar.classList.remove('visible');
+          } else {
+            stickyBar.classList.add('visible');
+          }
+        } else {
+          stickyBar.classList.add('visible');
+        }
+      } else {
+        stickyBar.classList.remove('visible');
+      }
+    });
+
+    // --- BUTTON SYNC ---
+    async function syncAllButtons() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let ref = urlParams.get('ref') || localStorage.getItem('aurum_ref') || '1W145K';
+        
+        setTimeout(() => {
+            const finalRef = localStorage.getItem('aurum_ref') || ref;
+            const targetUrl = `https://backoffice.aurum.foundation/u/${finalRef}`;
+            
+            ['final-join-btn', 'sticky-join-btn'].forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.href = targetUrl;
+            });
+            console.log("[AURUM-SYNC] All buttons synced to ref:", finalRef);
+        }, 1500);
+    }
+    syncAllButtons();
+  </script>
+
+  <!-- TRACKING & AFFILIATE LOGIC -->
+  <script src="tracking.js"></script>
+  <script src="skin.js"></script>
+</body>
+</html>
