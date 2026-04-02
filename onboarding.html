@@ -139,6 +139,55 @@
     }
     .mobile-only { display: none; }
     .hidden { display: none !important; }
+
+    /* === GUIDE STYLES === */
+    .guide-list {
+      margin-top: 32px; padding: 24px; background: #F8FAFC; border-radius: 16px;
+      border: 1px solid var(--glass-border); text-align: left;
+    }
+    .guide-list h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 16px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+    .guide-item { display: flex; gap: 12px; margin-bottom: 12px; font-size: 0.95rem; line-height: 1.4; color: var(--text-muted); }
+    .guide-num { 
+      min-width: 24px; height: 24px; border-radius: 6px; background: #E2E8F0;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.8rem; color: var(--text-main);
+    }
+
+    /* === STICKY CTA === */
+    .sticky-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--glass-border);
+      padding: 16px 24px; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
+    }
+    .sticky-bar.visible { transform: translateY(0); }
+    .sticky-bar-text { font-weight: 700; color: var(--text-main); font-size: 1rem; }
+    .sticky-bar-btn { 
+      padding: 12px 32px; border-radius: 99px; background: var(--accent-grad);
+      color: #fff; font-weight: 800; text-decoration: none; font-size: 0.9rem;
+      box-shadow: 0 8px 20px rgba(0, 115, 255, 0.3);
+    }
+
+    .hero-actions {
+      display: flex; gap: 16px; justify-content: center; margin-top: 32px;
+    }
+    .btn-secondary {
+      background: white; color: var(--aurum-blue); border: 2px solid var(--aurum-blue);
+      padding: 12px 24px; border-radius: 99px; font-weight: 700; text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .btn-secondary:hover { background: var(--bg-color); transform: translateY(-2px); }
+
+    @media (max-width: 768px) {
+      .sticky-bar { padding: 12px 20px; }
+      .sticky-bar-text { display: none; }
+      .sticky-bar-btn { width: 100%; text-align: center; }
+      .hero-actions { flex-direction: column; align-items: center; }
+    }
   </style>
 </head>
 <body>
@@ -188,17 +237,28 @@
     <div class="header">
       <h1 id="skin-h1">Onboarding Checklist</h1>
       <p id="skin-sub" class="subtitle">Complete these 3 essential steps before creating your AURUM account within our digital banking ecosystem.</p>
+      
     </div>
 
 
 
     <div class="steps">
+      <!-- OVERVIEW / FREE TO JOIN -->
+      <div class="step-card bg-gradient-to-br from-blue-50 to-white border-blue-200">
+        <h2 style="font-size: 1.25rem; margin-bottom: 12px; color: var(--aurum-blue);">Free to Join & Explore</h2>
+        <div class="step-content">
+          <p style="font-size: 1rem; color: var(--text-main); font-weight: 500;">
+            It is <strong>completely free</strong> to join and explore the AURUM ecosystem. However, to start generating returns, you will need <strong>$19.99</strong> for the annual membership fee, and a minimum of <strong>$100 USD</strong> for the trading bot.
+          </p>
+        </div>
+      </div>
+
       <!-- STEP 1 -->
       <div class="step-card">
         <div class="step-num">1</div>
         <h2>Prepare Your Crypto</h2>
         <div class="step-content">
-          <p>Ensure you have your funds ready in a compatible wallet. You will need a minimum of <strong>$100 USD</strong> for the trading bot, plus <strong>$19.99</strong> for the annual fee.</p>
+          <p>Ensure you have your funds ready in a compatible wallet before proceeding with the activation steps.</p>
           <div class="crypto-list">
             <div class="crypto-item">
               <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707l-4.5 4.5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L8.5 9.586l3.793-3.793a1 1 0 011.414 1.414z"></path></svg>
@@ -217,6 +277,9 @@
               BNB / ETH / MATIC for Gas
             </div>
           </div>
+          <div class="vpn-note" style="background: #FFFBEB; border: 1px solid #FEF3C7; color: #92400E;">
+            <strong>Pro Tip:</strong> Do not send money from Crypto Exchanges. Always use a personal Wallet like <strong>Exodus</strong> or <strong>Metamask</strong> to send funds to Aurum.
+          </div>
         </div>
       </div>
 
@@ -229,22 +292,43 @@
           <p><strong>Recommendations:</strong></p>
           <ul style="list-style: none; margin-bottom: 20px;">
             <li style="margin-bottom: 8px;">🔹 <strong>ProtonVPN.com</strong> - Free version available.</li>
-            <li>🔹 <strong>Opera Browser</strong> - Built-in free VPN (select "Europe").</li>
+            <li style="margin-bottom: 8px;">🔹 <strong>Windscribe.com</strong> - Great free tier (10GB/mo).</li>
+            <li style="margin-bottom: 8px;">🔹 <strong>Opera Browser</strong> - Built-in free VPN (select "Europe").</li>
+            <li style="margin-bottom: 8px;">🔹 <strong>NordVPN / ExpressVPN</strong> - Best premium paid options.</li>
           </ul>
           <div class="vpn-note">
-            <strong>Pro Tip:</strong> Use the <strong>Opera Browser</strong> if you only want the VPN to apply to your Aurum session without affecting your other open apps or trading websites.
+            <strong>Pro Tip: Always disconnect VPN before communicating with exchanges</strong> to ensure your account remains in good standing.
+          </div>
+          <div style="margin-top: 24px;">
+            <a href="#step-3-guide" class="text-xs font-bold text-blue-600 uppercase tracking-widest hover:underline">Finished Setup? Go to Step 3 →</a>
           </div>
         </div>
       </div>
 
       <!-- STEP 3 -->
-      <div class="step-card">
+      <div id="step-3-guide" class="step-card">
         <div class="step-num">3</div>
         <h2>Watch the Step-by-Step Guide</h2>
         <div class="step-content">
           <p>Follow the 5-minute video below strictly to ensure your account is activated correctly. <strong>Wait until the video finishes before proceeding.</strong></p>
           <div class="video-wrapper">
-            <iframe src="https://player.vimeo.com/video/1127732746" title="Onboarding Guide" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/TL5LHCLY7eA?rel=0" title="Onboarding Guide" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+          </div>
+
+          <div class="guide-list">
+            <h3>
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                Step-by-Step Instructions
+            </h3>
+            <div class="guide-item"><span class="guide-num">1</span><span><strong>Contact Info:</strong> Enter your email and phone number.</span></div>
+            <div class="guide-item"><span class="guide-num">2</span><span><strong>Security:</strong> Create a secure password.</span></div>
+            <div class="guide-item"><span class="guide-num">3</span><span><strong>Invite:</strong> Your Aurum Sponsor will be displayed here.</span></div>
+            <div class="guide-item"><span class="guide-num">4</span><span><strong>Details:</strong> Provide your name and unique username.</span></div>
+            <div class="guide-item"><span class="guide-num">5</span><span><strong>Profile:</strong> Set your birthday and country to "CRYPTONATION".</span></div>
+            <div class="guide-item"><span class="guide-num">6</span><span><strong>Agreement:</strong> Review and accept the Terms of Use.</span></div>
+            <div class="guide-item"><span class="guide-num">7</span><span><strong>Sign Up:</strong> Submit the registration form.</span></div>
+            <div class="guide-item"><span class="guide-num">8</span><span><strong>Verification:</strong> Retrieve the code from your email.</span></div>
+            <div class="guide-item"><span class="guide-num">9</span><span><strong>Activation:</strong> Enter the code to finalize your account.</span></div>
           </div>
         </div>
       </div>
@@ -271,6 +355,12 @@
       <p>© 2026 The AI Finance Breakdown. All rights reserved.</p>
       <p style="margin-top: 10px;">Review the official terms on the Aurum backoffice before participating.</p>
     </footer>
+  </div>
+
+  <!-- STICKY BOTTOM BAR -->
+  <div id="sticky-cta" class="sticky-bar">
+    <div class="sticky-bar-text">Ready to automate your digital assets?</div>
+    <a href="https://backoffice.aurum.foundation/register" id="sticky-join-btn" class="sticky-bar-btn">Create My AURUM Account →</a>
   </div>
 
   <!-- Load Supabase -->
@@ -421,6 +511,44 @@
         });
       }
     });
+  // --- STICKY BAR VISIBILITY ---
+    window.addEventListener('scroll', () => {
+      const stickyBar = document.getElementById('sticky-cta');
+      const finalSection = document.querySelector('.header[style*="margin-top: 80px"]');
+      
+      if (window.scrollY > 400) {
+        if (finalSection) {
+          const rect = finalSection.getBoundingClientRect();
+          if (rect.top < window.innerHeight) {
+            stickyBar.classList.remove('visible');
+          } else {
+            stickyBar.classList.add('visible');
+          }
+        } else {
+          stickyBar.classList.add('visible');
+        }
+      } else {
+        stickyBar.classList.remove('visible');
+      }
+    });
+
+    // --- BUTTON SYNC ---
+    async function syncAllButtons() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let ref = urlParams.get('ref') || localStorage.getItem('aurum_ref') || '1W145K';
+        
+        setTimeout(() => {
+            const finalRef = localStorage.getItem('aurum_ref') || ref;
+            const targetUrl = `https://backoffice.aurum.foundation/u/${finalRef}`;
+            
+            ['final-join-btn', 'sticky-join-btn'].forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.href = targetUrl;
+            });
+            console.log("[AURUM-SYNC] All buttons synced to ref:", finalRef);
+        }, 1500);
+    }
+    syncAllButtons();
   </script>
 
   <!-- TRACKING & AFFILIATE LOGIC -->
