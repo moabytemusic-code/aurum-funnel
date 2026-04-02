@@ -150,6 +150,22 @@
       .mobile-only { display: inline !important; }
     }
     .mobile-only { display: none; }
+    /* === MUSIC TOGGLE === */
+    #bg-music-toggle {
+      position: fixed; bottom: 30px; left: 30px; z-index: 2000;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      opacity: 0.8;
+    }
+    #bg-music-toggle:hover { transform: scale(1.1); opacity: 1; box-shadow: 0 12px 40px rgba(0,0,0,0.15); }
+    #bg-music-toggle .icon { font-size: 1.2rem; }
+    #bg-music-toggle.playing { background: var(--aurum-blue); color: #fff; border-color: transparent; }
+    #bg-music-container { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
   </style>
 </head>
 <body>
@@ -272,6 +288,92 @@
         const isOpen = item.classList.contains('open');
         document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
         if (!isOpen) item.classList.add('open');
+      });
+    });
+  </script>
+
+  <!-- BACKGROUND MUSIC ENGINE -->
+  <div id="bg-music-toggle" title="Toggle Background Music">
+    <span class="icon">🔈</span>
+  </div>
+  <div id="bg-music-container"></div>
+
+  <script>
+    // YouTube IFrame API Loader
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var bgPlayer;
+    var isMusicPlaying = false;
+    var hasInteracted = false;
+
+    function onYouTubeIframeAPIReady() {
+      bgPlayer = new YT.Player('bg-music-container', {
+        height: '1',
+        width: '1',
+        videoId: 'TWevWTQSkmc',
+        playerVars: {
+          'autoplay': 1,
+          'loop': 1,
+          'playlist': 'TWevWTQSkmc',
+          'controls': 0,
+          'showinfo': 0,
+          'autohide': 1,
+          'modestbranding': 1,
+          'mute': 1,
+          'enablejsapi': 1
+        },
+        events: {
+          'onReady': onPlayerReady
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      // Start muted to comply with autoplay policies
+      event.target.playVideo();
+    }
+
+    const toggle = document.getElementById('bg-music-toggle');
+    const icon = toggle.querySelector('.icon');
+
+    toggle.addEventListener('click', () => {
+      if (!bgPlayer) return;
+      
+      if (!isMusicPlaying) {
+        bgPlayer.unMute();
+        bgPlayer.setVolume(30); // 30% volume for subtle background
+        bgPlayer.playVideo();
+        toggle.classList.add('playing');
+        icon.innerText = '🔊';
+        isMusicPlaying = true;
+      } else {
+        bgPlayer.mute();
+        toggle.classList.remove('playing');
+        icon.innerText = '🔈';
+        isMusicPlaying = false;
+      }
+    });
+
+    // Auto-unmute on first meaningful interaction (if toggle is clicked or page is clicked)
+    document.addEventListener('click', () => {
+        if (!hasInteracted && bgPlayer) {
+            // We don't force play here, but we ensure the API is "unlocked"
+            hasInteracted = true;
+        }
+    }, { once: true });
+
+    // Sync with main videos: Pause music if a video starts
+    document.querySelectorAll('iframe').forEach(frame => {
+      frame.addEventListener('click', () => {
+        if (isMusicPlaying && bgPlayer) {
+          bgPlayer.mute();
+          toggle.classList.remove('playing');
+          icon.innerText = '🔈';
+          isMusicPlaying = false;
+        }
       });
     });
   </script>
