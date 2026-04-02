@@ -199,8 +199,9 @@
         <div class="form-group">
           <label>Initial Status</label>
           <select id="new-status">
-            <option value="active" selected>Active / VIP</option>
-            <option value="guest">Guest / Lead</option>
+            <option value="active">Active / VIP</option>
+            <option value="trialing">Trialing (14 Days)</option>
+            <option value="guest" selected>Guest / Lead</option>
             <option value="grace">Grace Period</option>
           </select>
         </div>
@@ -313,19 +314,34 @@
 
         if (affError) console.warn("Affiliate sync failed:", affError);
         
-        // 3. Fire VIP Welcome Email via Secure Vercel Proxy
+        // 3. Fire Welcome Email via Secure Vercel Proxy
         try {
           const portalLink = window.location.origin + '/affiliate-portal.html';
+          
+          let emailSubject = "AURUM Partner: VIP Node Activated";
+          let emailHeadline = "VIP Node Activated";
+          let emailSubtext = "You have been officially provisioned for the AURUM Digital Banking Funnel.";
+          
+          if (status === 'guest') {
+            emailSubject = "AURUM Partner: Guest Node Initialized";
+            emailHeadline = "Guest Node Initialized";
+            emailSubtext = "Your guest node has been initialized. You can now participate in our digital banking ecosystem and rotators.";
+          } else if (status === 'trialing') {
+            emailSubject = "AURUM Partner: 14-Day Trial Activated";
+            emailHeadline = "Trial Activated: Your 14-Day Window Begins";
+            emailSubtext = "Your 14-day trial has been activated. You now have full access to our digital banking ecosystem to test our infrastructure.";
+          }
+
           await fetch('/api/send-email', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
               to: [{ email: email }],
-              subject: "AURUM Partner Onboarding Funnel: Trial Activated",
+              subject: emailSubject,
               htmlContent: `
                 <div style="font-family: sans-serif; padding: 40px; border: 1px solid #eee; border-radius: 12px; max-width: 600px; margin: 0 auto;">
-                  <h1 style="color: #0073FF;">VIP Node Activated</h1>
-                  <p>You have been officially provisioned for the AURUM Digital Banking Funnel.</p>
+                  <h1 style="color: #0073FF;">${emailHeadline}</h1>
+                  <p>${emailSubtext}</p>
                   <p>Your affiliate tracking link is ready. Use the link below to access your master dashboard.</p>
                   <p><a href="${portalLink}" style="background: #000; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block;">Go to Master Portal</a></p>
                 </div>
@@ -533,6 +549,7 @@
 
            const statusBadge = (status === 'active') ? '<span class="status-badge status-active">VIP / Active</span>' : 
                                (status === 'trialing') ? '<span class="status-badge status-active" style="background:rgba(0,115,255,0.1); color:var(--aurum-blue);">Trialing</span>' + trialDaysLabel :
+                               status === 'guest' ? '<span class="status-badge status-guest">Guest Node</span>' :
                                (status === 'payment_pending' || status === 'pending') ? '<span class="status-badge status-grace" style="background:rgba(245,158,11,0.1); color:var(--warning);">Payment Pending</span>' :
                                status === 'grace' ? '<span class="status-badge status-grace">Grace</span>' : 
                                '<span class="status-badge status-expired">Suspended</span>';
