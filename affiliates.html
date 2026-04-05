@@ -78,8 +78,11 @@
     .stat-value { font-size: 2.5rem; font-weight: 900; color: var(--text-main); display: flex; align-items: baseline; gap: 8px; }
     
     /* === TABLE === */
-    .table-panel { background: var(--panel-bg); border-radius: var(--radius); border: 1px solid var(--panel-border); overflow: hidden; }
-    table { width: 100%; border-collapse: collapse; }
+    .table-panel { 
+      background: var(--panel-bg); border-radius: var(--radius); 
+      border: 1px solid var(--panel-border); overflow-x: auto; 
+    }
+    table { width: 100%; border-collapse: collapse; min-width: 1000px; }
     th { text-align: left; padding: 16px 24px; background: rgba(255,255,255,0.02); color: var(--text-muted); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid var(--panel-border); }
     td { padding: 16px 24px; border-bottom: 1px solid var(--panel-border); font-size: 0.95rem; }
     tr:last-child td { border-bottom: none; }
