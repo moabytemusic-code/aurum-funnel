@@ -720,9 +720,15 @@
 
                 <div class="qr-zone flex-1 flex justify-center items-center py-6 relative z-10" style="transform: translateZ(50px);">
                   <div class="relative p-2 bg-gradient-to-br from-[#FFD700] via-[#D4AF37] to-[#B8860B] rounded-[52px] shadow-[0_30px_70px_rgba(0,0,0,0.7)] group-hover:scale-105 transition-transform duration-500">
-                    <div class="bg-white p-6 rounded-[48px]">
+                    <div class="bg-white p-6 rounded-[48px] relative">
                       <div id="qr-code-container" class="w-[300px] h-[300px] flex items-center justify-center"></div>
                       <img id="qr-code-img" src="" alt="QR Code" class="hidden w-full h-full object-contain transition-transform duration-500 hover:scale-110">
+                      
+                      <!-- REGENERATE TOOL -->
+                      <button onclick="regenerateQRForCampaign(document.getElementById('aff-link').value, window.CURRENT_LOGO_TEXT)" 
+                        class="absolute bottom-2 right-6 text-[8px] font-black text-gray-400 hover:text-[#D4AF37] uppercase tracking-widest opacity-40 hover:opacity-100 transition-all">
+                        Regenerate Node
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -1201,7 +1207,7 @@
     });
 
     function generateTextLogo(text) {
-      if (!text) return null;
+      if (!text || typeof text !== 'string') return null;
       const canvas = document.createElement('canvas');
       canvas.width = 120;
       canvas.height = 120;
@@ -1240,7 +1246,9 @@
     }
 
     function showDashboard(email, affiliateCode, paymentStatus = 'unpaid', name = '') {
-      if (!email || !affiliateCode) return;
+      if (!email) return;
+      // Robust fallback for missing codes
+      if (!affiliateCode) affiliateCode = 'AURUM-NODE';
       window.CURRENT_PARTNER_CODE = affiliateCode;
       
       // Calculate Trial Days
@@ -1292,7 +1300,8 @@
       const isAgency = agencyBrandName && agencyBrandName !== 'Direct';
       
       // Dynamic Logo Label based on context
-      const initialLogoText = isAgency ? agencyBrandName : affiliateCode;
+      const initialLogoText = isAgency ? agencyBrandName : (window.isMasterRotator ? (affiliateCode || 'AURUM') : 'AURUM');
+      window.CURRENT_LOGO_TEXT = initialLogoText;
       let qrImage = generateTextLogo(initialLogoText);
 
       window._qrCodeInstance = new QRCodeStyling({
@@ -1342,22 +1351,29 @@
             const canvas = qrContainer.querySelector('canvas');
             if (canvas && qrImg) {
               const dataUrl = canvas.toDataURL('image/png');
-              qrImg.src = dataUrl;
-              qrImg.style.display = 'block';
-              qrContainer.style.display = 'none'; // Hide the active canvas
+              if (dataUrl && dataUrl.length > 1000) { // Ensure it's not a tiny/empty image
+                 qrImg.src = dataUrl;
+                 qrImg.style.display = 'block';
+                 qrContainer.style.display = 'none'; 
+              } else {
+                 console.warn("QR Render too small, skipping img conversion.");
+              }
             }
 
             // Sync Hub Img
             if (hubContainer) {
               const hubCanvas = hubContainer.querySelector('canvas');
               if (hubCanvas && hubImg) {
-                hubImg.src = hubCanvas.toDataURL('image/png');
-                hubImg.style.display = 'block';
-                hubContainer.style.display = 'none';
+                const dataUrl = hubCanvas.toDataURL('image/png');
+                if (dataUrl && dataUrl.length > 1000) {
+                   hubImg.src = dataUrl;
+                   hubImg.style.display = 'block';
+                   hubContainer.style.display = 'none';
+                }
               }
             }
-          }, 300);
-        }, 150);
+          }, 500); // Increased delay for more stability
+        }, 300); // Increased delay for initial append
       }
       
       const dlBtn = document.getElementById('qr-download');
@@ -1418,7 +1434,8 @@
       const licenseBrand = document.getElementById('license-brand-name');
       const dashBrandTitle = document.getElementById('brand-dash-title');
       if (licenseBrand || dashBrandTitle) {
-        let brandName = (agencyBrandName || 'PROTO-OPERATOR').toUpperCase();
+        let brandName = (agencyBrandName && agencyBrandName !== 'Direct') ? agencyBrandName : (window.isMasterRotator ? affiliateCode : 'AURUM-OPERATOR');
+        brandName = brandName.toUpperCase();
         if (brandName.startsWith('TEAM-')) brandName = brandName.replace('TEAM-', '');
         
         if (licenseBrand) licenseBrand.innerText = brandName;
