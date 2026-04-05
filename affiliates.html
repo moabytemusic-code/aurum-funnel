@@ -93,6 +93,26 @@
       font-size: 0.8rem; color: var(--text-muted); font-family: monospace;
       max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;
     }
+
+    /* === QR MODAL === */
+    .qr-modal-content {
+      background: #030712; padding: 0; border-radius: 24px;
+      border: 1px solid var(--gold); width: 100%; max-width: 400px;
+      text-align: center; overflow: hidden;
+    }
+    .qr-header { padding: 24px; border-bottom: 1px solid rgba(212, 175, 55, 0.1); }
+    .qr-body { padding: 32px; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+    #qr-preview { 
+      background: #fff; padding: 16px; border-radius: 24px; 
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+    .qr-footer { padding: 24px; background: rgba(255,255,255,0.02); display: flex; gap: 12px; }
+    .qr-btn { 
+      flex: 1; padding: 12px; border-radius: 12px; font-weight: 800; font-size: 0.8rem;
+      text-transform: uppercase; cursor: pointer; border: none; transition: 0.2s;
+    }
+    .qr-btn-download { background: var(--gold); color: #000; }
+    .qr-btn-close { background: rgba(255,255,255,0.05); color: var(--text-muted); }
   </style>
 </head>
 <body>
@@ -273,6 +293,27 @@
       </div>
     </div>
 
+    <!-- QR CODE MODAL -->
+    <div id="qrModal" class="modal-overlay">
+      <div class="qr-modal-content">
+        <div class="qr-header">
+          <h3 style="color: var(--gold); font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.9rem;">Partner Tracking Asset</h3>
+          <p id="qr-partner-name" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Node Identification</p>
+        </div>
+        <div class="qr-body">
+          <div id="qr-preview"></div>
+          <div class="qr-info">
+             <div id="qr-node-id" style="font-family: monospace; font-weight: 900; color: #fff; font-size: 1.1rem; letter-spacing: 0.2em;">NODE: ALPHA</div>
+             <p style="font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-top: 8px; font-weight: 700;">High-Resolution Production QR</p>
+          </div>
+        </div>
+        <div class="qr-footer">
+          <button class="qr-btn qr-btn-download" id="qr-download-btn">Download PNG</button>
+          <button class="qr-btn qr-btn-close" onclick="closeQRModal()">Close</button>
+        </div>
+      </div>
+    </div>
+
     <header class="header">
       <div>
         <h1>Affiliate Network</h1>
@@ -323,6 +364,8 @@
 
   <script src="config.js"></script>
   <script src="supabase-client.js"></script>
+  <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
     // Ensure Supabase is fully loaded before we start
     (async function initializeDB() {
@@ -528,6 +571,7 @@
             <td>${pwDisplay}</td>
             <td>${poolDisplay}</td>
             <td style="text-align:right; display:flex; gap:12px; justify-content:flex-end; align-items:center;">
+              <button onclick='showQRModal("${aff.affiliate_code}", "${aff.full_name || aff.email}")' style="background:none; border:none; color:var(--gold); font-weight:900; cursor:pointer; font-size:0.75rem; letter-spacing:0.05em;">QR</button>
               <button onclick='openEditModal(${JSON.stringify(aff)})' style="background:none; border:none; color:var(--aurum-blue); font-weight:900; cursor:pointer; font-size:0.75rem; letter-spacing:0.05em;">EDIT</button>
               <button onclick="openDeleteModal('${aff.email}')" style="background:none; border:none; color:#ef4444; font-weight:900; cursor:pointer; font-size:0.75rem; opacity:0.7; letter-spacing:0.05em; transition: opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">PURGE ×</button>
             </td>
@@ -702,6 +746,54 @@
         btn.disabled = false;
       }
     }
+    // === QR LOGIC ===
+    function generateTextLogo(text) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 400; canvas.height = 400;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#0a192f';
+      ctx.beginPath(); ctx.arc(200, 200, 190, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = '#D4AF37'; ctx.lineWidth = 15; ctx.stroke();
+      
+      const display = text.replace('TEAM-', '').toUpperCase().substring(0, 5);
+      ctx.fillStyle = '#D4AF37';
+      ctx.font = '900 120px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(display, 200, 200);
+      return canvas.toDataURL('image/png');
+    }
+
+    function showQRModal(code, name) {
+      if (!code) return alert("Node ID missing for this partner.");
+      document.getElementById('qr-partner-name').innerText = name;
+      document.getElementById('qr-node-id').innerText = `NODE: ${code}`;
+      const preview = document.getElementById('qr-preview');
+      preview.innerHTML = '';
+      
+      const url = window.location.origin + '/index.html?ref=' + code;
+      const qrImage = generateTextLogo(code);
+
+      const qrCode = new QRCodeStyling({
+        width: 300, height: 300,
+        data: url,
+        dotsOptions: { color: "#D4AF37", type: "rounded" },
+        backgroundOptions: { color: "#ffffff" },
+        cornersSquareOptions: { color: "#0a192f", type: "extra-rounded" },
+        image: qrImage,
+        imageOptions: { margin: 5, imageSize: 0.4 }
+      });
+      
+      qrCode.append(preview);
+      document.getElementById('qrModal').style.display = 'flex';
+      
+      document.getElementById('qr-download-btn').onclick = () => {
+        qrCode.download({ name: `AURUM-QR-${code}`, extension: "png" });
+      };
+    }
+
+    function closeQRModal() { document.getElementById('qrModal').style.display = 'none'; }
+
     // Auto-fetch Supabase on load
     fetchAffiliates();
   </script>
