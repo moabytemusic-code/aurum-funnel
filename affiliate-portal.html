@@ -779,7 +779,34 @@
                 <div class="text-[#00F5FF] text-2xl opacity-20 hover:opacity-100 transition-opacity">🎯</div>
               </div>
             </div>
-               </div>
+          </div>
+
+          <!-- Window 3: Marketing Asset Hub (NEW) -->
+          <div class="border border-[#D4AF37]/20 bg-black/40 backdrop-blur-xl rounded-[32px] p-8 md:p-12">
+            <div class="flex items-center justify-between mb-10">
+              <div>
+                <h3 class="text-xs font-black uppercase text-[#D4AF37] tracking-[0.3em] mb-1">Genesis Marketing Assets</h3>
+                <p class="text-[10px] text-gray-400 uppercase tracking-widest">High-Resolution Branding for Outreach</p>
+              </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center gap-12">
+              <div class="relative p-2 bg-gradient-to-br from-[#FFD700] via-[#D4AF37] to-[#B8860B] rounded-[42px] shadow-2xl">
+                <div class="bg-white p-4 rounded-[38px] w-[200px] h-[200px] flex items-center justify-center overflow-hidden">
+                  <div id="hub-qr-container" class="w-full h-full"></div>
+                  <img id="hub-qr-img" src="" alt="Standalone QR" class="hidden w-full h-full object-contain">
+                </div>
+              </div>
+
+              <div class="flex-1 text-center md:text-left">
+                <h4 class="text-lg font-black text-white uppercase tracking-tight mb-3">Professional Tracking Node</h4>
+                <p class="text-xs text-gray-500 leading-relaxed mb-8">This QR code is hard-coded to your active campaign link. Use it on print materials, business cards, or during in-person presentations to bridge traffic directly into your network.</p>
+                <div class="flex flex-wrap justify-center md:justify-start gap-4">
+                  <button onclick="downloadAssetQR()" class="px-8 py-4 bg-[#D4AF37] text-[#001F3F] font-black text-[10px] uppercase tracking-widest rounded-xl hover:scale-[1.05] transition-all shadow-glow">Download High-Res PNG →</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
         <!-- Footnote: Simplified Upgrades -->
         <div class="flex flex-wrap items-center justify-center gap-6 mt-12 py-8 border-t border-white/5">
@@ -1289,15 +1316,25 @@
       
       const qrContainer = document.getElementById('qr-code-container');
       const qrImg = document.getElementById('qr-code-img');
+      const hubContainer = document.getElementById('hub-qr-container');
+      const hubImg = document.getElementById('hub-qr-img');
       
       if (qrContainer) {
         qrContainer.innerHTML = ''; 
         qrContainer.style.display = 'flex'; // Reset display
         if (qrImg) qrImg.style.display = 'none'; // Hide image while regenerating
 
+        // Sync Hub Preview
+        if (hubContainer) {
+          hubContainer.innerHTML = '';
+          hubContainer.style.display = 'flex';
+          if (hubImg) hubImg.style.display = 'none';
+        }
+
         // CRITICAL: Delay render to ensure container sizing is initialized by browser
         setTimeout(() => {
           qrCode.append(qrContainer);
+          if (hubContainer) qrCode.append(hubContainer);
           
           // CRITICAL MOBILE FIX: Convert canvas to static <img> after render
           // This allows users to "long-press" to save and ensures stable rendering
@@ -1308,6 +1345,16 @@
               qrImg.src = dataUrl;
               qrImg.style.display = 'block';
               qrContainer.style.display = 'none'; // Hide the active canvas
+            }
+
+            // Sync Hub Img
+            if (hubContainer) {
+              const hubCanvas = hubContainer.querySelector('canvas');
+              if (hubCanvas && hubImg) {
+                hubImg.src = hubCanvas.toDataURL('image/png');
+                hubImg.style.display = 'block';
+                hubContainer.style.display = 'none';
+              }
             }
           }, 300);
         }, 150);
@@ -1352,6 +1399,21 @@
           }
         };
       }
+      
+      // Standalone QR Download
+      window.downloadAssetQR = () => {
+        if (!window._qrCodeInstance) return;
+        const btn = event?.currentTarget;
+        const orig = btn ? btn.innerText : 'Download High-Res PNG →';
+        if (btn) btn.innerText = "Generating PNG...";
+          
+        window._qrCodeInstance.download({ 
+          name: `AURUM-PARTNER-NODE-${affiliateCode || 'GENESIS'}`,
+          extension: "png"
+        }).then(() => {
+           if (btn) btn.innerText = orig;
+        });
+      };
       
       const licenseBrand = document.getElementById('license-brand-name');
       const dashBrandTitle = document.getElementById('brand-dash-title');
@@ -1935,14 +1997,16 @@
     function regenerateQRForCampaign(campaignLink, logoLabel = 'AURUM') {
       const qrContainer = document.getElementById('qr-code-container');
       const qrImg = document.getElementById('qr-code-img');
+      const hubContainer = document.getElementById('hub-qr-container');
+      const hubImg = document.getElementById('hub-qr-img');
       if (!qrContainer) return;
 
       // Generate a group-specific logo
       const campaignLogo = generateTextLogo(logoLabel);
 
       const newQR = new QRCodeStyling({
-        width: 600,
-        height: 600,
+        width: 1000, // Even higher res for better standalone quality
+        height: 1000,
         type: "canvas",
         data: campaignLink,
         dotsOptions: { color: "#D4AF37", type: "rounded" },
@@ -1958,14 +2022,31 @@
       qrContainer.style.display = 'flex';
       if (qrImg) qrImg.style.display = 'none';
 
+      if (hubContainer) {
+        hubContainer.innerHTML = '';
+        hubContainer.style.display = 'flex';
+        if (hubImg) hubImg.style.display = 'none';
+      }
+
       setTimeout(() => {
         newQR.append(qrContainer);
+        if (hubContainer) newQR.append(hubContainer);
+        
         setTimeout(() => {
           const canvas = qrContainer.querySelector('canvas');
           if (canvas && qrImg) {
             qrImg.src = canvas.toDataURL('image/png');
             qrImg.style.display = 'block';
             qrContainer.style.display = 'none';
+          }
+
+          if (hubContainer) {
+            const hubCanvas = hubContainer.querySelector('canvas');
+            if (hubCanvas && hubImg) {
+              hubImg.src = hubCanvas.toDataURL('image/png');
+              hubImg.style.display = 'block';
+              hubContainer.style.display = 'none';
+            }
           }
         }, 300);
       }, 150);
