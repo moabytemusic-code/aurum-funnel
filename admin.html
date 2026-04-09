@@ -292,7 +292,7 @@
       if (!window.aurumDB) return setTimeout(fetchData, 500);
       
       // Zero-Trust check: Detect if we are using the restricted public key
-      const isUnlocked = localStorage.getItem('aurum_master_key') || sessionStorage.getItem('aurum_master_key');
+      const isUnlocked = localStorage.getItem('AURUM_MASTER_KEY') || sessionStorage.getItem('AURUM_MASTER_KEY');
       
       if (!isUnlocked) {
         const gateExists = !!document.getElementById('aurum-admin-gate');
@@ -331,8 +331,8 @@
         if (err.code === '42501' || err.status === 403) {
           elements.statusText.innerHTML = `<span style="color:#ef4444; font-weight:800;">🚫 AUTHENTICATION DENIED (INVALID MASTER KEY)</span>`;
           // Clear the bad key to force re-entry
-          localStorage.removeItem('aurum_master_key');
-          sessionStorage.removeItem('aurum_master_key');
+          localStorage.removeItem('AURUM_MASTER_KEY');
+          sessionStorage.removeItem('AURUM_MASTER_KEY');
         } else {
           elements.statusText.textContent = "Sync interrupted. Using cache.";
           initCharts(); // Demo fallback
