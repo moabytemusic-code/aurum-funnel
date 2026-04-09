@@ -472,19 +472,19 @@
 
       try {
         const { data, error } = await window.aurumDB
-          .from('aurum_members')
-          .select('email, status')
-          .eq('email', email.trim().toLowerCase())
-          .single();
+          .rpc('get_member_status', { p_email: email.trim().toLowerCase() });
+        
+        // RPC for tables returns an array
+        const memberData = data && data.length > 0 ? data[0] : null;
 
-        if (error || !data) {
+        if (error || !memberData) {
           alert("Member not found. Please complete activation.");
           btn.innerText = "Verify & Proceed →";
           btn.disabled = false;
           return;
         }
 
-        if (data.status === 'suspended') {
+        if (memberData.status === 'suspended') {
           alert("Your membership has been suspended. Please contact support.");
           btn.innerText = "Verify & Proceed →";
           btn.disabled = false;

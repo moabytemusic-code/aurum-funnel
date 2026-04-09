@@ -215,8 +215,10 @@
         <button class="qr-btn qr-btn-close" onclick="closeQRModal()">Close</button>
       </div>
     </div>
-  </div>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="supabase-client.js"></script>
+  <script src="admin-gate.js"></script>
   <script>
     // Initial data matching skin.js logic
     const defaultOrgs = [
@@ -250,21 +252,10 @@
     }
 
     // Connect to Supabase to fetch master config
-    (async function initSupabase() {
+    async function initSupabase() {
+      if (!window.aurumDB) return setTimeout(initSupabase, 500);
+      
       try {
-        if (!window.supabase) {
-          await new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
-            script.onload = resolve;
-            script.onerror = reject;
-            document.head.appendChild(script);
-          });
-        }
-        const SUPABASE_URL = 'https://cwdawyeiijbcoihobvpb.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_7mcxzRZkMjQcK1CTZjUl_w_AGm9kisr';
-        window.aurumDB = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
         const { data, error } = await window.aurumDB.from('aurum_organizations').select('*');
         if (data && !error && data.length > 0) {
           orgsData = data;
@@ -274,7 +265,8 @@
       } catch (e) {
         console.warn('Supabase fetch failed, relying on localStorage cache.', e);
       }
-    })();
+    }
+    initSupabase();
 
     const orgContainer = document.getElementById('orgContainer');
     const modal = document.getElementById('orgModal');

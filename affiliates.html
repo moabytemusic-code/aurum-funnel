@@ -365,138 +365,23 @@
     </div>
   </main>
 
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="supabase-client.js"></script>
+  <script src="admin-gate.js"></script>
   <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
-    // Ensure Supabase is fully loaded before we start
-    (async function initializeDB() {
-      if (typeof supabase === 'undefined') {
-        await new Promise((resolve) => {
-          const script = document.createElement('script');
-          script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-          script.onload = resolve;
-          document.head.appendChild(script);
-        });
-      }
-      
-      const SUPABASE_URL = 'https://cwdawyeiijbcoihobvpb.supabase.co';
-      const SUPABASE_ANON_KEY = 'sb_publishable_7mcxzRZkMjQcK1CTZjUl_w_AGm9kisr';
-      
-      if (!window.aurumDB && typeof supabase !== 'undefined') {
-        window.aurumDB = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        console.log('[AURUM-DB] Manual Provisioning Client Initialized.');
-        fetchAffiliates(); // Initial population
-      }
-    })();
-
-    // === ADMIN MODAL LOGIC ===
-    function openModal() { document.getElementById('addAffiliateModal').style.display = 'flex'; }
-    function closeModal() { document.getElementById('addAffiliateModal').style.display = 'none'; }
-
-    async function saveVIPAffiliate() {
-      const email = document.getElementById('new-email').value.trim();
-      const password = document.getElementById('new-password').value.trim();
-      let customCode = document.getElementById('new-code').value.trim().toUpperCase().replace(/[^A-Z0-9-]/g, '');
-      const btn = document.getElementById('saveBtn');
-
-      if (!email || !password) return alert("Email and Password are required.");
-      if (!window.aurumDB) return alert("Database not initialized.");
-
-      btn.innerText = "Provisioning Node...";
-      btn.disabled = true;
-
-      // Auto-generate default code if empty
-      if(!customCode) {
-        customCode = Math.random().toString(36).substring(2, 8).toUpperCase();
-      } else if (!customCode.startsWith('TEAM-')) {
-        customCode = 'TEAM-' + customCode; // Keep enterprise formatting
-      }
-
-      const grantRotator = document.getElementById('grant-rotator').checked;
-      const grantWhiteLabel = document.getElementById('grant-whitelabel').checked;
-
-      try {
-        // 1. Insert into Affiliates Table (Tracking)
-        const { error: affError } = await window.aurumDB
-          .from('aurum_affiliates')
-          .insert([{ 
-             full_name: document.getElementById('new-code').value ? 'Agency Partner' : 'VIP Partner',
-             email: email.toLowerCase(), 
-             password: password,
-             affiliate_code: customCode,
-             phone: document.getElementById('new-phone').value.trim(),
-             instructions: document.getElementById('new-instructions').value.trim(),
-             status: document.getElementById('new-status').value,
-             is_rotator: grantRotator,
-             rotator_pool: null
-          }]);
-
-        if (affError) {
-           if(affError.code === '23505') throw new Error("That Tracking Code or Email is already in use!");
-           throw affError;
-        }
-
-        // 2. Insert into Members Table (License/Access)
-        const { error: memError } = await window.aurumDB
-          .from('aurum_members')
-          .insert([{
-             full_name: document.getElementById('new-code').value ? 'Agency Partner' : 'VIP Partner',
-             email: email.toLowerCase(),
-             status: document.getElementById('new-status').value,
-             membership_start: new Date().toISOString()
-          }]);
-
-        if (memError) console.error("Member sync failed:", memError);
-
-        // 3. Fire VIP Welcome Email via Secure Vercel Proxy
-        try {
-          const portalLink = window.location.origin + '/affiliate-portal.html';
-          await fetch('/api/send-email', {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({
-              to: [{ email: email }],
-              subject: "AURUM Partner Onboarding Funnel: Trial Activated",
-              htmlContent: `
-              <div style="font-family: sans-serif; line-height: 1.6; color: #334155; padding: 40px; border: 1px solid #E2E8F0; border-radius: 12px; max-width: 600px; margin: 0 auto;">
-                <h1 style="color: #0F172A; font-size: 24px; margin-bottom: 20px;">Welcome to the Ecosystem!</h1>
-                <p>An administrator has officially provisioned your Master Tracking Node and bypassed your Funnel License checkout!</p>
-                <div style="background: #F8FAFC; padding: 20px; border-radius: 8px; margin: 24px 0;">
-                  <p style="margin: 0; font-weight: 700; color: #0073FF;">YOUR SECRET LOGIN CREDENTIALS:</p>
-                  <ul style="margin-top: 10px; padding-left: 20px;">
-                    <li>Email: <b>${email}</b></li>
-                    <li>Password: <b>${password}</b></li>
-                    <li>Status: <b style="color: #22c55e;">Checkout Bypassed (Active)</b></li>
-                  </ul>
-                </div>
-                <p><b>YOUR NEXT STEPS:</b></p>
-                <p>Go to the partner portal using the link below, log in with these credentials, and the system will automatically drop you into your affiliate dashboard where you can copy your custom tracking links!</p>
-                <p style="margin-top: 24px; margin-bottom: 40px;"><a href="${portalLink}" style="background-color: #0F172A; color: #FFFFFF; padding: 14px 24px; text-decoration: none; border-radius: 8px; font-weight: 700;">Login To Dashboard &rarr;</a></p>
-                <p style="border-top: 1px solid #E2E8F0; padding-top: 20px; font-size: 13px; color: #94A3B8;">
-                  At The AI Finance Breakdown, we focus on realistic expectations and measured distributions. Keep this email safe.
-                </p>
-              </div>
-            `
-            })
-          });
-        } catch(e) { console.warn("Background Affiliate Email Failed:", e); }
-
-        alert(`VIP Affiliate successfully created!\n\nEmail sent to ${email} containing their credentials.\nPassword: ${password}\nNode: ${customCode}`);
-        closeModal();
-        fetchAffiliates(); // Refresh table dynamically
-
-      } catch (err) {
-        console.error('Save failed:', err);
-        alert("Error saving affiliate: " + err.message);
-        btn.innerText = "Provision Affiliate Node →";
-        btn.disabled = false;
-      }
-    }
-
+    // Connect to Supabase to fetch affiliates
     async function fetchAffiliates() {
       const statusText = document.getElementById('status-text');
+      
+      // Wait for Admin Gate to initialize window.aurumDB with the Master Key
+      if (!window.aurumDB) {
+        statusText.textContent = "Waiting for Master Unlock...";
+        return setTimeout(fetchAffiliates, 500);
+      }
+      
       statusText.textContent = "Syncing with Supabase...";
 
       try {

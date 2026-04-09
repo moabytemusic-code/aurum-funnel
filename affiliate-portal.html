@@ -345,17 +345,19 @@
         <div
           class="w-8 h-8 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#E5C04A] flex items-center justify-center font-black text-[#001F3F] text-xs">
           AFB</div>
-        <a href="index.html" class="text-xl font-bold tracking-tighter" style="color: #D4AF37;">AI<span
-            class="text-white">Finance</span>Breakdown</a>
+        <a href="index.html" class="text-xl font-bold tracking-tighter" style="color: #D4AF37;" data-i18n="nav_brand">TheAI<span>Finance</span>Breakdown</a>
       </div>
       <div
         class="hidden md:flex items-center gap-8 text-[11px] font-black uppercase tracking-[0.2em] text-[#00F5FF]/70">
-        <span class="text-white">Affiliate Portal</span>
+        <div class="lang-switcher" style="padding: 2px; border-radius: 8px; background: rgba(255,255,255,0.05); display:flex; gap:4px;">
+          <a href="javascript:void(0)" class="lang-btn" data-lang="en" onclick="setLanguage('en')" style="font-size: 9px; padding: 4px 8px;">EN</a>
+          <a href="javascript:void(0)" class="lang-btn" data-lang="es" onclick="setLanguage('es')" style="font-size: 9px; padding: 4px 8px;">ES</a>
+        </div>
+        <span class="text-white" data-i18n="aff_portal_nav_status">Affiliate Portal</span>
       </div>
       <div>
         <button id="navLoginBtn"
-          class="hidden md:block text-[11px] font-black uppercase text-gray-500 hover:text-[#00F5FF] transition-colors bg-white/5 px-4 py-2 rounded-lg border border-white/10">Log
-          Out</button>
+          class="hidden md:block text-[11px] font-black uppercase text-gray-500 hover:text-[#00F5FF] transition-colors bg-white/5 px-4 py-2 rounded-lg border border-white/10" data-i18n="aff_portal_logout">Log Out</button>
       </div>
     </div>
   </nav>
@@ -376,24 +378,24 @@
 
       <!-- PART 1: ELITE HEADER -->
       <div class="text-center mb-16">
-        <div class="inline-block px-4 py-1.5 bg-[#D4AF37]/10 border border-[#D4AF37]/20 rounded-full text-[#D4AF37] text-[10px] font-black tracking-widest uppercase mb-8">
+        <div class="inline-block px-4 py-1.5 bg-[#D4AF37]/10 border border-[#D4AF37]/20 rounded-full text-[#D4AF37] text-[10px] font-black tracking-widest uppercase mb-8" data-i18n="gateway_badge">
           The AURUM Partner Ecosystem
         </div>
-        <h1 class="text-5xl md:text-7xl font-black leading-[1] tracking-tighter uppercase mb-8">
+        <h1 class="text-5xl md:text-7xl font-black leading-[1] tracking-tighter uppercase mb-8" data-i18n="gateway_h1">
           Build Your <span class="gradient-text" style="background: linear-gradient(to right, #fff, #D4AF37); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Financial Empire</span>
         </h1>
-        <p class="text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto mb-12">
+        <p class="text-xl text-gray-300 leading-relaxed max-w-2xl mx-auto mb-12" data-i18n="gateway_sub">
           Activate your partner node and start earning high-ticket commissions by sharing the world's most advanced AI Digital Banking ecosystem.
         </p>
       </div>
 
       <!-- PART 1: ACTIVATION FORM (CENTRAL CTA) -->
       <div class="max-w-xl mx-auto bg-[#001F3F] border border-[#D4AF37]/20 p-10 md:p-14 rounded-[40px] shadow-2xl relative mb-16 text-center">
-        <div class="absolute -top-4 -right-4 bg-[#00F5FF] text-[#001F3F] text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest shadow-glow-teal">
+        <div class="absolute -top-4 -right-4 bg-[#00F5FF] text-[#001F3F] text-[10px] font-black px-4 py-1 rounded-full uppercase tracking-widest shadow-glow-teal" data-i18n="activation_promo">
           Limited Invitation</div>
         
-        <h2 class="text-3xl font-black mb-2 text-white uppercase">Unlock Your Partner Access</h2>
-        <p class="text-sm text-gray-400 mb-10">Your professional invitation is ready. Activate your 14-day trial today and start using our tools to build your AURUM network.</p>
+        <h2 class="text-3xl font-black mb-2 text-white uppercase" data-i18n="activation_title">Unlock Your Partner Access</h2>
+        <p class="text-sm text-gray-400 mb-10" data-i18n="activation_desc">Your professional invitation is ready. Activate your 14-day trial today and start using our tools to build your AURUM network.</p>
 
         <form id="checkout-form" class="flex flex-col gap-6">
           <input type="email" id="aff-email" placeholder="name@example.com"
@@ -402,29 +404,29 @@
 
           <button type="submit" id="start-trial-btn"
             class="w-full bg-[#D4AF37] hover:bg-white text-[#001F3F] font-black text-lg md:text-xl py-4 md:py-6 rounded-2xl shadow-glow transition-all transform hover:scale-[1.02]">
-            Unlock My Access →
+            <span data-i18n="unlock_access_btn">Unlock My Access →</span>
           </button>
         </form>
-        <p class="text-[10px] text-gray-500 mt-8 uppercase tracking-widest font-bold">No Credit Card Required • Instant Activation</p>
-        <button onclick="showDirectLogin()" class="mt-6 text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.2em] hover:text-white transition-all cursor-pointer">Returning Member? Click Here →</button>
+        <p class="text-[10px] text-gray-500 mt-8 uppercase tracking-widest font-bold" data-i18n="no_cc_required">No Credit Card Required • Instant Activation</p>
+        <button onclick="showDirectLogin()" class="mt-6 text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.2em] hover:text-white transition-all cursor-pointer" data-i18n="returning_member">Returning Member? Click Here →</button>
       </div>
 
       <!-- PART 2: CORE VALUE GRID -->
       <div class="grid md:grid-cols-3 gap-6 text-left mb-10">
         <div class="bg-white/[0.03] border border-white/10 p-8 rounded-[32px] hover:border-[#D4AF37]/40 transition-all group">
           <div class="text-[#D4AF37] text-3xl mb-4 group-hover:scale-110 transition-transform">∞</div>
-          <h4 class="font-black text-sm uppercase tracking-tight text-white mb-2">Passive Commissions</h4>
-          <p class="text-xs text-gray-500 leading-relaxed">Earn recurring monthly payouts on every active license in your network.</p>
+          <h4 class="font-black text-sm uppercase tracking-tight text-white mb-2" data-i18n="feat_passive_title">Passive Commissions</h4>
+          <p class="text-xs text-gray-500 leading-relaxed" data-i18n="feat_passive_desc">Earn recurring monthly payouts on every active license in your network.</p>
         </div>
         <div class="bg-white/[0.03] border border-white/10 p-8 rounded-[32px] hover:border-[#00F5FF]/40 transition-all group">
           <div class="text-[#00F5FF] text-3xl mb-4 group-hover:scale-110 transition-transform">⚡</div>
-          <h4 class="font-black text-sm uppercase tracking-tight text-white mb-2">Fast Setup</h4>
-          <p class="text-xs text-gray-500 leading-relaxed">Activate your 14-day trial and start building your network in seconds.</p>
+          <h4 class="font-black text-sm uppercase tracking-tight text-white mb-2" data-i18n="feat_fast_setup_title">Fast Setup</h4>
+          <p class="text-xs text-gray-500 leading-relaxed" data-i18n="feat_fast_setup_desc">Activate your 14-day trial and start building your network in seconds.</p>
         </div>
         <div class="bg-white/[0.03] border border-white/10 p-8 rounded-[32px] hover:border-purple-500/40 transition-all group">
           <div class="text-purple-400 text-3xl mb-4 group-hover:scale-110 transition-transform">📊</div>
-          <h4 class="font-black text-sm uppercase tracking-tight text-white mb-2">Global Tracking</h4>
-          <p class="text-xs text-gray-500 leading-relaxed">Access real-time analytics for every click, signup, and conversion in your tree.</p>
+          <h4 class="font-black text-sm uppercase tracking-tight text-white mb-2" data-i18n="feat_tracking_title">Global Tracking</h4>
+          <p class="text-xs text-gray-500 leading-relaxed" data-i18n="feat_tracking_desc">Access real-time analytics for every click, signup, and conversion in your tree.</p>
         </div>
       </div>
 
@@ -432,26 +434,26 @@
       <div class="grid md:grid-cols-3 gap-6 text-left mb-24">
           <div onclick="window.location.href='rotator.html'" class="bg-white/[0.03] border border-[#D4AF37]/20 p-8 rounded-[32px] group cursor-pointer hover:bg-[#D4AF37]/5 transition-all">
               <div class="flex justify-between items-start mb-4">
-                <h3 class="text-xs font-black uppercase text-[#D4AF37] tracking-widest">Master Rotator</h3>
+                <h3 class="text-xs font-black uppercase text-[#D4AF37] tracking-widest" data-i18n="rotator_title">Master Rotator</h3>
                 <span class="text-[10px] font-bold text-white">$47 + $5/mo</span>
               </div>
-              <p class="text-[10px] text-gray-400 leading-relaxed uppercase tracking-tighter">Automate your team growth and lead flow. Perfect for building a large network.</p>
+              <p class="text-[10px] text-gray-400 leading-relaxed uppercase tracking-tighter" data-i18n="rotator_desc">Automate your team growth and lead flow. Perfect for building a large network.</p>
               <div class="mt-6 text-[10px] font-black text-[#D4AF37] uppercase border-b border-[#D4AF37]/30 inline-block group-hover:border-[#D4AF37] transition-all">Activate Agency Hub →</div>
           </div>
 
           <div onclick="window.location.href='whitelabel.html'" class="bg-white/[0.03] border border-[#00F5FF]/20 p-8 rounded-[32px] group cursor-pointer hover:bg-[#00F5FF]/5 transition-all">
               <div class="flex justify-between items-start mb-4">
-                <h3 class="text-xs font-black uppercase text-[#00F5FF] tracking-widest">White Label</h3>
+                <h3 class="text-xs font-black uppercase text-[#00F5FF] tracking-widest" data-i18n="whitelabel_title">White Label</h3>
                 <span class="text-[10px] font-bold text-white">$499</span>
               </div>
-              <p class="text-[10px] text-gray-400 leading-relaxed uppercase tracking-tighter">Full dynamic ecosystem skinning. Custom logos and branding.</p>
-              <div class="mt-6 text-[10px] font-black text-[#00F5FF] uppercase border-b border-[#00F5FF]/30 group-hover:border-[#00F5FF] transition-all">Access White Label →</div>
+              <p class="text-[10px] text-gray-400 leading-relaxed uppercase tracking-tighter" data-i18n="whitelabel_desc">Full dynamic ecosystem skinning. Custom logos and branding.</p>
+              <div class="mt-6 text-[10px] font-black text-[#00F5FF] uppercase border-b border-[#00F5FF]/30 group-hover:border-[#00F5FF] transition-all" data-i18n="access_whitelabel_btn">Access White Label →</div>
           </div>
 
           <div class="bg-white/[0.03] border border-white/10 p-8 rounded-[32px] relative overflow-hidden group">
               <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent"></div>
-              <h3 class="text-xs font-black uppercase text-gray-400 tracking-widest mb-4">High Ticket</h3>
-              <p class="text-[10px] text-gray-400 leading-relaxed uppercase tracking-tighter">You earn 10% monthly USDT payouts on all active licenses.</p>
+              <h3 class="text-xs font-black uppercase text-gray-400 tracking-widest mb-4" data-i18n="high_ticket_title">High Ticket</h3>
+              <p class="text-[10px] text-gray-400 leading-relaxed uppercase tracking-tighter" data-i18n="high_ticket_desc">You earn 10% monthly USDT payouts on all active licenses.</p>
               <div class="mt-6 text-[10px] font-black text-gray-500 uppercase border-b border-white/10 inline-block">Earn 10% Recurring →</div>
           </div>
       </div>
@@ -483,8 +485,8 @@
     <!-- ============================================== -->
     <div id="setup-view" class="view-section max-w-xl mx-auto px-6 w-full z-10">
       <div class="bg-[#001F3F] border border-[#D4AF37]/20 p-8 md:p-12 rounded-[40px] shadow-2xl relative">
-        <h2 class="text-3xl font-black mb-2 text-white uppercase text-center" id="setup-title">Complete Setup</h2>
-        <p class="text-sm text-gray-400 mb-8 text-center" id="setup-desc">Secure your dashboard and link your AURUM
+        <h2 class="text-3xl font-black mb-2 text-white uppercase text-center" id="setup-title" data-i18n="setup_complete_title">Complete Setup</h2>
+        <p class="text-sm text-gray-400 mb-8 text-center" id="setup-desc" data-i18n="setup_complete_desc">Secure your dashboard and link your AURUM
           corporate account.</p>
 
         <form id="setup-form">
@@ -498,35 +500,35 @@
           <!-- REGISTRATION ONLY FIELDS -->
           <div id="registration-fields-zone">
             <div class="mb-5">
-              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Full Name</label>
-              <p class="text-[9px] text-gray-400 mb-2 leading-tight">Displayed on your dashboard and in official communication.</p>
+              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block" data-i18n="setup_fullname_label">Full Name</label>
+              <p class="text-[9px] text-gray-400 mb-2 leading-tight" data-i18n="setup_fullname_desc">Displayed on your dashboard and in official communication.</p>
               <input type="text" id="setup-fullname" placeholder="John Doe"
                 class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl text-sm font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37] transition-all"
                 required>
             </div>
             <div class="mb-5">
-              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Phone Number (Optional)</label>
-              <p class="text-[9px] text-gray-400 mb-2 leading-tight">Displayed in the 'Sponsor Contact' window for your team.</p>
+              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block" data-i18n="setup_phone_label">Phone Number (Optional)</label>
+              <p class="text-[9px] text-gray-400 mb-2 leading-tight" data-i18n="setup_phone_desc">Displayed in the 'Sponsor Contact' window for your team.</p>
               <input type="tel" id="setup-phone" placeholder="+1 (555) 000-0000"
                 class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl text-sm font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37] transition-all">
             </div>
             <div class="mb-5">
-              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Onboarding Instructions (Optional)</label>
-              <p class="text-[9px] text-gray-400 mb-2 leading-tight">Custom message displayed to your leads on their checklist page.</p>
+              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block" data-i18n="setup_inst_label">Onboarding Instructions (Optional)</label>
+              <p class="text-[9px] text-gray-400 mb-2 leading-tight" data-i18n="setup_inst_desc">Custom message displayed to your leads on their checklist page.</p>
               <textarea id="setup-instructions" placeholder="e.g. Text me once you've joined our Telegram group!"
                 class="w-full h-24 bg-white/5 border border-white/10 px-6 py-4 rounded-2xl text-xs font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37] transition-all resize-none"></textarea>
             </div>
             <div id="aurum-id-field" class="mb-5">
-              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">AURUM Corporate Link</label>
-              <p class="text-[9px] text-gray-400 mb-2 leading-tight">Paste your unique referral link (e.g. aurum.foundation/u/User123) to bridge your traffic directly to your tree.</p>
+              <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block" data-i18n="setup_link_label">AURUM Corporate Link</label>
+              <p class="text-[9px] text-gray-400 mb-2 leading-tight" data-i18n="setup_link_desc">Paste your unique referral link (e.g. aurum.foundation/u/User123) to bridge your traffic directly to your tree.</p>
               <input type="text" id="setup-aff-id" placeholder="e.g. aurum.foundation/u/AlexR24"
                 class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl text-sm font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37] transition-all" required>
             </div>
           </div>
 
           <div class="mb-5">
-            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Account Password</label>
-            <p class="text-[9px] text-gray-400 mb-2 leading-tight">Choose a secure password specifically for your AURUM partner portal.</p>
+            <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block" data-i18n="setup_pass_label">Account Password</label>
+            <p class="text-[9px] text-gray-400 mb-2 leading-tight" data-i18n="setup_pass_desc">Choose a secure password specifically for your AURUM partner portal.</p>
             <div class="relative">
               <input type="password" id="setup-password" placeholder="••••••••"
                 class="w-full bg-white/5 border border-white/10 px-6 py-4 rounded-2xl text-sm font-bold text-white placeholder:text-white/20 focus:outline-none focus:border-[#D4AF37] transition-all"
@@ -539,7 +541,7 @@
           </div>
           <button type="submit" id="save-setup-btn"
             class="w-full bg-[#00F5FF] hover:bg-white text-[#001F3F] font-black text-md md:text-lg py-4 md:py-5 rounded-2xl transition-all transform hover:scale-[1.02] active:scale-95 shadow-glow-teal flex justify-center items-center gap-2 mt-4">
-            <span id="setup-btn-text">Save & Generate Dashboard</span>
+            <span id="setup-btn-text" data-i18n="save_dash_btn">Save & Generate Dashboard</span>
           </button>
         </form>
       </div>
@@ -893,6 +895,8 @@
 
   <!-- Load Support Libs -->
   <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+  <script src="translations.js"></script>
+  <script src="i18n.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
@@ -980,7 +984,7 @@
             const { data, error } = await window.aurumDB
               .from('aurum_affiliates')
               .select('status, created_at, affiliate_code, is_rotator, rotator_pool')
-              .ilike('email', userEmail)
+              .eq('email', userEmail) 
               .single();
 
             if (data && !error) {
@@ -1105,27 +1109,25 @@
 
         if (window.aurumDB) {
           if (isReturningUser) {
-            const { data, error } = await window.aurumDB
-              .from('aurum_affiliates')
-              .select('affiliate_code, password, full_name, phone, instructions, is_rotator, rotator_pool, status, created_at')
-              .eq('email', emailToUse)
-              .single();
+          const { data, error } = await window.aurumDB
+            .rpc('check_affiliate_login', { p_email: emailToUse, p_password: password });
 
-            if (error || !data || data.password !== password) {
-              alert("Incorrect Password!");
-              btnText.innerText = originalText;
-              btn.disabled = false;
-              return;
-            }
-            finalCode = data.affiliate_code;
-            finalName = data.full_name || emailToUse.split('@')[0];
-            finalPhone = data.phone || '';
-            finalInstructions = data.instructions || '';
-            
-            const dbStatus = (data.status || '').toLowerCase().trim();
-            currentPaymentStatus = (dbStatus === 'active' || dbStatus === 'paid') ? 'paid' : 'unpaid';
-            window.isMasterRotator = data.is_rotator || false;
-            window.currentRotatorPool = data.rotator_pool || '';
+          if (error || !data || data.length === 0) {
+            alert("Incorrect Password!");
+            btnText.innerText = originalText;
+            btn.disabled = false;
+            return;
+          }
+          const userData = data[0]; 
+          finalCode = userData.affiliate_code;
+          finalName = userData.full_name || emailToUse.split('@')[0];
+          finalPhone = userData.phone || '';
+          finalInstructions = userData.instructions || '';
+          
+          const dbStatus = (userData.status || '').toLowerCase().trim();
+          currentPaymentStatus = (dbStatus === 'active' || dbStatus === 'paid') ? 'paid' : 'unpaid';
+          window.isMasterRotator = userData.is_rotator || false;
+          window.currentRotatorPool = userData.rotator_pool || '';
 
           } else {
             if (affId.includes('/u/')) {
@@ -1706,10 +1708,7 @@
 
         try {
             const { data, error } = await window.aurumDB
-                .from('aurum_affiliates')
-                .select('email, full_name, affiliate_code, status') 
-                .or(`email.ilike.%${query}%, affiliate_code.ilike.%${query}%, full_name.ilike.%${query}%`) 
-                .limit(5);
+                .rpc('search_affiliates', { query: query });
 
             if (data && !error) {
                 resultsBox.innerHTML = '';
