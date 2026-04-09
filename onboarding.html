@@ -194,8 +194,14 @@
 
   <nav>
     <div class="nav-inner">
-      <a href="index.html" class="nav-brand">TheAI<span>Finance</span>Breakdown</a>
-      <a href="offer.html" class="nav-cta">Explore <span class="hidden-mobile">Digital Banking </span>Ecosystem →</a>
+      <a href="index.html" class="nav-brand" data-i18n="nav_brand">TheAI<span>Finance</span>Breakdown</a>
+      <div style="display:flex;gap:12px;align-items:center;">
+        <div class="lang-switcher">
+          <a href="javascript:void(0)" class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</a>
+          <a href="javascript:void(0)" class="lang-btn" data-lang="es" onclick="setLanguage('es')">ES</a>
+        </div>
+        <a href="offer.html" class="nav-cta" data-i18n="nav_cta_explore">Explore <span class="hidden-mobile">Digital Banking </span>Ecosystem →</a>
+      </div>
     </div>
   </nav>
 
@@ -235,8 +241,8 @@
   <div class="container">
 
     <div class="header">
-      <h1 id="skin-h1">Onboarding Checklist</h1>
-      <p id="skin-sub" class="subtitle">Complete these 3 essential steps before creating your AURUM account within our digital banking ecosystem.</p>
+      <h1 id="skin-h1" data-i18n="onboarding_h1">Onboarding Checklist</h1>
+      <p id="skin-sub" class="subtitle" data-i18n="onboarding_sub">Complete these 3 essential steps before creating your AURUM account within our digital banking ecosystem.</p>
       
     </div>
 
@@ -245,9 +251,9 @@
     <div class="steps">
       <!-- OVERVIEW / FREE TO JOIN -->
       <div class="step-card bg-gradient-to-br from-blue-50 to-white border-blue-200">
-        <h2 style="font-size: 1.25rem; margin-bottom: 12px; color: var(--aurum-blue);">Free to Join & Explore</h2>
+        <h2 style="font-size: 1.25rem; margin-bottom: 12px; color: var(--aurum-blue);" data-i18n="free_to_join_title">Free to Join & Explore</h2>
         <div class="step-content">
-          <p style="font-size: 1rem; color: var(--text-main); font-weight: 500;">
+          <p style="font-size: 1rem; color: var(--text-main); font-weight: 500;" data-i18n="free_to_join_text">
             It is <strong>completely free</strong> to join and explore the AURUM ecosystem. However, to start generating returns, you will need <strong>$19.99</strong> for the annual membership fee, and a minimum of <strong>$100 USD</strong> for the trading bot.
           </p>
         </div>
@@ -256,9 +262,9 @@
       <!-- STEP 1 -->
       <div class="step-card">
         <div class="step-num">1</div>
-        <h2>Prepare Your Crypto</h2>
+        <h2 data-i18n="step_1_title">Prepare Your Crypto</h2>
         <div class="step-content">
-          <p>Ensure you have your funds ready in a compatible wallet before proceeding with the activation steps.</p>
+          <p data-i18n="step_1_text">Ensure you have your funds ready in a compatible wallet before proceeding with the activation steps.</p>
           <div class="crypto-list">
             <div class="crypto-item">
               <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707l-4.5 4.5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L8.5 9.586l3.793-3.793a1 1 0 011.414 1.414z"></path></svg>
@@ -277,7 +283,7 @@
               BNB / ETH / MATIC for Gas
             </div>
           </div>
-          <div class="vpn-note" style="background: #FFFBEB; border: 1px solid #FEF3C7; color: #92400E;">
+          <div class="vpn-note" style="background: #FFFBEB; border: 1px solid #FEF3C7; color: #92400E;" data-i18n="crypto_tip">
             <strong>Pro Tip:</strong> Do not send money from Crypto Exchanges. Always use a personal Wallet like <strong>Exodus</strong> or <strong>Metamask</strong> to send funds to Aurum.
           </div>
         </div>
@@ -286,21 +292,21 @@
       <!-- STEP 2 -->
       <div class="step-card">
         <div class="step-num">2</div>
-        <h2>VPN Setup (US / CA Users)</h2>
+        <h2 data-i18n="step_2_title">VPN Setup (US / CA Users)</h2>
         <div class="step-content">
-          <p>If you are located in the US, Canada, or Mexico, you <strong>must</strong> use a VPN set to a country outside these regions (e.g., Europe) to access the registration page.</p>
-          <p><strong>Recommendations:</strong></p>
+          <p data-i18n="step_2_text">If you are located in the US, Canada, or Mexico, you <strong>must</strong> use a VPN set to a country outside these regions (e.g., Europe) to access the registration page.</p>
+          <p><strong data-i18n="vpn_recs_title">Recommendations:</strong></p>
           <ul style="list-style: none; margin-bottom: 20px;">
             <li style="margin-bottom: 8px;">🔹 <strong>ProtonVPN.com</strong> - Free version available.</li>
             <li style="margin-bottom: 8px;">🔹 <strong>Windscribe.com</strong> - Great free tier (10GB/mo).</li>
             <li style="margin-bottom: 8px;">🔹 <strong>Opera Browser</strong> - Built-in free VPN (select "Europe").</li>
             <li style="margin-bottom: 8px;">🔹 <strong>NordVPN / ExpressVPN</strong> - Best premium paid options.</li>
           </ul>
-          <div class="vpn-note">
+          <div class="vpn-note" data-i18n="vpn_pro_tip">
             <strong>Pro Tip: Always disconnect VPN before communicating with exchanges</strong> to ensure your account remains in good standing.
           </div>
           <div style="margin-top: 24px;">
-            <a href="#step-3-guide" class="text-xs font-bold text-blue-600 uppercase tracking-widest hover:underline">Finished Setup? Go to Step 3 →</a>
+            <a href="#step-3-guide" class="text-xs font-bold text-blue-600 uppercase tracking-widest hover:underline" data-i18n="finished_setup">Finished Setup? Go to Step 3 →</a>
           </div>
         </div>
       </div>
@@ -310,23 +316,23 @@
         <div class="step-num">3</div>
         <div class="step-content">
           <div class="guide-list" style="margin-top: 0; margin-bottom: 32px;">
-            <h3>
+            <h3 data-i18n="step_3_title">
                 <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 Step-by-Step Instructions
             </h3>
-            <div class="guide-item"><span class="guide-num">1</span><span><strong>Contact Info:</strong> Enter your email and phone number.</span></div>
-            <div class="guide-item"><span class="guide-num">2</span><span><strong>Security:</strong> Create a secure password.</span></div>
-            <div class="guide-item"><span class="guide-num">3</span><span><strong>Invite:</strong> Your Aurum Sponsor will be displayed here.</span></div>
-            <div class="guide-item"><span class="guide-num">4</span><span><strong>Details:</strong> Provide your name and unique username.</span></div>
-            <div class="guide-item"><span class="guide-num">5</span><span><strong>Profile:</strong> Set your birthday and country to "CRYPTONATION".</span></div>
-            <div class="guide-item"><span class="guide-num">6</span><span><strong>Agreement:</strong> Review and accept the Terms of Use.</span></div>
-            <div class="guide-item"><span class="guide-num">7</span><span><strong>Sign Up:</strong> Submit the registration form.</span></div>
-            <div class="guide-item"><span class="guide-num">8</span><span><strong>Verification:</strong> Retrieve the code from your email.</span></div>
-            <div class="guide-item"><span class="guide-num">9</span><span><strong>Activation:</strong> Enter the code to finalize your account.</span></div>
+            <div class="guide-item"><span class="guide-num">1</span><span data-i18n="inst_1"><strong>Contact Info:</strong> Enter your email and phone number.</span></div>
+            <div class="guide-item"><span class="guide-num">2</span><span data-i18n="inst_2"><strong>Security:</strong> Create a secure password.</span></div>
+            <div class="guide-item"><span class="guide-num">3</span><span data-i18n="inst_3"><strong>Invite:</strong> Your Aurum Sponsor will be displayed here.</span></div>
+            <div class="guide-item"><span class="guide-num">4</span><span data-i18n="inst_4"><strong>Details:</strong> Provide your name and unique username.</span></div>
+            <div class="guide-item"><span class="guide-num">5</span><span data-i18n="inst_5"><strong>Profile:</strong> Set your birthday and country to "CRYPTONATION".</span></div>
+            <div class="guide-item"><span class="guide-num">6</span><span data-i18n="inst_6"><strong>Agreement:</strong> Review and accept the Terms of Use.</span></div>
+            <div class="guide-item"><span class="guide-num">7</span><span data-i18n="inst_7"><strong>Sign Up:</strong> Submit the registration form.</span></div>
+            <div class="guide-item"><span class="guide-num">8</span><span data-i18n="inst_8"><strong>Verification:</strong> Retrieve the code from your email.</span></div>
+            <div class="guide-item"><span class="guide-num">9</span><span data-i18n="inst_9"><strong>Activation:</strong> Enter the code to finalize your account.</span></div>
           </div>
 
-          <h2 style="margin-top: 32px; font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">Watch the Step-by-Step Guide</h2>
-          <p style="margin-bottom: 24px; color: var(--text-muted);">Follow the 5-minute video below strictly to ensure your account is activated correctly. <strong>Wait until the video finishes before proceeding.</strong></p>
+          <h2 style="margin-top: 32px; font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px;" data-i18n="watch_step_guide">Watch the Step-by-Step Guide</h2>
+          <p style="margin-bottom: 24px; color: var(--text-muted);" data-i18n="watch_step_desc">Follow the 5-minute video below strictly to ensure your account is activated correctly. <strong>Wait until the video finishes before proceeding.</strong></p>
 
           <div class="guide-video-wrapper">
             <iframe src="https://www.youtube.com/embed/TL5LHCLY7eA?rel=0" title="Onboarding Guide" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
@@ -338,14 +344,14 @@
 
     <!-- FINAL CTA SECTION -->
     <div class="header" style="margin-top: 80px; margin-bottom: 20px;">
-        <h2 style="font-size: 2rem; margin-bottom: 15px;">Ready to Begin?</h2>
-        <p class="subtitle" style="margin-bottom: 40px;">Click the button below to create your official account using your sponsor's link.</p>
+        <h2 style="font-size: 2rem; margin-bottom: 15px;" data-i18n="ready_to_begin">Ready to Begin?</h2>
+        <p class="subtitle" style="margin-bottom: 40px;" data-i18n="click_to_create">Click the button below to create your official account using your sponsor's link.</p>
         
         <a href="https://backoffice.aurum.foundation/register" id="final-join-btn" class="join-btn" style="text-decoration: none;">
-            Create My AURUM Account →
+            <span data-i18n="create_account_btn">Create My AURUM Account →</span>
         </a>
         
-        <p style="margin-top: 30px; font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">
+        <p style="margin-top: 30px; font-size: 0.85rem; color: var(--text-muted); font-weight: 600;" data-i18n="vpn_warning">
             ⚠️ Ensure your VPN is ACTIVE before clicking if you are in the US/CA.
         </p>
     </div>
@@ -353,15 +359,15 @@
 
 
     <footer class="foot">
-      <p>© 2026 The AI Finance Breakdown. All rights reserved.</p>
-      <p style="margin-top: 10px;">Review the official terms on the Aurum backoffice before participating.</p>
+      <p data-i18n="footer_rights">© 2026 The AI Finance Breakdown. All rights reserved.</p>
+      <p style="margin-top: 10px;" data-i18n="footer_terms_note">Review the official terms on the Aurum backoffice before participating.</p>
     </footer>
   </div>
 
   <!-- STICKY BOTTOM BAR -->
   <div id="sticky-cta" class="sticky-bar">
-    <div class="sticky-bar-text">Ready to automate your digital assets?</div>
-    <a href="https://backoffice.aurum.foundation/register" id="sticky-join-btn" class="sticky-bar-btn">Create My AURUM Account →</a>
+    <div class="sticky-bar-text" data-i18n="sticky_ready">Ready to automate your digital assets?</div>
+    <a href="https://backoffice.aurum.foundation/register" id="sticky-join-btn" class="sticky-bar-btn"><span data-i18n="create_account_btn">Create My AURUM Account →</span></a>
   </div>
 
   <!-- Load Supabase -->
@@ -560,6 +566,8 @@
   </script>
 
   <!-- TRACKING & AFFILIATE LOGIC -->
+  <script src="translations.js"></script>
+  <script src="i18n.js"></script>
   <script src="tracking.js"></script>
   <script src="skin.js"></script>
 </body>

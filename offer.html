@@ -180,18 +180,22 @@
   <!-- SHARED NAV -->
   <nav>
     <div class="nav-inner">
-      <a href="index.html" class="nav-brand">TheAI<span>Finance</span>Breakdown</a>
+      <a href="index.html" class="nav-brand" data-i18n="nav_brand">TheAI<span>Finance</span>Breakdown</a>
       <div style="display:flex;gap:12px;align-items:center;">
-        <a href="onboarding.html" class="nav-cta"><span class="hidden-mobile">Start Your </span>Setup Checklist →</a>
+        <div class="lang-switcher">
+          <a href="javascript:void(0)" class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</a>
+          <a href="javascript:void(0)" class="lang-btn" data-lang="es" onclick="setLanguage('es')">ES</a>
+        </div>
+        <a href="onboarding.html" class="nav-cta" data-i18n="nav_cta_checklist"><span class="hidden-mobile">Start Your </span>Setup Checklist →</a>
       </div>
     </div>
   </nav>
 
   <!-- HERO -->
   <header class="hero">
-    <div class="badge">Official Presentation</div>
-    <h1 id="skin-h1">The AURUM Digital <br>Banking Ecosystem</h1>
-    <p id="skin-sub" class="subheadline">Discover how AI liquidity bots and institutional digital banking tools work together to create a streamlined, automated financial experience.</p>
+    <div class="badge" data-i18n="badge_presentation">Official Presentation</div>
+    <h1 id="skin-h1" data-i18n="offer_h1">The AURUM Digital <br>Banking Ecosystem</h1>
+    <p id="skin-sub" class="subheadline" data-i18n="offer_sub">Discover how AI liquidity bots and institutional digital banking tools work together to create a streamlined, automated financial experience.</p>
   </header>
 
 
@@ -201,22 +205,22 @@
       <div class="icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
       </div>
-      <h3>AI Liquidity Bots</h3>
-      <p>Intelligent automation that navigates market liquidity to optimize your digital asset growth without manual trading.</p>
+      <h3 data-i18n="feat_liquidity_title">AI Liquidity Bots</h3>
+      <p data-i18n="feat_liquidity_desc">Intelligent automation that navigates market liquidity to optimize your digital asset growth without manual trading.</p>
     </div>
     <div class="feat-card">
       <div class="icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
       </div>
-      <h3>Web3 Neobanking</h3>
-      <p>The bridge between traditional finance and the decentralized world, featuring both virtual and physical spending tools.</p>
+      <h3 data-i18n="feat_neobank_title">Web3 Neobanking</h3>
+      <p data-i18n="feat_neobank_desc">The bridge between traditional finance and the decentralized world, featuring both virtual and physical spending tools.</p>
     </div>
     <div class="feat-card">
       <div class="icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
       </div>
-      <h3>Secure Infrastructure</h3>
-      <p>Built on battle-tested blockchain protocols to ensure your assets are protected while they work for you.</p>
+      <h3 data-i18n="feat_secure_title">Secure Infrastructure</h3>
+      <p data-i18n="feat_secure_desc">Built on battle-tested blockchain protocols to ensure your assets are protected while they work for you.</p>
     </div>
   </div>
 
@@ -227,21 +231,21 @@
       <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 32px;">
         <div style="background: #000; color: #fff; padding: 5px 14px; font-family: 'Times New Roman', serif; font-weight: 900; font-size: 1.3rem; letter-spacing: -0.05em; line-height: 1;">Forbes</div>
         <div style="height: 16px; width: 1px; background: #E2E8F0;"></div>
-        <span style="font-weight: 700; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em;">Institutional Insight</span>
+        <span style="font-weight: 700; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em;" data-i18n="forbes_insight">Institutional Insight</span>
       </div>
       
-      <p style="font-family: 'Inter', sans-serif; font-size: 1.15rem; font-weight: 600; color: var(--text-main); line-height: 1.6; margin-bottom: 28px;">
+      <p style="font-family: 'Inter', sans-serif; font-size: 1.15rem; font-weight: 600; color: var(--text-main); line-height: 1.6; margin-bottom: 28px;" data-i18n="forbes_p1">
         Aurum was featured in a recent <span style="color: #E11D48;">Forbes</span> magazine article discussing how blockchain technology is quietly reshaping the infrastructure of global financial markets:
       </p>
       
       <div style="border-left: 4px solid var(--aurum-blue); padding-left: 32px; position: relative;">
-        <p style="font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 20px;">
+        <p style="font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 20px;" data-i18n="forbes_quote_1">
           "The structural limitations of crypto as a medium of real-world payment have long hindered its adoption. Digital assets remained siloed in wallets and exchanges, cut off from everyday financial systems. But that barrier is starting to break down—not by replacing payment giants, but by building infrastructure that bridges the two worlds. In fact, payment giants like Mastercard and Visa have accelerator programs focused on integrating targeted crypto solutions that can plug into existing systems, creating corridors between traditional and decentralized financial systems.
         </p>
-        <p style="font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 20px; font-weight: 500; color: var(--text-main);">
+        <p style="font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 20px; font-weight: 500; color: var(--text-main);" data-i18n="forbes_quote_2">
           Hong Kong-based Aurum exemplifies this approach, enabling users to fund accounts with USDT and spend in local currencies. Its digital banking ecosystem offers bots, payment cards, staking, NFT licenses, and a Web3 wallet with low fees and cashback rewards. With $12M in funding, Aurum delivers institutional-grade trading and payment infrastructure powered by advanced AI... Former Binance executive Bryan Benson now leads Aurum Exchange, bringing expertise in scaling crypto platforms across emerging markets.
         </p>
-        <p style="font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; font-style: italic;">
+        <p style="font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; font-style: italic;" data-i18n="forbes_quote_3">
           The endgame? A world where crypto wallets function seamlessly with traditional payment systems, making digital assets as spendable as cash—without friction."
         </p>
       </div>
@@ -250,33 +254,33 @@
 
   <!-- CTA TEXT (SIMPLIFIED) -->
   <section style="max-width: 800px; margin: 0 auto 80px; padding: 0 24px; text-align: center;">
-    <h2 style="font-size: 2.4rem; font-weight: 900; line-height: 1.1; margin-bottom: 24px;">Ready to explore the digital banking ecosystem?</h2>
-    <p style="font-size: 1.15rem; color: var(--text-muted); margin-bottom: 30px;">Aurum is built by an experienced team that understands what is possible. We focus on realistic expectations and measured, sustainable growth while maintaining strict protocols to mitigate risk.</p>
+    <h2 style="font-size: 2.4rem; font-weight: 900; line-height: 1.1; margin-bottom: 24px;" data-i18n="ready_to_explore">Ready to explore the digital banking ecosystem?</h2>
+    <p style="font-size: 1.15rem; color: var(--text-muted); margin-bottom: 30px;" data-i18n="aurum_team_desc">Aurum is built by an experienced team that understands what is possible. We focus on realistic expectations and measured, sustainable growth while maintaining strict protocols to mitigate risk.</p>
     
     <div style="display: flex; gap: 16px; align-items: center; justify-content: center;">
       <div style="width: 40px; height: 40px; border-radius: 50%; background: #22c55e; display: flex; align-items: center; justify-content: center; color: #fff;">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
       </div>
-      <span style="font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: #166534;">Verified Platform</span>
+      <span style="font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: #166534;" data-i18n="verified_platform">Verified Platform</span>
     </div>
   </section>
 
     <section style="max-width: 1100px; margin: 0 auto 80px; padding: 0 24px; text-align: center;">
       <div style="background: var(--dark-panel); border-radius: 30px; padding: 60px 40px; color: #fff; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
-        <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 16px;">Final Step: Start Your Activation</h2>
-        <p style="font-size: 1.15rem; opacity: 0.8; max-width: 600px; margin: 0 auto 40px;">Follow the link below to set up your AI Banking account. Your activation deposit puts your automated AI bots to work, allowing them to start growing your digital assets immediately.</p>
+        <h2 style="font-size: 2.5rem; font-weight: 900; margin-bottom: 16px;" data-i18n="final_step_title">Final Step: Start Your Activation</h2>
+        <p style="font-size: 1.15rem; opacity: 0.8; max-width: 600px; margin: 0 auto 40px;" data-i18n="final_step_desc">Follow the link below to set up your AI Banking account. Your activation deposit puts your automated AI bots to work, allowing them to start growing your digital assets immediately.</p>
         
         <a href="onboarding.html" id="dynamic-onboard-btn" class="nav-cta cta-btn">
-            <span class="hidden-mobile">Activate My AI Account</span>
-            <span class="mobile-only">Start Now</span> →
+            <span class="hidden-mobile" data-i18n="activate_btn">Activate My AI Account</span>
+            <span class="mobile-only" data-i18n="start_now">Start Now</span> →
         </a>
       </div>
     </section>
 
   <footer class="foot">
     <div style="max-width: 800px; margin: 0 auto;">
-      <p style="font-weight: 800; margin-bottom: 12px; color: var(--text-main);">Educational Presentation Only</p>
-      <p>This site is not affiliated with Google, Facebook, or YouTube. All financial decisions carry risk. Please conduct your own research before participating in digital banking and asset ecosystems.</p>
+      <p style="font-weight: 800; margin-bottom: 12px; color: var(--text-main);" data-i18n="edu_presentation_only">Educational Presentation Only</p>
+      <p data-i18n="off_affiliated_disclaimer">This site is not affiliated with Google, Facebook, or YouTube. All financial decisions carry risk. Please conduct your own research before participating in digital banking and asset ecosystems.</p>
     </div>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -290,6 +294,8 @@
     })();
   </script>
   <!-- TRACKING -->
+  <script src="translations.js"></script>
+  <script src="i18n.js"></script>
   <script src="tracking.js"></script>
   <script src="skin.js"></script>
 

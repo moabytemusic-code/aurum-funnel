@@ -174,6 +174,71 @@
       font-weight: 700;
     }
 
+    /* === HELP TOOLTIPS === */
+    .has-tooltip {
+      position: relative;
+      cursor: help;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      color: #94A3B8;
+      font-size: 9px;
+      font-weight: 900;
+      margin-left: 6px;
+      vertical-align: middle;
+      transition: all 0.2s;
+    }
+    .has-tooltip:hover {
+      background: var(--teal);
+      color: #000;
+      box-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+    }
+    .tooltip-content {
+      visibility: hidden;
+      width: 200px;
+      background: #0F172A;
+      color: #F8FAFC;
+      text-align: left;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 12px;
+      position: absolute;
+      z-index: 100;
+      bottom: 150%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      font-size: 11px;
+      line-height: 1.4;
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: normal;
+      pointer-events: none;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+    .tooltip-content::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: rgba(255,255,255,0.1) transparent transparent transparent;
+    }
+    .has-tooltip:hover .tooltip-content {
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(-50%) translateY(-5px);
+    }
+    .gold-tooltip:hover { background: var(--gold); }
+    .gold-tooltip:hover .tooltip-content { border-color: var(--gold); }
+
     /* === RESPONSIVE MODS === */
     @media (max-width: 768px) {
       .plan-selector {
@@ -609,7 +674,12 @@
               <div id="rotator-control-view" class="hidden">
                 <div class="flex justify-between items-start mb-6">
                   <div>
-                    <h3 class="text-xl font-black uppercase text-[#D4AF37] mb-1">Master Rotator Control</h3>
+                    <h3 class="text-xl font-black uppercase text-[#D4AF37] mb-1 flex items-center">
+                      Master Rotator Control
+                      <span class="has-tooltip gold-tooltip">?
+                        <span class="tooltip-content">Advanced traffic routing that distributes hits among your sub-affiliate pool automatically for this campaign.</span>
+                      </span>
+                    </h3>
                     <p class="text-[10px] text-gray-500 uppercase tracking-widest font-black">Campaign-Based Traffic Distribution</p>
                   </div>
                   <div id="master-id-badge" class="px-4 py-2 bg-[#D4AF37]/10 border border-[#D4AF37]/20 rounded-xl text-[#D4AF37] text-[11px] font-black uppercase tracking-widest">NODE ID: ...</div>
@@ -650,7 +720,12 @@
                         </div>
                       </div>
                       
-                      <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 block">Current Pool (<span id="pool-count">0</span> / <span id="pool-max">100</span>)</label>
+                      <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 block flex items-center">
+                        Current Pool (<span id="pool-count">0</span> / <span id="pool-max">100</span>)
+                        <span class="has-tooltip">?
+                          <span class="tooltip-content">Assign affiliates to this pool to automatically distribute traffic among your team.</span>
+                        </span>
+                      </label>
                       <div id="active-pool-list" class="flex flex-wrap gap-2 max-h-48 overflow-y-auto">
                          <!-- Active members as tags -->
                       </div>
@@ -772,7 +847,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class="bg-white/5 p-6 rounded-[24px] border border-white/5 flex items-center justify-between">
                 <div>
-                  <div class="text-[10px] font-bold text-gray-500 uppercase mb-1 tracking-widest">Total Network Hits
+                  <div class="text-[10px] font-bold text-gray-500 uppercase mb-1 tracking-widest flex items-center">
+                    Total Network Hits
+                    <span class="has-tooltip">?
+                      <span class="tooltip-content">Counts every time your link is clicked across all campaigns.</span>
+                    </span>
                   </div>
                   <div class="text-4xl font-black text-white" id="stat-clicks">0</div>
                 </div>
@@ -780,7 +859,11 @@
               </div>
               <div class="bg-white/5 p-6 rounded-[24px] border border-white/5 flex items-center justify-between">
                 <div>
-                  <div class="text-[10px] font-bold text-gray-500 uppercase mb-1 tracking-widest">Conversions
+                  <div class="text-[10px] font-bold text-gray-500 uppercase mb-1 tracking-widest flex items-center">
+                    Conversions
+                    <span class="has-tooltip">?
+                      <span class="tooltip-content">Counts every time a user clicks "Create My AURUM Account".</span>
+                    </span>
                   </div>
                   <div class="text-4xl font-black text-[#00F5FF]" id="stat-trials">0</div>
                 </div>
@@ -793,7 +876,12 @@
           <div class="border border-[#D4AF37]/20 bg-black/40 backdrop-blur-xl rounded-[32px] p-8 md:p-12">
             <div class="flex items-center justify-between mb-10">
               <div>
-                <h3 class="text-xs font-black uppercase text-[#D4AF37] tracking-[0.3em] mb-1">Genesis Marketing Assets</h3>
+                <h3 class="text-xs font-black uppercase text-[#D4AF37] tracking-[0.3em] mb-1 flex items-center">
+                  Genesis Marketing Assets
+                  <span class="has-tooltip gold-tooltip">?
+                    <span class="tooltip-content">Download your unique Genesis License card and QR codes for high-impact social sharing.</span>
+                  </span>
+                </h3>
                 <p class="text-[10px] text-gray-400 uppercase tracking-widest">High-Resolution Branding for Outreach</p>
               </div>
             </div>
