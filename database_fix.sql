@@ -116,3 +116,23 @@ BEGIN
      OR a.full_name ILIKE '%' || query || '%';
 END;
 $$;
+
+-----------------------------------------------------------
+-- 4. HARDEN aurum_tracking TABLE
+-----------------------------------------------------------
+
+-- Enable RLS
+ALTER TABLE public.aurum_tracking ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.aurum_tracking FORCE ROW LEVEL SECURITY;
+
+-- Lockdown tracking data
+REVOKE ALL ON public.aurum_tracking FROM anon, authenticated, public;
+GRANT INSERT ON public.aurum_tracking TO anon, authenticated;
+-- Select is ONLY available via Service Role (Master Key) or Superuser
+
+-- Policies
+DROP POLICY IF EXISTS "Allow public insert" ON public.aurum_tracking;
+CREATE POLICY "Allow public insert" ON public.aurum_tracking FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow service select" ON public.aurum_tracking;
+CREATE POLICY "Allow service select" ON public.aurum_tracking FOR SELECT TO service_role USING (true);

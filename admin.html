@@ -291,6 +291,14 @@
     async function fetchData() {
       if (!window.aurumDB) return setTimeout(fetchData, 500);
       
+      // Zero-Trust check: Detect if we are using the restricted public key
+      const isUnlocked = localStorage.getItem('aurum_master_key') || sessionStorage.getItem('aurum_master_key');
+      
+      if (!isUnlocked) {
+        elements.statusText.innerHTML = `<span style="color:var(--gold); font-weight:800;">🔐 AWAITING MASTER UNLOCK...</span>`;
+        return setTimeout(fetchData, 2000);
+      }
+
       elements.statusText.textContent = "Syncing with live database...";
       
       try {
@@ -298,7 +306,7 @@
         const { data: events, error: trackError } = await window.aurumDB
           .from('aurum_tracking')
           .select('*')
-          .order('created_at', { ascending: false })
+          .order('timestamp', { ascending: false })
           .limit(100);
           
         if (trackError) throw trackError;
@@ -316,9 +324,17 @@
         processData(events, affiliates ? affiliates.length : 0);
         
       } catch (err) {
-        console.error(err);
-        elements.statusText.textContent = "Connection error. Using cache.";
-        initCharts(); // Demo fallback
+        console.error("Dashboard Sync Error:", err);
+        // If we get a 403, it means the key is invalid or RLS is blocking us
+        if (err.code === '42501' || err.status === 403) {
+          elements.statusText.innerHTML = `<span style="color:#ef4444; font-weight:800;">🚫 AUTHENTICATION DENIED (INVALID MASTER KEY)</span>`;
+          // Clear the bad key to force re-entry
+          localStorage.removeItem('aurum_master_key');
+          sessionStorage.removeItem('aurum_master_key');
+        } else {
+          elements.statusText.textContent = "Sync interrupted. Using cache.";
+          initCharts(); // Demo fallback
+        }
       }
     }
 
@@ -383,7 +399,7 @@
       
       // Show last 20 events
       events.slice(0, 20).forEach(ev => {
-        const time = timeAgo(ev.created_at);
+        const time = timeAgo(ev.timestamp);
         let eventLabel = ev.event_type || 'Hit';
         let badgeColor = 'var(--aurum-blue)';
         
