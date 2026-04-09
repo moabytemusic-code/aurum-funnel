@@ -295,6 +295,8 @@
       const isUnlocked = localStorage.getItem('aurum_master_key') || sessionStorage.getItem('aurum_master_key');
       
       if (!isUnlocked) {
+        const gateExists = !!document.getElementById('aurum-admin-gate');
+        console.log("[AURUM-ADMIN] State: Awaiting Unlock. Gate Present:", gateExists);
         elements.statusText.innerHTML = `<span style="color:var(--gold); font-weight:800;">🔐 AWAITING MASTER UNLOCK...</span>`;
         return setTimeout(fetchData, 2000);
       }

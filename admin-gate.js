@@ -6,11 +6,20 @@
   const MASTER_KEY_STORAGE = 'AURUM_MASTER_KEY';
   
   function checkAccess() {
-    const currentKey = sessionStorage.getItem(MASTER_KEY_STORAGE) || localStorage.getItem(MASTER_KEY_STORAGE);
-    
-    // If we only have the anon key (or no key), show the gate
-    if (!currentKey || currentKey.startsWith('sb_publishable')) {
-      showGate();
+    console.log("[AURUM-GATE] Verifying access token...");
+    try {
+      const currentKey = sessionStorage.getItem(MASTER_KEY_STORAGE) || localStorage.getItem(MASTER_KEY_STORAGE);
+      
+      // If we only have the anon key (or no key), show the gate
+      if (!currentKey || currentKey.startsWith('sb_publishable')) {
+        console.warn("[AURUM-GATE] Access Token Missing or Restricted. Initializing Gate...");
+        showGate();
+      } else {
+        console.log("[AURUM-GATE] Privileged Session Detected.");
+      }
+    } catch (e) {
+      console.error("[AURUM-GATE] Critical check failure:", e);
+      showGate(); // Fallback to showing gate on error
     }
   }
 
@@ -115,6 +124,8 @@
     document.getElementById('master-key-input').addEventListener('keypress', (e) => {
       if (e.key === 'Enter') document.getElementById('unlock-btn').click();
     });
+
+    console.log("[AURUM-GATE] Modal Injected Successfully.");
   }
 
   // Create a global Logout function
