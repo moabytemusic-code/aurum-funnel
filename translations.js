@@ -12,27 +12,10 @@ window.AURUM_TRANSLATIONS = {
     // Hero - Index
     hero_h1: "The AURUM NeoBank & AI Digital Banking Ecosystem",
     hero_sub: "I've been looking into AI finance tools lately… and this is one of the few that actually made me stop and take a closer look.",
-    hero_skeptical: "I Was Skeptical About AI Crypto… Until I Saw This",
+    hero_skeptical: "Still Confused About Aurum?",
     
-    // Content Blocks
-    highlight_skeptical: "I'm not saying this is the answer… But this is one of the few AI crypto platforms focused on realistic expectations and institutional-grade risk management.",
-    story_p1: "Honestly… most of what I've seen in this space either felt <strong>way too technical</strong>… or just straight hype.",
-    story_p2: "So I started digging deeper to find something that actually made sense.",
-    story_p3: "It isn't just a single trading bot. It's an entire <strong>digital banking ecosystem</strong> — AI trading bots, digital asset tools, and a broader Web3 finance angle.",
-    
-    glass_aurum: "That's when I came across <strong>AURUM</strong>. And what caught my attention wasn't hype… It was how they're positioning it.",
-    
-    highlight_features_title: "Here's the part that made me look deeper…",
-    feat_not_one_tool: "It's <strong>not just one tool</strong>",
-    feat_positioning: "It's positioned as a <strong>digital banking ecosystem</strong>",
-    feat_automation: "It's built around true <strong>automation</strong>",
-
     // Video 2
-    watch_breakdown: "Watch This Breakdown",
-    stood_out_title: "What stood out to me:",
-    stood_out_1: "Simple, jargon-free explanation",
-    stood_out_2: "Experienced team with a measured, realistic approach",
-    stood_out_3: "Focused on great returns while mitigating risk",
+    watch_breakdown: "Watch This Video!",
 
     // CTA
     cta_final_title: "Don't just take my word for it…",
@@ -40,13 +23,6 @@ window.AURUM_TRANSLATIONS = {
     cta_final_p2: "If you're even a little curious… just click below. At the very least, you'll understand what's happening in this space right now.",
     cta_btn_watch: "Watch <span class=\"hidden-mobile\">The Full </span>AURUM Breakdown",
     cta_subtext: "Takes you straight to the official presentation. No commitment.",
-
-    // FAQ
-    faq_title: "Common Questions",
-    faq_q1: "Do I need trading experience?",
-    faq_a1: "No. The AI automation angle is specifically designed for people who don't want to manually trade. That's a big part of what drew me toward investigating it further.",
-    faq_q2: "What happens after I click the button?",
-    faq_a2: "You'll see the full AURUM presentation. There's no pressure, no commitment — just a more detailed walkthrough of the platform so you can make an informed decision for yourself.",
 
     // Offer Page
     badge_presentation: "Official Presentation",
@@ -66,13 +42,9 @@ window.AURUM_TRANSLATIONS = {
     forbes_quote_2: "\"Hong Kong-based Aurum exemplifies this approach, enabling users to fund accounts with USDT and spend in local currencies. Its digital banking ecosystem offers bots, payment cards, staking, NFT licenses, and a Web3 wallet with low fees and cashback rewards. With $12M in funding, Aurum delivers institutional-grade trading and payment infrastructure powered by advanced AI.\"",
     forbes_quote_3: "\"The endgame? A world where crypto wallets function seamlessly with traditional payment systems, making digital assets as spendable as cash—without friction.\"",
 
-    ready_to_explore: "Ready to explore the digital banking ecosystem?",
-    aurum_team_desc: "Aurum is built by an experienced team that understands what is possible. We focus on realistic expectations and measured, sustainable growth while maintaining strict protocols to mitigate risk.",
-    verified_platform: "Verified Platform",
-
     final_step_title: "Final Step: Start Your Activation",
     final_step_desc: "Follow the link below to set up your AI Banking account. Your activation deposit puts your automated AI bots to work, allowing them to start growing your digital assets immediately.",
-    activate_btn: "Activate My AI Account",
+    activate_btn: "Yes! Tell Me More!",
     start_now: "Start Now",
 
     edu_presentation_only: "Educational Presentation Only",
@@ -182,27 +154,10 @@ window.AURUM_TRANSLATIONS = {
     // Hero - Index
     hero_h1: "El Ecosistema de NeoBank y Banca Digital IA de AURUM",
     hero_sub: "He estado investigando herramientas financieras de IA últimamente... y esta es una de las pocas que realmente me hizo detenerme y mirar más de cerca.",
-    hero_skeptical: "Era escéptico sobre el Cripto de IA... Hasta que vi esto",
+    hero_skeptical: "¿Sigues confundido sobre Aurum?",
     
-    // Content Blocks
-    highlight_skeptical: "No digo que esta sea la respuesta... Pero esta es una de las pocas plataformas de cripto IA enfocadas en expectativas realistas y gestión de riesgos de grado institucional.",
-    story_p1: "Sinceramente... la mayor parte de lo que he visto en este espacio se sentía **demasiado técnico**... o simplemente puro hype.",
-    story_p2: "Así que empecé a profundizar para encontrar algo que realmente tuviera sentido.",
-    story_p3: "No es solo un bot de trading. Es un **ecosistema de banca digital** completo: bots de trading IA, herramientas de activos digitales y un ángulo financiero Web3 más amplio.",
-    
-    glass_aurum: "Fue entonces cuando me encontré con **AURUM**. Y lo que me llamó la atención no fue el hype... Fue cómo lo posicionan.",
-    
-    highlight_features_title: "Aquí está la parte que me hizo mirar más profundo...",
-    feat_not_one_tool: "No es **solo una herramienta**",
-    feat_positioning: "Está posicionado como un **ecosistema de banca digital**",
-    feat_automation: "Está construido alrededor de una verdadera **automatización**",
-
     // Video 2
-    watch_breakdown: "Mira este desglose",
-    stood_out_title: "Lo que me llamó la atención:",
-    stood_out_1: "Explicación sencilla y sin tecnicismos",
-    stood_out_2: "Equipo experimentado con un enfoque medido y realista",
-    stood_out_3: "Enfocado en grandes retornos mientras se mitiga el riesgo",
+    watch_breakdown: "¡Mira este vídeo!",
 
     // CTA
     cta_final_title: "No te quedes solo con mi palabra...",
@@ -210,13 +165,6 @@ window.AURUM_TRANSLATIONS = {
     cta_final_p2: "Si tienes al menos un poco de curiosidad... simplemente haz clic abajo. Al menos entenderás lo que está pasando en este espacio ahora mismo.",
     cta_btn_watch: "Ver <span class=\"hidden-mobile\">el Desglose Completo </span> de AURUM",
     cta_subtext: "Te lleva directamente a la presentación oficial. Sin compromiso.",
-
-    // FAQ
-    faq_title: "Preguntas Frecuentes",
-    faq_q1: "¿Necesito experiencia en trading?",
-    faq_a1: "No. El ángulo de automatización de IA está diseñado específicamente para personas que no quieren operar manualmente. Eso es gran parte de lo que me atrajo a investigar más a fondo.",
-    faq_q2: "¿Qué pasa después de hacer clic en el botón?",
-    faq_a2: "Verás la presentación completa de AURUM. No hay presión, ni compromiso: solo un recorrido más detallado de la plataforma para que puedas tomar una decisión informada por ti mismo.",
 
     // Offer Page
     badge_presentation: "Presentación Oficial",
@@ -236,13 +184,9 @@ window.AURUM_TRANSLATIONS = {
     forbes_quote_2: "\"Aurum, con sede en Hong Kong, ejemplifica este enfoque, permitiendo a los usuarios financiar cuentas con USDT y gastar en monedas locales. Su ecosistema de banca digital ofrece bots, tarjetas de pago, staking, licencias NFT y una billetera Web3 con bajas comisiones y recompensas de cashback. Con 12 millones de dólares en financiación, Aurum ofrece una infraestructura de trading y pagos de grado institucional impulsada por IA avanzada.\"",
     forbes_quote_3: "\"¿El objetivo final? Un mundo donde las billeteras cripto funcionen a la perfección con los sistemas de pago tradicionales, haciendo que los activos digitales sean tan fáciles de gastar como el efectivo, sin fricciones.\"",
 
-    ready_to_explore: "¿Listo para explorar el ecosistema de banca digital?",
-    aurum_team_desc: "Aurum está construido por un equipo experimentado que entiende lo que es posible. Nos enfocamos en expectativas realistas y un crecimiento medido y sostenible mientras mantenemos protocolos estrictos para mitigar el riesgo.",
-    verified_platform: "Plataforma Verificada",
-
     final_step_title: "Paso Final: Inicie su Activación",
     final_step_desc: "Siga el enlace a continuación para configurar su cuenta de Banca IA. Su depósito de activación pone a funcionar sus bots automatizados de IA, lo que les permite comenzar a hacer crecer sus activos digitales de inmediato.",
-    activate_btn: "Activar mi Cuenta de IA",
+    activate_btn: "¡Sí! ¡Cuéntame más!",
     start_now: "Comenzar Ahora",
 
     edu_presentation_only: "Solo Presentación Educativa",
