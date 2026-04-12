@@ -36,6 +36,16 @@ window.AURUM_TRANSLATIONS = {
     feat_secure_title: "Secure Infrastructure",
     feat_secure_desc: "Built on battle-tested blockchain protocols to ensure your assets are protected while they work for you.",
 
+    // Promo Sections
+    neobank_promo_title: "AURUM NEO-BANK",
+    neobank_promo_desc: "Manage your finances and maximize your earnings while staying ahead in the fast-evolving financial world.",
+    subscription_promo_title: "SUBSCRIPTION",
+    subscription_promo_desc: "Unlock full access to Aurum's ecosystem products and benefit from our marketing plan. Annual price: $19.99.",
+    exchange_promo_title: "AURUM EXCHANGE",
+    exchange_promo_desc: "REVOLUTIONIZING DECENTRALIZED TRADING.",
+    zeus_promo_title: "AURUM ZEUS AI BOT",
+    zeus_promo_desc: "Step into the future of crypto trading – smart deals, secure payments, and passive income in one powerful solution.",
+
     forbes_insight: "Institutional Insight",
     forbes_p1: "Aurum was featured in a recent <span style=\"color: #E11D48;\">Forbes</span> magazine article discussing how blockchain technology is quietly reshaping the infrastructure of global financial markets:",
     forbes_quote_1: "\"The structural limitations of crypto as a medium of real-world payment have long hindered its adoption. Digital assets remained siloed in wallets and exchanges, cut off from everyday financial systems. But that barrier is starting to break down—not by replacing payment giants, but by building infrastructure that bridges the two worlds.\"",
@@ -177,6 +187,16 @@ window.AURUM_TRANSLATIONS = {
     feat_neobank_desc: "El puente entre las finanzas tradicionales y el mundo descentralizado, con herramientas de gasto tanto virtuales como físicas.",
     feat_secure_title: "Infraestructura Segura",
     feat_secure_desc: "Construido sobre protocolos de blockchain probados en batalla para garantizar que sus activos estén protegidos mientras trabajan para usted.",
+
+    // Secciones de Promo
+    neobank_promo_title: "AURUM NEO-BANK",
+    neobank_promo_desc: "Gestione sus finanzas y maximice sus ganancias mientras se mantiene a la vanguardia en el mundo financiero en constante evolución.",
+    subscription_promo_title: "SUSCRIPCIÓN",
+    subscription_promo_desc: "Desbloquee el acceso total a los productos del ecosistema de Aurum y benefíciese de nuestro plan de marketing. Precio anual: $19.99.",
+    exchange_promo_title: "INTERCAMBIO AURUM",
+    exchange_promo_desc: "REVOLUCIONANDO EL TRADING DESCENTRALIZADO.",
+    zeus_promo_title: "BOT DE IA AURUM ZEUS",
+    zeus_promo_desc: "Ingrese al futuro del trading de criptomonedas: operaciones inteligentes, pagos seguros e ingresos pasivos en una solución poderosa.",
 
     forbes_insight: "Visión Institucional",
     forbes_p1: "Aurum fue presentado en un reciente artículo de la revista <span style=\"color: #E11D48;\">Forbes</span> que analiza cómo la tecnología blockchain está remodelando silenciosamente la infraestructura de los mercados financieros globales:",
