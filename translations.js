@@ -27,7 +27,7 @@ window.AURUM_TRANSLATIONS = {
     // Offer Page
     badge_presentation: "Official Presentation",
     offer_h1: "The AURUM Digital <br>Banking Ecosystem",
-    offer_sub: "Discover how AI liquidity bots and institutional digital banking tools work together to create a streamlined, automated financial experience.",
+    offer_sub: "Explore the AURUM digital banking ecosystem and automate your digital assets with institutional-grade AI.",
     
     feat_liquidity_title: "AI Liquidity Bots",
     feat_liquidity_desc: "Intelligent automation that navigates market liquidity to optimize your digital asset growth without manual trading.",
@@ -39,6 +39,8 @@ window.AURUM_TRANSLATIONS = {
     // Promo Sections
     neobank_promo_title: "AURUM NEO-BANK",
     neobank_promo_desc: "Manage your finances and maximize your earnings while staying ahead in the fast-evolving financial world.",
+    liquidity_promo_title: "AI LIQUIDITY BOTS",
+    liquidity_promo_desc: "Intelligent automation that navigates market liquidity to optimize your digital asset growth without manual trading.",
     subscription_promo_title: "SUBSCRIPTION",
     subscription_promo_desc: "Unlock full access to Aurum's ecosystem products and benefit from our marketing plan. Annual price: $19.99.",
     exchange_promo_title: "AURUM EXCHANGE",
@@ -179,7 +181,7 @@ window.AURUM_TRANSLATIONS = {
     // Offer Page
     badge_presentation: "Presentación Oficial",
     offer_h1: "El Ecosistema de <br>Banca Digital AURUM",
-    offer_sub: "Descubra cómo los bots de liquidez de IA y las herramientas de banca digital institucional trabajan juntos para crear una experiencia financiera automatizada y simplificada.",
+    offer_sub: "Explore el ecosistema de banca digital AURUM y automatice sus activos digitales con IA de grado institucional.",
     
     feat_liquidity_title: "Bots de Liquidez IA",
     feat_liquidity_desc: "Automatización inteligente que navega por la liquidez del mercado para optimizar el crecimiento de sus activos digitales sin trading manual.",
@@ -191,6 +193,8 @@ window.AURUM_TRANSLATIONS = {
     // Secciones de Promo
     neobank_promo_title: "AURUM NEO-BANK",
     neobank_promo_desc: "Gestione sus finanzas y maximice sus ganancias mientras se mantiene a la vanguardia en el mundo financiero en constante evolución.",
+    liquidity_promo_title: "BOTS DE LIQUIDEZ IA",
+    liquidity_promo_desc: "Automatización inteligente que navega por la liquidez del mercado para optimizar el crecimiento de sus activos digitales sin trading manual.",
     subscription_promo_title: "SUSCRIPCIÓN",
     subscription_promo_desc: "Desbloquee el acceso total a los productos del ecosistema de Aurum y benefíciese de nuestro plan de marketing. Precio anual: $19.99.",
     exchange_promo_title: "INTERCAMBIO AURUM",
