@@ -26,7 +26,7 @@ window.AURUM_TRANSLATIONS = {
 
     // Offer Page
     badge_presentation: "Institutional Insight",
-    offer_h1: "The AURUM Digital <br>Banking Ecosystem",
+    offer_h1: "Aurum: Reshaping the Infrastructure of Global Financial Markets",
     offer_sub: "Explore the AURUM digital banking ecosystem and automate your digital assets with institutional-grade AI.",
     
     feat_liquidity_title: "AI Liquidity Bots",
@@ -180,7 +180,7 @@ window.AURUM_TRANSLATIONS = {
 
     // Offer Page
     badge_presentation: "Visión Institucional",
-    offer_h1: "El Ecosistema de <br>Banca Digital AURUM",
+    offer_h1: "Aurum: Redefiniendo la Infraestructura de los Mercados Financieros Globales",
     offer_sub: "Explore el ecosistema de banca digital AURUM y automatice sus activos digitales con IA de grado institucional.",
     
     feat_liquidity_title: "Bots de Liquidez IA",
