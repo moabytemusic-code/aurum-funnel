@@ -362,25 +362,19 @@
       });
     });
 
-    // --- HEADING ROTATION ---
+    // --- RANDOM HEADING SELECTION ---
     const phrases = [
       "Ready to Get Clarity on Aurum?",
       "Let’s Make Aurum Simple and Clear for You",
       "Ready to Understand Aurum with Confidence?",
       "Discover How Aurum Really Works (Made Easy)"
     ];
-    let phraseIndex = 0;
     const rotHeading = document.getElementById('rotating-heading');
 
     if (rotHeading) {
-      setInterval(() => {
-        rotHeading.classList.add('fade-out');
-        setTimeout(() => {
-          phraseIndex = (phraseIndex + 1) % phrases.length;
-          rotHeading.innerText = phrases[phraseIndex];
-          rotHeading.classList.remove('fade-out');
-        }, 600);
-      }, 4000);
+      // Pick a random index
+      const randomIndex = Math.floor(Math.random() * phrases.length);
+      rotHeading.innerText = phrases[randomIndex];
     }
   </script>
 
