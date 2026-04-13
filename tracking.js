@@ -8,8 +8,13 @@ const SUPABASE_KEY = 'sb_publishable_7mcxzRZkMjQcK1CTZjUl_w_AGm9kisr';
 function trackEvent(page, event = 'View') {
   // 1. Determine Referrer (Priority: URL > LocalStorage > Default)
   const urlParams = new URLSearchParams(window.location.search);
-  const ref = urlParams.get('ref') || localStorage.getItem('aurum_ref') || '1W145K';
+  let ref = urlParams.get('ref') || localStorage.getItem('aurum_ref') || 'Financial Freedom';
   
+  // MIGRATION: If the persisted code is the old default '1W145K', force-reset to the new default.
+  if (ref === '1W145K') {
+    ref = 'Financial Freedom';
+  }
+
   // Sync to LocalStorage for persistence
   localStorage.setItem('aurum_ref', ref);
 

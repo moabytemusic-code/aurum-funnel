@@ -8,6 +8,7 @@ window.AURUM_TRANSLATIONS = {
     nav_cta_explore: "Explore <span class=\"hidden-mobile\">Digital Banking </span>Ecosystem →",
     nav_cta_checklist: "<span class=\"hidden-mobile\">Start Your </span>Setup Checklist →",
     partner_program: "Partner Program",
+    welcome_banner: "You've been given this invite because someone close to you has recently changed their <strong>financial trajectory</strong> using this platform. They thought about you and how it will improve your life as well. Please take a moment to educate yourself about Aurum, and its <strong>powerful ecosystem</strong>. Thank You for your time!",
 
     // Hero - Index
     hero_h1: "The AURUM NeoBank & AI Digital Banking Ecosystem",
@@ -168,6 +169,7 @@ window.AURUM_TRANSLATIONS = {
     nav_cta_explore: "Explorar el Ecosistema de <span class=\"hidden-mobile\">Banca Digital</span> →",
     nav_cta_checklist: "<span class=\"hidden-mobile\">Comenzar su </span>Lista de Configuración →",
     partner_program: "Programa de Socios",
+    welcome_banner: "Se le ha dado esta invitación porque alguien cercano a usted ha cambiado recientemente su <strong>trayectoria financiera</strong> utilizando esta plataforma. Pensaron en usted y en cómo mejorará su vida también. Tómese un momento para informarse sobre Aurum y su <strong>poderoso ecosistema</strong>. ¡Gracias por su tiempo!",
 
     // Hero - Index
     hero_h1: "El Ecosistema de NeoBank y Banca Digital IA de AURUM",

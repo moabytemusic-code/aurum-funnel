@@ -205,7 +205,7 @@
     </div>
   </nav>
 
-  <!-- TOP SPONSOR BAR (Hidden by default for Direct/1W145K traffic) -->
+  <!-- TOP SPONSOR BAR (Hidden by default for Direct/Financial Freedom traffic) -->
   <div id="sponsor-instructions-zone" class="hidden animate-in fade-in slide-in-from-top-4 duration-1000">
       <div class="bg-gradient-to-r from-[#030712] via-[#0F172A] to-[#030712] border-b border-[#D4AF37]/20 py-6">
           <div class="max-w-[1100px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
@@ -424,9 +424,14 @@
 
     async function lookupSponsor() {
       const urlParams = new URLSearchParams(window.location.search);
-      const ref = (urlParams.get('ref') || localStorage.getItem('aurum_ref') || '1W145K').toUpperCase();
+      const ref = (urlParams.get('ref') || localStorage.getItem('aurum_ref') || 'Financial Freedom').toUpperCase();
       let activeCode = ref;
       
+      // MIGRATION: If the persisted code is the old default '1W145K', force-reset to the new default.
+      if (activeCode === '1W145K') {
+          activeCode = 'Financial Freedom';
+      }
+
       // Lock it back into storage if it came from URL or is the Default
       localStorage.setItem('aurum_ref', ref);
 
@@ -485,7 +490,7 @@
 
         if (data && !error) {
             // DYNAMIC UI: Only reveal and populate the sponsor bar if it's NOT the default Main Admin code
-            if (activeCode !== '1W145K') {
+            if (activeCode !== 'Financial Freedom') {
                 document.getElementById('sponsor-instructions-zone').classList.remove('hidden');
                 document.getElementById('sponsor-name').innerText = data.full_name;
                 document.getElementById('sponsor-email-link').href = `mailto:${data.email}`;
@@ -552,7 +557,7 @@
       const joinBtn = document.getElementById('final-join-btn');
       if (joinBtn) {
         joinBtn.addEventListener('click', async (e) => {
-          const sponsorCode = localStorage.getItem('aurum_ref') || '1W145K';
+          const sponsorCode = localStorage.getItem('aurum_ref') || 'Financial Freedom';
           // Fire-and-forget — don't block navigation
           try {
             await aurumDB.from('aurum_tracking').insert([{
@@ -593,7 +598,7 @@
     // --- BUTTON SYNC ---
     async function syncAllButtons() {
         const urlParams = new URLSearchParams(window.location.search);
-        let ref = urlParams.get('ref') || localStorage.getItem('aurum_ref') || '1W145K';
+        let ref = urlParams.get('ref') || localStorage.getItem('aurum_ref') || 'Financial Freedom';
         
         setTimeout(() => {
             const finalRef = localStorage.getItem('aurum_ref') || ref;

@@ -166,9 +166,33 @@
     #bg-music-toggle .icon { font-size: 1.2rem; }
     #bg-music-toggle.playing { background: var(--aurum-blue); color: #fff; border-color: transparent; }
     #bg-music-container { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+    /* === WELCOME BANNER === */
+    .welcome-banner {
+      background: #030712;
+      color: #FFFFFF;
+      text-align: center;
+      padding: 14px 24px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      line-height: 1.5;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      position: relative;
+      z-index: 1000;
+    }
+    .welcome-banner strong { font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.4); }
+    
+    @media (max-width: 768px) {
+      .welcome-banner { font-size: 0.85rem; padding: 12px 16px; }
+    }
   </style>
 </head>
 <body>
+  
+  <!-- WELCOME BANNER -->
+  <div class="welcome-banner" data-i18n="welcome_banner">
+    You've been given this invite because someone close to you has recently changed their <strong>financial trajectory</strong> using this platform. They thought about you and how it will improve your life as well. Please take a moment to educate yourself about Aurum, and its <strong>powerful ecosystem</strong>. Thank You for your time!
+  </div>
 
   <!-- SHARED NAV -->
   <nav>
@@ -200,6 +224,8 @@
 
 
 
+
+
     </section>
 
     <!-- SECTION 4: VIDEO 2 -->
@@ -210,6 +236,10 @@
 
       <div class="video-wrapper">
         <iframe src="https://www.youtube.com/embed/WnrMvNnGYkk?rel=0" title="AURUM Breakdown - Video 2" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+
+      <div style="max-width: 700px; margin: 28px auto; border-radius: 20px; overflow: hidden; box-shadow: 0 16px 48px rgba(0,0,0,0.1);">
+        <img src="aurum_happy_user.png" alt="Successful after using Aurum" style="width: 100%; display: block;">
       </div>
     </section>
 

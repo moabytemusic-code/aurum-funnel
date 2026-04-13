@@ -1,0 +1,8 @@
+{
+  "name": "aurum-funnel",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npx serve .",
+    "vercel": "vercel dev"
+  }
+}

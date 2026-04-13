@@ -10,8 +10,13 @@
 
   // Priority: URL Param > LocalStorage > Default
   const org = urlOrg || localStorage.getItem('aurum_org') || 'Direct';
-  let ref = urlRef || localStorage.getItem('aurum_ref') || '1W145K';
+  let ref = urlRef || localStorage.getItem('aurum_ref') || 'Financial Freedom';
   
+  // MIGRATION: If the persisted code is the old default '1W145K', force-reset to the new default.
+  if (ref === '1W145K') {
+    ref = 'Financial Freedom';
+  }
+
   // Persist back to storage
   localStorage.setItem('aurum_org', org);
   localStorage.setItem('aurum_ref', ref);
@@ -101,12 +106,12 @@
         if (affErr || !affData) {
             // ROGUE DEFENSE: If they try to fake a code that doesn't exist, override to Admin.
             console.warn('[AURUM-SECURE] Unregistered affiliate ID detected. Defaulting to Main Admin.');
-            ref = '1W145K';
+            ref = 'Financial Freedom';
             localStorage.setItem('aurum_ref', ref);
         } else if (affData.status === 'suspended') {
             // SUSPENDED DEFENSE: If their node payment failed/lapsed.
             console.warn('[AURUM-SECURE] Suspended affiliate ID detected. Defaulting to Main Admin.');
-            ref = '1W145K';
+            ref = 'Financial Freedom';
             localStorage.setItem('aurum_ref', ref);
         } else if (affData.is_rotator && affData.rotator_pool) {
             // VALID ROTATOR: Execute Hijack (Multi-Campaign Group Support)
@@ -234,7 +239,7 @@
     const updateJoinButton = () => {
       const joinBtn = document.getElementById('final-join-btn') || document.getElementById('dynamic-join-btn') || document.querySelector('.join-btn');
       if (joinBtn) {
-        const finalRef = localStorage.getItem('aurum_ref') || '1W145K';
+        const finalRef = localStorage.getItem('aurum_ref') || 'Financial Freedom';
         
         // If we are in rotator mode or redirected session, overwrite the link
         joinBtn.href = `https://backoffice.aurum.foundation/u/${finalRef}`;

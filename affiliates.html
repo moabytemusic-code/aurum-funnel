@@ -167,7 +167,7 @@
         <div class="form-group">
           <label>Custom Attribution Node</label>
           <input type="text" id="new-code" placeholder="e.g. ALPHA">
-          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">Leave blank to auto-generate standard `1W145K` style code.</p>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">Leave blank to auto-generate standard `Financial Freedom` style code.</p>
         </div>
         <div class="form-group">
           <label>Initial Node Status</label>
@@ -404,7 +404,7 @@
         statusText.textContent = "Error: Could not connect to Supabase backend.";
         // Fallback demo data
         processAffiliates([
-          { created_at: new Date().toISOString(), email: "demo.partner@example.com", affiliate_code: "1W145K", is_rotator: false, status: "trialing", password: "demo", rotator_pool: null },
+          { created_at: new Date().toISOString(), email: "demo.partner@example.com", affiliate_code: "Financial Freedom", is_rotator: false, status: "trialing", password: "demo", rotator_pool: null },
           { created_at: new Date(Date.now() - 86400000).toISOString(), email: "agency.lead@example.com", affiliate_code: "TEAM-DEMO", is_rotator: true, status: "active", password: "supersecret", rotator_pool: "JohnD99, SarahM01" }
         ]);
       }
