@@ -13,7 +13,7 @@ ALTER TABLE public.aurum_affiliates FORCE ROW LEVEL SECURITY;
 
 -- Absolute lockdown: Revoke all and grant back ONLY non-sensitive columns
 REVOKE ALL ON public.aurum_affiliates FROM anon, authenticated, public;
-GRANT SELECT (email, full_name, affiliate_code, status, is_rotator, rotator_pool, created_at, phone, instructions, affiliate_id, hero_title, hero_subtitle, hero_video, brand_name, plan) 
+GRANT SELECT (email, full_name, affiliate_code, status, is_rotator, rotator_pool, rotator_index, created_at, phone, instructions, affiliate_id, hero_title, hero_subtitle, hero_video, brand_name, plan) 
     ON public.aurum_affiliates TO anon, authenticated;
 GRANT INSERT, UPDATE, DELETE ON public.aurum_affiliates TO anon, authenticated;
 
