@@ -25,7 +25,7 @@ window.AURUM_TRANSLATIONS = {
     cta_subtext: "Takes you straight to the official presentation. No commitment.",
 
     // Offer Page
-    badge_presentation: "Official Presentation",
+    badge_presentation: "Institutional Insight",
     offer_h1: "The AURUM Digital <br>Banking Ecosystem",
     offer_sub: "Explore the AURUM digital banking ecosystem and automate your digital assets with institutional-grade AI.",
     
@@ -179,7 +179,7 @@ window.AURUM_TRANSLATIONS = {
     cta_subtext: "Te lleva directamente a la presentación oficial. Sin compromiso.",
 
     // Offer Page
-    badge_presentation: "Presentación Oficial",
+    badge_presentation: "Visión Institucional",
     offer_h1: "El Ecosistema de <br>Banca Digital AURUM",
     offer_sub: "Explore el ecosistema de banca digital AURUM y automatice sus activos digitales con IA de grado institucional.",
     
