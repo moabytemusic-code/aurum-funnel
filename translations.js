@@ -15,12 +15,12 @@ window.AURUM_TRANSLATIONS = {
     hero_skeptical: "Still Confused About Aurum?",
     
     // Video 2
-    watch_breakdown: "Watch This Video!",
+    watch_breakdown: "Here's a short video clearly explaining what Aurum is and how it's making residual income for all its members 24/7 utilizing AI trading on crypto exchanges!",
 
     // CTA
-    cta_final_title: "Don't just take my word for it…",
-    cta_final_p1: "That's why I recommend watching the full presentation and deciding for yourself.",
-    cta_final_p2: "If you're even a little curious… just click below. At the very least, you'll understand what's happening in this space right now.",
+    cta_final_title: "Now that you have a general idea of what Aurum can do for you, let's take a closer look at the ecosystem and some of its most popular products!",
+    cta_final_p1: "",
+    cta_final_p2: "",
     cta_btn_watch: "Watch <span class=\"hidden-mobile\">The Full </span>AURUM Breakdown",
     cta_subtext: "Takes you straight to the official presentation. No commitment.",
 
@@ -169,12 +169,12 @@ window.AURUM_TRANSLATIONS = {
     hero_skeptical: "¿Sigues confundido sobre Aurum?",
     
     // Video 2
-    watch_breakdown: "¡Mira este vídeo!",
+    watch_breakdown: "¡Aquí hay un breve video que explica claramente qué es Aurum y cómo genera ingresos residuales para todos sus miembros 24/7 utilizando trading de IA en exchanges de criptomonedas!",
 
     // CTA
-    cta_final_title: "No te quedes solo con mi palabra...",
-    cta_final_p1: "Por eso recomiendo ver la presentación completa y decidir por ti mismo.",
-    cta_final_p2: "Si tienes al menos un poco de curiosidad... simplemente haz clic abajo. Al menos entenderás lo que está pasando en este espacio ahora mismo.",
+    cta_final_title: "Ahora que tienes una idea general de lo que Aurum puede hacer por ti, ¡echemos un vistazo más de cerca al ecosistema y algunos de sus productos más populares!",
+    cta_final_p1: "",
+    cta_final_p2: "",
     cta_btn_watch: "Ver <span class=\"hidden-mobile\">el Desglose Completo </span> de AURUM",
     cta_subtext: "Te lleva directamente a la presentación oficial. Sin compromiso.",
 
