@@ -70,6 +70,7 @@ window.AURUM_TRANSLATIONS = {
     
     step_1_title: "Prepare Your Crypto",
     step_1_text: "Ensure you have your funds ready in a compatible wallet before proceeding with the activation steps.",
+    step_1_gas_tip: "Ensure you have matching crypto for gas fees in Exodus or any Web 3 wallet.",
     crypto_tip: "<strong>Pro Tip:</strong> Do not send money from Crypto Exchanges. Always use a personal Wallet like <strong>Exodus</strong> or <strong>Metamask</strong> to send funds to Aurum.",
     
     step_2_title: "VPN Setup (US / CA Users)",
@@ -83,7 +84,7 @@ window.AURUM_TRANSLATIONS = {
     inst_2: "<strong>Security:</strong> Create a secure password.",
     inst_3: "<strong>Invite:</strong> Your Aurum Sponsor will be displayed here.",
     inst_4: "<strong>Details:</strong> Provide your name and unique username.",
-    inst_5: "<strong>Profile:</strong> Set your birthday and country to \"CRYPTONATION\".",
+    inst_5: "<strong>Profile:</strong> Set your birthday and use country code \"CRYPTONATION\" at the bottom of the dropdown.",
     inst_6: "<strong>Agreement:</strong> Review and accept the Terms of Use.",
     inst_7: "<strong>Sign Up:</strong> Submit the registration form.",
     inst_8: "<strong>Verification:</strong> Retrieve the code from your email.",
@@ -91,11 +92,16 @@ window.AURUM_TRANSLATIONS = {
     
     watch_step_guide: "Watch the Step-by-Step Guide",
     watch_step_desc: "Follow the 5-minute video below strictly to ensure your account is activated correctly. <strong>Wait until the video finishes before proceeding.</strong>",
+    step_3_photo_tip: "Take a photo to have ready for the next page!",
     
     ready_to_begin: "Ready to Begin?",
     click_to_create: "Click the button below to create your official account using your sponsor's link.",
     create_account_btn: "Create My AURUM Account →",
     vpn_warning: "⚠️ Ensure your VPN is ACTIVE before clicking if you are in the US/CA.",
+
+    step_5_title: "Have more questions?",
+    step_5_text: "Please reach out to your sponsor located at the top of this page, they will be happy to answer all questions and concerns regarding Aurum and its amazing ecosystem!",
+    step_5_thank_you: "Thank you for taking the time to review this opportunity as time is precious! And remember EVERY Aurum member is making profit daily!",
     
     sticky_ready: "Ready to automate your digital assets?",
     footer_rights: "© 2026 The AI Finance Breakdown. All rights reserved.",
@@ -224,6 +230,7 @@ window.AURUM_TRANSLATIONS = {
     
     step_1_title: "Prepare su Cripto",
     step_1_text: "Asegúrese de tener sus fondos listos en una billetera compatible antes de continuar con los pasos de activación.",
+    step_1_gas_tip: "Asegúrese de tener criptografía a juego para las tarifas de gas en Exodus o cualquier billetera Web 3.",
     crypto_tip: "<strong>Consejo pro:</strong> No envíe dinero desde exchanges. Use siempre una billetera personal como <strong>Exodus</strong> o <strong>Metamask</strong> para enviar fondos a Aurum.",
     
     step_2_title: "Configuración de VPN (Usuarios de EE. UU. / CA)",
@@ -237,7 +244,7 @@ window.AURUM_TRANSLATIONS = {
     inst_2: "<strong>Seguridad:</strong> Cree una contraseña segura.",
     inst_3: "<strong>Invitación:</strong> Su patrocinador de Aurum se mostrará aquí.",
     inst_4: "<strong>Detalles:</strong> Proporcione su nombre y un nombre de usuario único.",
-    inst_5: "<strong>Perfil:</strong> Establezca su fecha de nacimiento y país en \"CRYPTONATION\".",
+    inst_5: "<strong>Perfil:</strong> Establezca su fecha de nacimiento y use el código de país \"CRYPTONATION\" al final de la lista desplegable.",
     inst_6: "<strong>Acuerdo:</strong> Revise y acepte los Términos de Uso.",
     inst_7: "<strong>Registro:</strong> Envíe el formulario de registro.",
     inst_8: "<strong>Verificación:</strong> Recupere el código de su correo electrónico.",
@@ -245,11 +252,16 @@ window.AURUM_TRANSLATIONS = {
     
     watch_step_guide: "Vea la Guía Paso a Paso",
     watch_step_desc: "Siga estrictamente el video de 5 minutos a continuación para asegurarse de que su cuenta se active correctamente. **Espere hasta que el video termine antes de continuar.**",
+    step_3_photo_tip: "¡Toma una foto para tenerla lista para la siguiente página!",
     
     ready_to_begin: "¿Listo para comenzar?",
     click_to_create: "Haga clic en el botón a continuación para crear su cuenta oficial usando el enlace de su patrocinador.",
     create_account_btn: "Crear mi Cuenta AURUM →",
     vpn_warning: "⚠️ Asegúrese de que su VPN esté ACTIVA antes de hacer clic si está en EE. UU./CA.",
+
+    step_5_title: "¿Tienes más preguntas?",
+    step_5_text: "¡Comuníquese con su patrocinador ubicado en la parte superior de esta página, ellos estarán encantados de responder todas las preguntas e inquietudes con respecto a Aurum y su increíble ecosistema!",
+    step_5_thank_you: "¡Gracias por tomarse el tiempo de revisar esta oportunidad, ya que el tiempo es precioso! ¡Y recuerde que CADA miembro de Aurum está obteniendo ganancias diariamente!",
     
     sticky_ready: "¿Listo para automatizar sus activos digitales?",
     footer_rights: "© 2026 The AI Finance Breakdown. Todos los derechos reservados.",

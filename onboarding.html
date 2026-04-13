@@ -249,112 +249,156 @@
 
 
     <div class="steps">
-      <!-- OVERVIEW / FREE TO JOIN -->
-      <div class="step-card bg-gradient-to-br from-blue-50 to-white border-blue-200">
-        <h2 style="font-size: 1.25rem; margin-bottom: 12px; color: var(--aurum-blue);" data-i18n="free_to_join_title">Free to Join & Explore</h2>
-        <div class="step-content">
-          <p style="font-size: 1rem; color: var(--text-main); font-weight: 500;" data-i18n="free_to_join_text">
-            It is <strong>completely free</strong> to join and explore the AURUM ecosystem. However, to start generating returns, you will need <strong>$19.99</strong> for the annual membership fee, and a minimum of <strong>$100 USD</strong> for the trading bot.
-          </p>
+      
+      <!-- STEP 0: THE TRANSITION -->
+      <div class="step-card bg-white border-2 border-blue-500/20 shadow-xl" style="text-align: center;">
+        <div class="flex flex-col items-center">
+          <div class="bg-blue-600/10 p-4 rounded-full mb-6">
+            <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+          </div>
+          <h2 class="text-3xl font-black mb-4" data-i18n="free_to_join_title">Free to Join and Explore</h2>
+          <div class="step-content">
+            <p class="text-lg leading-relaxed text-slate-600" data-i18n="free_to_join_text">
+              It is <strong>completely free</strong> to join and explore the AURUM ecosystem. However, to start generating returns, you will need <strong>$19.99</strong> for the annual membership fee, and a minimum of <strong>$100 USD</strong> for the trading bot.
+            </p>
+          </div>
         </div>
       </div>
 
-      <!-- STEP 1 -->
-      <div class="step-card">
+      <!-- STEP 1: FUNDS -->
+      <div class="step-card" style="text-align: center;">
         <div class="step-num">1</div>
-        <h2 data-i18n="step_1_title">Prepare Your Crypto</h2>
-        <div class="step-content">
-          <p data-i18n="step_1_text">Ensure you have your funds ready in a compatible wallet before proceeding with the activation steps.</p>
-          <div class="crypto-list">
-            <div class="crypto-item">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707l-4.5 4.5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L8.5 9.586l3.793-3.793a1 1 0 011.414 1.414z"></path></svg>
-              USDT (TRC20 / BEP20)
+        <div class="flex flex-col items-center">
+          <h2 class="text-2xl font-black mb-4" data-i18n="step_1_title">Prepare Your Funds</h2>
+          <div class="step-content">
+            <p class="text-slate-600 mb-6" data-i18n="step_1_text">Ensure you have your funds ready in a compatible wallet before proceeding with the activation steps.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-lg mb-8">
+              <div class="flex items-center gap-3 p-4 bg-slate-50 rounded-xl border border-slate-100">
+                <span class="w-8 h-8 flex items-center justify-center bg-blue-100 text-blue-600 rounded-lg text-lg">💰</span>
+                <span class="font-bold text-slate-700">USDT / USDC</span>
+              </div>
+              <div class="flex items-center gap-3 p-4 bg-slate-50 rounded-xl border border-slate-100">
+                <span class="w-8 h-8 flex items-center justify-center bg-blue-100 text-blue-600 rounded-lg text-lg">🦊</span>
+                <span class="font-bold text-slate-700">Web3 Wallet</span>
+              </div>
             </div>
-            <div class="crypto-item">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707l-4.5 4.5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L8.5 9.586l3.793-3.793a1 1 0 011.414 1.414z"></path></svg>
-              USDC (BEP20 / ERC20 / Polygon)
+
+            <div class="bg-blue-50 border border-blue-100 p-6 rounded-2xl">
+              <p class="text-blue-900 font-bold mb-1">💡 PRO TIP</p>
+              <p class="text-blue-800 text-sm" data-i18n="step_1_gas_tip">Ensure you have matching crypto for gas fees in Exodus or any Web 3 wallet.</p>
             </div>
-            <div class="crypto-item">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707l-4.5 4.5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L8.5 9.586l3.793-3.793a1 1 0 011.414 1.414z"></path></svg>
-              Standard Web3 Wallets
-            </div>
-            <div class="crypto-item">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707l-4.5 4.5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L8.5 9.586l3.793-3.793a1 1 0 011.414 1.414z"></path></svg>
-              BNB / ETH / MATIC for Gas
-            </div>
-          </div>
-          <div class="vpn-note" style="background: #FFFBEB; border: 1px solid #FEF3C7; color: #92400E;" data-i18n="crypto_tip">
-            <strong>Pro Tip:</strong> Do not send money from Crypto Exchanges. Always use a personal Wallet like <strong>Exodus</strong> or <strong>Metamask</strong> to send funds to Aurum.
           </div>
         </div>
       </div>
 
-      <!-- STEP 2 -->
-      <div class="step-card">
+      <!-- STEP 2: VPN -->
+      <div class="step-card" style="text-align: center;">
         <div class="step-num">2</div>
-        <h2 data-i18n="step_2_title">VPN Setup (US / CA Users)</h2>
-        <div class="step-content">
-          <p data-i18n="step_2_text">If you are located in the US, Canada, or Mexico, you <strong>must</strong> use a VPN set to a country outside these regions (e.g., Europe) to access the registration page.</p>
-          <p><strong data-i18n="vpn_recs_title">Recommendations:</strong></p>
-          <ul style="list-style: none; margin-bottom: 20px;">
-            <li style="margin-bottom: 8px;">🔹 <strong>ProtonVPN.com</strong> - Free version available.</li>
-            <li style="margin-bottom: 8px;">🔹 <strong>Windscribe.com</strong> - Great free tier (10GB/mo).</li>
-            <li style="margin-bottom: 8px;">🔹 <strong>Opera Browser</strong> - Built-in free VPN (select "Europe").</li>
-            <li style="margin-bottom: 8px;">🔹 <strong>NordVPN / ExpressVPN</strong> - Best premium paid options.</li>
-          </ul>
-          <div class="vpn-note" data-i18n="vpn_pro_tip">
-            <strong>Pro Tip: Always disconnect VPN before communicating with exchanges</strong> to ensure your account remains in good standing.
-          </div>
-          <div style="margin-top: 24px;">
-            <a href="#step-3-guide" class="text-xs font-bold text-blue-600 uppercase tracking-widest hover:underline" data-i18n="finished_setup">Finished Setup? Go to Step 3 →</a>
+        <div class="flex flex-col items-center">
+          <h2 class="text-2xl font-black mb-4" data-i18n="step_2_title">VPN Required</h2>
+          <div class="step-content">
+            <p class="text-slate-600 mb-6 font-medium" data-i18n="step_2_text">If you are located in the US, Canada, or Mexico, you <strong>must</strong> use a VPN set to a country outside these regions to access the registration page.</p>
+            
+            <div class="flex flex-wrap justify-center gap-2 mb-8 text-xs font-bold uppercase tracking-wider text-slate-400">
+              <span class="px-3 py-1 bg-slate-100 rounded-full">ProtonVPN</span>
+              <span class="px-3 py-1 bg-slate-100 rounded-full">Windscribe</span>
+              <span class="px-3 py-1 bg-slate-100 rounded-full">NordVPN</span>
+            </div>
+
+            <div class="bg-amber-50 border border-amber-100 p-6 rounded-2xl">
+              <p class="text-amber-900 font-bold mb-1 italic">Note for North America</p>
+              <p class="text-amber-800 text-sm">Set your location to "Europe" or "Asia" for seamless access to the digital banking engine.</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- STEP 3 -->
-      <div id="step-3-guide" class="step-card">
+      <!-- STEP 3: INSTRUCTIONS -->
+      <div id="step-3-guide" class="step-card" style="text-align: center;">
         <div class="step-num">3</div>
-        <div class="step-content">
-          <div class="guide-list" style="margin-top: 0; margin-bottom: 32px;">
-            <h3 data-i18n="step_3_title">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                Step-by-Step Instructions
+        <div class="flex flex-col items-center">
+          <h2 class="text-2xl font-black mb-4" data-i18n="step_3_title">Step-by-Step Instructions</h2>
+          
+          <div class="w-full max-w-xl text-left bg-slate-50 border border-slate-100 rounded-2xl p-6 md:p-8 mb-8">
+            <h3 class="flex items-center gap-3 text-lg font-black mb-6">
+              <span class="w-10 h-10 flex items-center justify-center bg-white shadow-sm rounded-xl text-xl">📝</span>
+              Follow These Steps Logically
             </h3>
-            <div class="guide-item"><span class="guide-num">1</span><span data-i18n="inst_1"><strong>Contact Info:</strong> Enter your email and phone number.</span></div>
-            <div class="guide-item"><span class="guide-num">2</span><span data-i18n="inst_2"><strong>Security:</strong> Create a secure password.</span></div>
-            <div class="guide-item"><span class="guide-num">3</span><span data-i18n="inst_3"><strong>Invite:</strong> Your Aurum Sponsor will be displayed here.</span></div>
-            <div class="guide-item"><span class="guide-num">4</span><span data-i18n="inst_4"><strong>Details:</strong> Provide your name and unique username.</span></div>
-            <div class="guide-item"><span class="guide-num">5</span><span data-i18n="inst_5"><strong>Profile:</strong> Set your birthday and country to "CRYPTONATION".</span></div>
-            <div class="guide-item"><span class="guide-num">6</span><span data-i18n="inst_6"><strong>Agreement:</strong> Review and accept the Terms of Use.</span></div>
-            <div class="guide-item"><span class="guide-num">7</span><span data-i18n="inst_7"><strong>Sign Up:</strong> Submit the registration form.</span></div>
-            <div class="guide-item"><span class="guide-num">8</span><span data-i18n="inst_8"><strong>Verification:</strong> Retrieve the code from your email.</span></div>
-            <div class="guide-item"><span class="guide-num">9</span><span data-i18n="inst_9"><strong>Activation:</strong> Enter the code to finalize your account.</span></div>
+            
+            <div class="space-y-4">
+              <div class="flex gap-4 items-start">
+                <span class="w-6 h-6 bg-blue-600 text-white text-[10px] font-black rounded-full flex items-center justify-center shrink-0 mt-1">1</span>
+                <p class="text-slate-600 text-sm" data-i18n="inst_1"><strong>Contact:</strong> Enter your working email and phone number.</p>
+              </div>
+              <div class="flex gap-4 items-start">
+                <span class="w-6 h-6 bg-blue-600 text-white text-[10px] font-black rounded-full flex items-center justify-center shrink-0 mt-1">2</span>
+                <p class="text-slate-600 text-sm" data-i18n="inst_2"><strong>Invite Code:</strong> Your sponsor's code will be pre-filled.</p>
+              </div>
+              <div class="flex gap-4 items-start">
+                <span class="w-6 h-6 bg-blue-600 text-white text-[10px] font-black rounded-full flex items-center justify-center shrink-0 mt-1">3</span>
+                <p class="text-slate-600 text-sm" data-i18n="inst_5"><strong>Profile:</strong> Set your birthday and use country code "CRYPTONATION" at the bottom of the dropdown.</p>
+              </div>
+              <div class="flex gap-4 items-start">
+                <span class="w-6 h-6 bg-blue-600 text-white text-[10px] font-black rounded-full flex items-center justify-center shrink-0 mt-1">4</span>
+                <p class="text-slate-600 text-sm" data-i18n="inst_9"><strong>Activation:</strong> Verify your email to finalize activation.</p>
+              </div>
+            </div>
           </div>
 
-          <h2 style="margin-top: 32px; font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px;" data-i18n="watch_step_guide">Watch the Step-by-Step Guide</h2>
-          <p style="margin-bottom: 24px; color: var(--text-muted);" data-i18n="watch_step_desc">Follow the 5-minute video below strictly to ensure your account is activated correctly. <strong>Wait until the video finishes before proceeding.</strong></p>
+          <div class="bg-blue-600 text-white p-6 rounded-2xl w-full max-w-xl mb-8">
+            <p class="font-black text-lg mb-1">📸 PRO TIP</p>
+            <p class="text-white/90 text-sm" data-i18n="step_3_photo_tip">Take a photo to have ready for the next page!</p>
+          </div>
 
-          <div class="guide-video-wrapper">
-            <iframe src="https://www.youtube.com/embed/TL5LHCLY7eA?rel=0" title="Onboarding Guide" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+          <div class="w-full max-w-lg mx-auto border-4 border-white shadow-2xl rounded-2xl overflow-hidden mt-6">
+            <div class="guide-video-wrapper shadow-none border-0 mt-0">
+              <iframe src="https://www.youtube.com/embed/TL5LHCLY7eA?rel=0" title="Onboarding Guide" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+            </div>
           </div>
         </div>
       </div>
+
+      <!-- STEP 4: READY -->
+      <div class="step-card" style="text-align: center;">
+        <div class="step-num">4</div>
+        <div class="flex flex-col items-center">
+          <h2 class="text-2xl font-black mb-4" data-i18n="ready_to_begin">Ready to Begin</h2>
+          <div class="step-content">
+            <p class="text-slate-600 mb-8 max-w-md mx-auto text-center font-medium" data-i18n="click_to_create">Click the button below to secure your position and create your official account using your sponsor's link.</p>
+            
+            <a href="https://backoffice.aurum.foundation/register" id="final-join-btn" class="join-btn" style="margin-top: 0;">
+                <span data-i18n="create_account_btn">Create My AURUM Account →</span>
+            </a>
+            
+            <p class="mt-6 text-xs font-black text-slate-400 uppercase tracking-widest text-center" data-i18n="vpn_warning">
+                ⚠️ Ensure VPN is ACTIVE (US/CA only)
+            </p>
+          </div>
+        </div>
       </div>
+
+      <!-- STEP 5: QUESTIONS -->
+      <div class="step-card bg-slate-900 border-0" style="text-align: center;">
+        <div class="flex flex-col items-center">
+          <h2 class="text-2xl font-black mb-4 text-white" data-i18n="step_5_title">Have more questions?</h2>
+          <div class="step-content">
+            <p class="mb-8 text-center" style="color: #FFFFFF !important; font-size: 1.15rem; font-weight: 500; line-height: 1.6;" data-i18n="step_5_text">
+              Please reach out to your sponsor located at the top of this page, they will be happy to answer all questions and concerns regarding Aurum and its amazing ecosystem!
+            </p>
+            
+            <div class="bg-white/5 border border-white/10 p-8 rounded-3xl backdrop-blur-sm">
+                <p class="text-lg italic mb-4" style="color: #FFFFFF !important; font-weight: 500;" data-i18n="step_5_thank_you">
+                    "Thank you for taking the time to review this opportunity as time is precious! And remember EVERY Aurum member is making profit daily!"
+                </p>
+                <div class="h-1 w-12 bg-blue-600 mx-auto rounded-full"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
-    <!-- FINAL CTA SECTION -->
-    <div class="header" style="margin-top: 80px; margin-bottom: 20px;">
-        <h2 style="font-size: 2rem; margin-bottom: 15px;" data-i18n="ready_to_begin">Ready to Begin?</h2>
-        <p class="subtitle" style="margin-bottom: 40px;" data-i18n="click_to_create">Click the button below to create your official account using your sponsor's link.</p>
-        
-        <a href="https://backoffice.aurum.foundation/register" id="final-join-btn" class="join-btn" style="text-decoration: none;">
-            <span data-i18n="create_account_btn">Create My AURUM Account →</span>
-        </a>
-        
-        <p style="margin-top: 30px; font-size: 0.85rem; color: var(--text-muted); font-weight: 600;" data-i18n="vpn_warning">
-            ⚠️ Ensure your VPN is ACTIVE before clicking if you are in the US/CA.
-        </p>
-    </div>
 
 
 
