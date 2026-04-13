@@ -533,19 +533,23 @@
                 }
             }
 
-            // DYNAMIC LINK BRIDGE: Update Final Join Button (ALWAYS applies for correct attribution)
+            // DYNAMIC LINK BRIDGE: Update ALL Join Buttons (ALWAYS applies for correct attribution)
+            const resolvedRef = localStorage.getItem('aurum_ref') || activeCode;
+            let finalTargetUrl = `https://backoffice.aurum.foundation/u/${resolvedRef}`;
+            
             if (data.affiliate_id) {
-                const finalBtn = document.getElementById('final-join-btn');
-                if (finalBtn) {
-                   // Clean the URL to ensure it starts with https:// if it's a domain
-                   let targetUrl = data.affiliate_id.trim();
-                   if (!targetUrl.startsWith('http')) {
-                       targetUrl = `https://${targetUrl}`;
-                   }
-                   finalBtn.href = targetUrl;
-                   console.log("Tracking Bridge Established:", targetUrl);
+                let customUrl = data.affiliate_id.trim();
+                if (!customUrl.startsWith('http')) {
+                    customUrl = `https://${customUrl}`;
                 }
+                finalTargetUrl = customUrl;
             }
+
+            ['final-join-btn', 'sticky-join-btn'].forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.href = finalTargetUrl;
+            });
+            console.log("Tracking Bridge Established:", finalTargetUrl);
         }
       } catch (e) { console.warn("Sponsor Lookup Error", e); }
     }
@@ -598,19 +602,8 @@
 
     // --- BUTTON SYNC ---
     async function syncAllButtons() {
-        const urlParams = new URLSearchParams(window.location.search);
-        let ref = urlParams.get('ref') || localStorage.getItem('aurum_ref') || 'Financial Freedom';
-        
-        setTimeout(() => {
-            const finalRef = localStorage.getItem('aurum_ref') || ref;
-            const targetUrl = `https://backoffice.aurum.foundation/u/${finalRef}`;
-            
-            ['final-join-btn', 'sticky-join-btn'].forEach(id => {
-                const btn = document.getElementById(id);
-                if (btn) btn.href = targetUrl;
-            });
-            console.log("[AURUM-SYNC] All buttons synced to ref:", finalRef);
-        }, 1500);
+        await lookupSponsor();
+        console.log("[AURUM-SYNC] All buttons synced.");
     }
     syncAllButtons();
   </script>
