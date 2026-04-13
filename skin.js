@@ -100,7 +100,7 @@
         const { data: affData, error: affErr } = await supabase
           .from('aurum_affiliates')
           .select('is_rotator, rotator_pool, rotator_index, status, brand_name, hero_title, hero_subtitle, hero_video')
-          .eq('affiliate_code', ref)
+          .ilike('affiliate_code', ref)
           .single();
           
         if (affErr || !affData) {

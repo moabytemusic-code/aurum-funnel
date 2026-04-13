@@ -424,7 +424,7 @@
 
     async function lookupSponsor() {
       const urlParams = new URLSearchParams(window.location.search);
-      const ref = (urlParams.get('ref') || localStorage.getItem('aurum_ref') || 'Financial Freedom').toUpperCase();
+      const ref = urlParams.get('ref') || localStorage.getItem('aurum_ref') || 'Financial Freedom';
       let activeCode = ref;
       
       // MIGRATION: If the persisted code is the old default '1W145K', force-reset to the new default.
@@ -440,7 +440,7 @@
         const { data: node } = await aurumDB
           .from('aurum_affiliates')
           .select('is_rotator, rotator_pool, rotator_index, status, plan, instructions, hero_title, hero_subtitle, hero_video')
-          .eq('affiliate_code', ref)
+          .ilike('affiliate_code', ref)
           .single();
 
         if (node && node.is_rotator && node.rotator_pool) {
@@ -485,7 +485,7 @@
         const { data, error } = await aurumDB
           .from('aurum_affiliates')
           .select('full_name, email, phone, instructions, affiliate_id, hero_title, hero_subtitle, hero_video')
-          .eq('affiliate_code', activeCode)
+          .ilike('affiliate_code', activeCode)
           .single();
 
         if (data && !error) {
