@@ -21,7 +21,7 @@ window.AURUM_TRANSLATIONS = {
     cta_final_title: "Now that you have a general idea of what Aurum can do for you, let's take a closer look at the ecosystem and some of its most popular products!",
     cta_final_p1: "",
     cta_final_p2: "",
-    cta_btn_watch: "Watch <span class=\"hidden-mobile\">The Full </span>AURUM Breakdown",
+    cta_btn_watch: "Explore the ecosystem ~~>",
     cta_subtext: "Takes you straight to the official presentation. No commitment.",
 
     // Offer Page
@@ -175,7 +175,7 @@ window.AURUM_TRANSLATIONS = {
     cta_final_title: "Ahora que tienes una idea general de lo que Aurum puede hacer por ti, ¡echemos un vistazo más de cerca al ecosistema y algunos de sus productos más populares!",
     cta_final_p1: "",
     cta_final_p2: "",
-    cta_btn_watch: "Ver <span class=\"hidden-mobile\">el Desglose Completo </span> de AURUM",
+    cta_btn_watch: "Explorar el ecosistema ~~>",
     cta_subtext: "Te lleva directamente a la presentación oficial. Sin compromiso.",
 
     // Offer Page
