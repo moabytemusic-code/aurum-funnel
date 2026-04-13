@@ -264,7 +264,9 @@
     const cleanName = partnerName.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
     
     // Official Corporate Branding (No Prefix) vs. Partner Branding (Prefix)
-    const fullBrandHTML = (cleanName === 'THE AI FINANCE BREAKDOWN') 
+    const isMainAdmin = cleanName === 'THE AI FINANCE BREAKDOWN' || ref === 'Financial Freedom' || ref === '1W145K';
+    
+    const fullBrandHTML = (isMainAdmin) 
         ? `THE AI<span> FINANCE </span>BREAKDOWN`
         : `AURUM TEAM - ${cleanName}`;
 
