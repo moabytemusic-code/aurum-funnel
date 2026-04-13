@@ -477,6 +477,7 @@
                 let nextIdx = (lastIdx + 1) % pool.length;
                 localStorage.setItem(`rot_idx_${ref}_${campaignGroup}`, nextIdx);
                 activeCode = pool[nextIdx];
+                localStorage.setItem('aurum_ref', activeCode);
                 console.log(`[ROTATOR] Campaign [${campaignGroup}] traffic assigned to sub-node: ${activeCode}`);
             }
         }
