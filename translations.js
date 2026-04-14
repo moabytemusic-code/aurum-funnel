@@ -81,7 +81,7 @@ window.AURUM_TRANSLATIONS = {
     finished_setup: "Finished Setup? Go to Step 3 →",
     
     step_3_title: "Step-by-Step Instructions",
-    inst_1: "<strong>Contact Info:</strong> Enter your email and phone number.",
+    inst_1: "<strong>Contact Info:</strong> Enter your email and crypto nation for the phone number.",
     inst_2: "<strong>Security:</strong> Create a secure password.",
     inst_3: "<strong>Invite:</strong> Your Aurum Sponsor will be displayed here.",
     inst_4: "<strong>Details:</strong> Provide your name and unique username.",
@@ -242,7 +242,7 @@ window.AURUM_TRANSLATIONS = {
     finished_setup: "¿Terminó la configuración? Vaya al Paso 3 →",
     
     step_3_title: "Instrucciones Paso a Paso",
-    inst_1: "<strong>Contacto:</strong> Ingrese su correo electrónico y número de teléfono.",
+    inst_1: "<strong>Contacto:</strong> Ingrese su correo electrónico y crypto nation para el número de teléfono.",
     inst_2: "<strong>Seguridad:</strong> Cree una contraseña segura.",
     inst_3: "<strong>Invitación:</strong> Su patrocinador de Aurum se mostrará aquí.",
     inst_4: "<strong>Detalles:</strong> Proporcione su nombre y un nombre de usuario único.",
