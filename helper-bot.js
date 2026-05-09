@@ -69,11 +69,11 @@
       .bot-window { width: calc(100% - 40px); bottom: 100px; right: 20px; }
       .bot-trigger { bottom: 80px; right: 20px; } /* Above the sticky CTA */
     }
-  \`;
+  `;
   document.head.appendChild(style);
 
   // Inject HTML
-  const botHTML = \`
+  const botHTML = `
     <!-- WIDGET TRIGGER -->
     <div class="bot-trigger" id="botTriggerBtn">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -89,7 +89,7 @@
       </div>
       <div class="bot-messages" id="botChat"></div>
     </div>
-  \`;
+  `;
   const container = document.createElement('div');
   container.innerHTML = botHTML;
   document.body.appendChild(container);
@@ -98,7 +98,7 @@
   const chatContainer = document.getElementById('botChat');
   
   const knowledgeBase = {
-    "signup": \`
+    "signup": `
       Here is how to create your account:
       <ol>
         <li>Download and open <strong>Proton VPN</strong> (Free).</li>
@@ -107,8 +107,8 @@
         <li>Check your email and paste the confirmation code.</li>
       </ol>
       <p><b>PRO TIP:</b> Take a photo to have ready for the next page!</p>
-    \`,
-    "costs": \`
+    `,
+    "costs": `
       It is completely free to join and explore the AURUM ecosystem. 
       However, to start generating returns, you will need:
       <ul>
