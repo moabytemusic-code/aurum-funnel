@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setup & Tutorials | AURUM</title>
+  <style>
+    :root {
+      --bg-color: #030712;
+      --panel-bg: #0F172A;
+      --panel-border: rgba(255, 255, 255, 0.08);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --aurum-blue: #0073FF;
+      --aurum-blue-hover: #3898F8;
+      --radius: 16px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-color); color: var(--text-main); line-height: 1.6;
+      -webkit-font-smoothing: antialiased; display: flex; min-height: 100vh;
+    }
+
+    /* === SIDEBAR (Matched from other pages) === */
+    .sidebar {
+      width: 260px; background: var(--panel-bg); border-right: 1px solid var(--panel-border);
+      padding: 32px 24px; display: flex; flex-direction: column; position: sticky; top: 0;
+    }
+    .logo { font-weight: 900; font-size: 1.25rem; margin-bottom: 48px; display: flex; align-items: center; gap: 8px; }
+    .logo span { color: var(--aurum-blue); }
+    .nav-item {
+      padding: 12px 16px; border-radius: 12px; color: var(--text-muted); text-decoration: none;
+      font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 12px;
+    }
+    .nav-item:hover, .nav-item.active { background: rgba(0, 115, 255, 0.1); color: var(--text-main); }
+    .nav-item.active { border: 1px solid rgba(0, 115, 255, 0.2); }
+
+    /* === MAIN CONTENT === */
+    .main { flex: 1; padding: 40px; overflow-y: auto; max-width: 900px; margin: 0 auto; }
+    .header { margin-bottom: 40px; }
+    .header h1 { font-size: 2.2rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 8px; }
+    
+    /* === ACCORDION === */
+    .accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .accordion-item {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .accordion-item:hover {
+      border-color: rgba(0, 115, 255, 0.3);
+    }
+    .accordion-header {
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: none;
+      padding: 24px;
+      color: var(--text-main);
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .accordion-header svg {
+      transition: transform 0.3s ease;
+      color: var(--aurum-blue);
+    }
+    .accordion-item.active .accordion-header svg {
+      transform: rotate(180deg);
+    }
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-out;
+      background: rgba(0,0,0,0.2);
+    }
+    .accordion-content-inner {
+      padding: 0 24px 24px 24px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    .accordion-content-inner h4 {
+      color: var(--text-main);
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
+    .accordion-content-inner ul, .accordion-content-inner ol {
+      padding-left: 20px;
+      margin-bottom: 16px;
+    }
+    .accordion-content-inner li {
+      margin-bottom: 8px;
+    }
+    .accordion-content-inner strong {
+      color: var(--text-main);
+    }
+    
+    .category-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--aurum-blue);
+      margin-top: 40px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Using the same sidebar format, assuming you can link this to the others -->
+  <aside class="sidebar">
+    <div class="logo">AURUM<span>SYSTEM</span></div>
+    <nav>
+      <a href="affiliate-portal.html" class="nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        Master Portal
+      </a>
+      <a href="setup-guide.html" class="nav-item active">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+        Setup Guide & Scripts
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <header class="header">
+      <h1>Getting Started Guide</h1>
+      <p style="color: var(--text-muted);">Step-by-step scripts and tutorials for navigating the Aurum Ecosystem.</p>
+    </header>
+
+    <div class="category-title">1. Account Creation & Onboarding</div>
+    <div class="accordion">
+      
+      <!-- ITEM 1 -->
+      <div class="accordion-item">
+        <button class="accordion-header">
+          Creating Your Aurum Account
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-content-inner">
+            <ol>
+              <li><strong>Step 1:</strong> Get Proton VPN (free).</li>
+              <li><strong>Step 2:</strong> Open the VPN.</li>
+              <li><strong>Step 3:</strong> <em>(IMPORTANT: when signing up, for PHONE and COUNTRY fields choose "U.S. Minor Outlying Islands" if in the USA)</em> then use your regular phone number.</li>
+              <li><strong>Step 4:</strong> Go to the Aurum login page. If you are new, click <strong>Sign Up</strong> to create an account.</li>
+            </ol>
+            <h4>Creating the Account</h4>
+            <ul>
+              <li>Enter your email address and phone number (Country code is Crypto Nation at the end of the list).</li>
+              <li>Set a strong password and enter the invite code from the partner who invited you.</li>
+              <li>Complete your profile: First/last name, nickname, DOB, and Country.</li>
+              <li>Accept Terms and click Sign Up.</li>
+            </ul>
+            <h4>Confirm Email</h4>
+            <ul>
+              <li>Check your inbox for the confirmation email from Aurum.</li>
+              <li>Copy the confirmation code and paste it into the confirmation field.</li>
+              <li>Click Confirm.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ITEM 2 -->
+      <div class="accordion-item">
+        <button class="accordion-header">
+          Using Your Dashboard
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-content-inner">
+            <ul>
+              <li><strong>Dashboard Overview:</strong> Shows available balance in USDT, last 7 days earnings, affiliate overview, and shortcuts.</li>
+              <li><strong>Referral Link:</strong> At the top of the dashboard, locate your personal referral link to invite others.</li>
+              <li><strong>Affiliate Information:</strong> View your current partner level, progress toward next level, leaderboard, and link to the Aurum partner Telegram channel.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="category-title">2. Funding & Transfers</div>
+    <div class="accordion">
+
+      <!-- ITEM 3 -->
+      <div class="accordion-item">
+        <button class="accordion-header">
+          Funding Your Aurum Account (Direct)
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-content-inner">
+            <ol>
+              <li>From the left menu, click <strong>Finance</strong>.</li>
+              <li>Under the Main Balance section, click <strong>Top Up</strong>.</li>
+              <li>Select the cryptocurrency (Example: <strong>USDT</strong>).</li>
+              <li>Choose the network (Example: <strong>TRON (TRC20)</strong> for USDT).</li>
+              <li>Click Continue to move to the wallet address.</li>
+              <li>Copy the wallet address or scan the QR code.</li>
+              <li>Send the cryptocurrency to that address (Make sure to meet the minimum required amount).</li>
+              <li>Wait for payment to be credited (Usually within 30 minutes).</li>
+            </ol>
+            <p><em>Note: There is no commission for replenishing the account. The wallet address is only valid for the displayed time.</em></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ITEM 4 -->
+      <div class="accordion-item">
+        <button class="accordion-header">
+          Transfer: Coinbase to Exodus Wallet
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-content-inner">
+            <p><strong>In Coinbase:</strong></p>
+            <ol>
+              <li>Click on Cash / USDC. (Or click the 3 dots and select Send)</li>
+              <li>Click the Transfer button / Send.</li>
+              <li>Click Exodus.</li>
+              <li>Click Ethereum network.</li>
+              <li>Change USD to USDC.</li>
+              <li>Enter the amount and click Preview.</li>
+              <li>Confirm details and click <strong>Send now</strong>.</li>
+              <li>Check the new balance in your Exodus Wallet (This can take a minute).</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- ITEM 5 -->
+      <div class="accordion-item">
+        <button class="accordion-header">
+          Transfer: Exodus Wallet to Aurum
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-content-inner">
+            <ol>
+              <li>In Exodus, click on USDC.</li>
+              <li>Click the swap icon (Left arrow above a right arrow).</li>
+              <li>Swap from USDC to USDT. Enter the amount to the right of "USDC".</li>
+              <li>Click the Swap icon.</li>
+              <li>In your Aurum Account Dashboard, click on <strong>Top-up</strong>.</li>
+              <li>Set Asset = <strong>USDT Tether</strong>, Network = <strong>BNB</strong>.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="category-title">3. Ecosystem & Neyro Operations</div>
+    <div class="accordion">
+
+      <!-- ITEM 6 -->
+      <div class="accordion-item">
+        <button class="accordion-header">
+          Accessing the Aurum Ecosystem Subscription
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-content-inner">
+            <ol>
+              <li>From the dashboard, click <strong>Access to Aurum Ecosystem</strong> in the Main Balance section.</li>
+              <li>Ensure your deposit meets the minimum funding requirement.</li>
+              <li>A confirmation pop-up will appear for the annual subscription. Click <strong>Confirm Purchase</strong>.</li>
+              <li>Your subscription status should now show as Active. You will see next payment amount, due date, and cancellation options.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- ITEM 7 -->
+      <div class="accordion-item">
+        <button class="accordion-header">
+          Neyro Top-Up Process
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-content-inner">
+            <p><strong>In the Aurum/Neyro web page:</strong></p>
+            <ol>
+              <li>Click the “Connect wallet” button in top right.</li>
+              <li>Click “Connect to WalletConnect”.</li>
+              <li>Select the UniSwap Wallet (QR Code pops up).</li>
+              <li>Click the "Top-up Agent" button, then "Connect to WalletConnect" again.</li>
+              <li>Choose "Uniswap Wallet" and the QR Code window shows up.</li>
+            </ol>
+            <p><strong>In the Uniswap Wallet App:</strong></p>
+            <ol>
+              <li>Click Swap. Enter amount, then change the top token to USDC.</li>
+              <li>Click "Select token" and choose “Tether USD”.</li>
+              <li>Click on the square QR Code Icon in the top right of the wallet app.</li>
+              <li>Scan the QR code on Aurum.</li>
+              <li>Click the Connect button in the Wallet.</li>
+            </ol>
+            <p><strong>Back in Aurum/Neyro:</strong></p>
+            <ul>
+              <li>A "Wallet Connect" window pops up. Click Close.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ITEM 8 -->
+      <div class="accordion-item">
+        <button class="accordion-header">
+          Neyro Withdraw Profit Process
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-content-inner">
+            <ol>
+              <li>Click the <strong>"Withdraw Profit"</strong> button in the middle of the page.</li>
+              <li>Withdrawal will complete in about 1 minute.</li>
+              <li>Your Aurum "Available profit" amount will go to zero.</li>
+              <li>After several minutes, your Wallet balance for Tether USD will increase by the "Available profit" amount.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- ITEM 9 -->
+      <div class="accordion-item">
+        <button class="accordion-header">
+          Neyro Withdraw Capital Process
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="accordion-content">
+          <div class="accordion-content-inner">
+            <ol>
+              <li>In Aurum/Neyro, click on the <strong>“Close Agent”</strong> button.</li>
+              <li>It shows a countdown starting at 48 hours.</li>
+              <li>When it completes, the Capital amount will go to zero.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // Accordion Logic
+    document.querySelectorAll('.accordion-header').forEach(button => {
+      button.addEventListener('click', () => {
+        const accordionItem = button.parentElement;
+        const content = button.nextElementSibling;
+        
+        // Toggle Active Class
+        accordionItem.classList.toggle('active');
+
+        // Toggle Max Height for Animation
+        if (accordionItem.classList.contains('active')) {
+          content.style.maxHeight = content.scrollHeight + "px";
+        } else {
+          content.style.maxHeight = null;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

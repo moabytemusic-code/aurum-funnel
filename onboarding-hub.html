@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onboarding Hub | AURUM</title>
+  <style>
+    :root {
+      --bg-color: #030712;
+      --panel-bg: #0F172A;
+      --panel-border: rgba(255, 255, 255, 0.08);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --aurum-blue: #0073FF;
+      --aurum-blue-hover: #3898F8;
+      --success: #22c55e;
+      --radius: 16px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-color); color: var(--text-main); line-height: 1.6;
+      -webkit-font-smoothing: antialiased; display: flex; min-height: 100vh;
+      flex-direction: column; align-items: center; padding-top: 60px;
+    }
+
+    /* === HEADER & PROGRESS BAR === */
+    .onboarding-container {
+      width: 100%;
+      max-width: 900px;
+      padding: 0 24px;
+    }
+    
+    .header { text-align: center; margin-bottom: 48px; }
+    .header h1 { font-size: 2.5rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 12px; }
+    .header p { color: var(--text-muted); font-size: 1.1rem; }
+
+    .progress-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    .progress-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--panel-border);
+      z-index: 0;
+      transform: translateY(-50%);
+    }
+    .progress-line-fill {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      height: 2px;
+      background: var(--aurum-blue);
+      z-index: 1;
+      transform: translateY(-50%);
+      transition: width 0.4s ease;
+      width: 0%; /* changes via JS */
+    }
+    
+    .step-indicator {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--panel-bg);
+      border: 2px solid var(--panel-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      z-index: 2;
+      position: relative;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .step-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      z-index: 2;
+    }
+    .step-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: color 0.3s ease;
+    }
+    
+    .step-indicator.active {
+      border-color: var(--aurum-blue);
+      background: rgba(0, 115, 255, 0.1);
+      color: var(--aurum-blue);
+      box-shadow: 0 0 20px rgba(0, 115, 255, 0.3);
+    }
+    .step-indicator.completed {
+      border-color: var(--aurum-blue);
+      background: var(--aurum-blue);
+      color: #fff;
+    }
+    .step-wrapper.active .step-label { color: var(--text-main); }
+    .step-wrapper.completed .step-label { color: var(--aurum-blue); }
+
+    /* === TAB CONTENT PANELS === */
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+    .card h3 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .card-number {
+      background: rgba(255,255,255,0.1);
+      color: var(--text-main);
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+    .card p, .card li {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+    }
+    .card ul, .card ol {
+      padding-left: 24px;
+      margin-bottom: 16px;
+    }
+    .card strong { color: var(--text-main); }
+    .highlight-box {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+      color: #fbbf24;
+      font-size: 0.95rem;
+    }
+
+    /* === BUTTONS === */
+    .btn-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 32px;
+      margin-bottom: 60px;
+    }
+    .btn-primary {
+      background: var(--aurum-blue);
+      color: #fff;
+      padding: 16px 32px;
+      border-radius: 12px;
+      border: none;
+      font-size: 1.1rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 10px 25px rgba(0, 115, 255, 0.25);
+    }
+    .btn-primary:hover {
+      background: var(--aurum-blue-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(0, 115, 255, 0.35);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-muted);
+      padding: 16px 32px;
+      border-radius: 12px;
+      border: 1px solid var(--panel-border);
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-right: 16px;
+    }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--text-main);
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="onboarding-container">
+    <div class="header">
+      <h1>Launch Initialization</h1>
+      <p>Follow this 3-phase sequence to deploy your Aurum node and Neyro AI Agents.</p>
+    </div>
+
+    <!-- PROGRESS BAR -->
+    <div class="progress-container">
+      <div class="progress-line"></div>
+      <div class="progress-line-fill" id="progress-fill"></div>
+      
+      <div class="step-wrapper active" id="wrap-1" onclick="goToStep(1)">
+        <div class="step-indicator active" id="step-1">1</div>
+        <div class="step-label">Account Setup</div>
+      </div>
+      
+      <div class="step-wrapper" id="wrap-2" onclick="goToStep(2)">
+        <div class="step-indicator" id="step-2">2</div>
+        <div class="step-label">Wallet Funding</div>
+      </div>
+      
+      <div class="step-wrapper" id="wrap-3" onclick="goToStep(3)">
+        <div class="step-indicator" id="step-3">3</div>
+        <div class="step-label">Neyro Operations</div>
+      </div>
+    </div>
+
+    <!-- PHASE 1 CONTENT -->
+    <div class="tab-content active" id="phase-1">
+      <div class="card">
+        <h3><div class="card-number">1</div> VPN Configuration & Registration</h3>
+        <p>Before connecting to the Aurum banking ecosystem, ensure your connection is properly routed.</p>
+        <ol>
+          <li>Download and open <strong>Proton VPN</strong> (Free).</li>
+          <li>Connect your VPN to an approved region.</li>
+          <li>Go to the Aurum sign up page.</li>
+        </ol>
+        <div class="highlight-box">
+          <strong>CRITICAL FOR US USERS:</strong> When signing up, for both the PHONE and COUNTRY fields, you must select "U.S. Minor Outlying Islands". Then use your regular phone number. (Country code is Crypto Nation at the bottom of the list).
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><div class="card-number">2</div> Complete Profile & Dashboard access</h3>
+        <p>Finalize your account creation to unlock your master dashboard.</p>
+        <ul>
+          <li>Enter your personal details (Name, Nickname, DOB).</li>
+          <li>Accept the Terms of Service and submit the form.</li>
+          <li>Check your email inbox, copy the confirmation code, and paste it into Aurum to verify.</li>
+        </ul>
+        <p>Once logged in, locate your personal <strong>referral link</strong> at the top of the dashboard. This is your primary node link.</p>
+      </div>
+
+      <div class="btn-container">
+        <button class="btn-primary" onclick="goToStep(2)">Continue to Phase 2 →</button>
+      </div>
+    </div>
+
+    <!-- PHASE 2 CONTENT -->
+    <div class="tab-content" id="phase-2">
+      <div class="card">
+        <h3><div class="card-number">1</div> Route Funds: Coinbase to Exodus</h3>
+        <p>Transfer capital from your primary exchange to your decentralized wallet.</p>
+        <ol>
+          <li>In Coinbase, select <strong>Cash / USDC</strong> and click <strong>Send/Transfer</strong>.</li>
+          <li>Select the <strong>Exodus</strong> wallet as the destination.</li>
+          <li>Select the <strong>Ethereum</strong> network and change currency to USDC.</li>
+          <li>Preview the transfer and click <strong>Send now</strong>. (Wait ~1 minute to verify balance in Exodus).</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3><div class="card-number">2</div> Swap & Top-Up: Exodus to Aurum</h3>
+        <p>Bridge your funds into the Aurum Ecosystem.</p>
+        <ol>
+          <li>In Exodus, click on USDC, then click the <strong>Swap icon</strong>.</li>
+          <li>Swap your USDC to <strong>USDT</strong>.</li>
+          <li>In your Aurum Dashboard, click on <strong>Finance > Top Up</strong>.</li>
+          <li>Select Asset = <strong>USDT Tether</strong> and Network = <strong>BNB</strong> (or TRC20 based on preference).</li>
+          <li>Scan the provided QR code or copy the address, and send the USDT from Exodus.</li>
+        </ol>
+        <p><em>Your Aurum Main Balance will reflect the deposit within 30 minutes.</em></p>
+      </div>
+
+      <div class="btn-container">
+        <button class="btn-secondary" onclick="goToStep(1)">← Back</button>
+        <button class="btn-primary" onclick="goToStep(3)">Deploy Neyro Agents →</button>
+      </div>
+    </div>
+
+    <!-- PHASE 3 CONTENT -->
+    <div class="tab-content" id="phase-3">
+      <div class="card">
+        <h3><div class="card-number">1</div> Activating Aurum Ecosystem</h3>
+        <p>First, activate your annual node subscription.</p>
+        <ul>
+          <li>Click <strong>Access to Aurum Ecosystem</strong> in your dashboard's Main Balance section.</li>
+          <li>Confirm the purchase (Ensure your balance meets the minimum).</li>
+          <li>Your status will update to <strong>Active</strong>.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3><div class="card-number">2</div> Top-Up Neyro AI Agent</h3>
+        <p>Connect your wallet to deploy capital into the AI trading agents.</p>
+        <ol>
+          <li>In the Aurum/Neyro page, click <strong>Connect wallet > WalletConnect</strong>.</li>
+          <li>Select the <strong>Uniswap Wallet</strong>.</li>
+          <li>Click <strong>Top-up Agent</strong>, and connect via WalletConnect again.</li>
+          <li>In your Uniswap App: Click Swap -> Change top token to USDC -> Bottom token to Tether USD.</li>
+          <li>Scan the QR code on Aurum using the Uniswap App.</li>
+          <li>Click Connect in the Wallet.</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3><div class="card-number">3</div> Withdrawals & Harvesting</h3>
+        <p>How to extract profits or capital from the Neyro ecosystem.</p>
+        <ul>
+          <li><strong>Withdraw Profit:</strong> Click the "Withdraw Profit" button. Your Aurum "Available profit" goes to zero, and your USDT Wallet balance will increase within 1 minute.</li>
+          <li><strong>Withdraw Capital:</strong> Click "Close Agent". A 48-hour countdown begins. Once complete, your capital is released to your wallet.</li>
+        </ul>
+      </div>
+
+      <div class="btn-container">
+        <button class="btn-secondary" onclick="goToStep(2)">← Back</button>
+        <button class="btn-primary" onclick="alert('Onboarding complete! You are now fully deployed.')">Finish Onboarding ✓</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentStep = 1;
+
+    function goToStep(step) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      // Show selected tab
+      document.getElementById('phase-' + step).classList.add('active');
+
+      // Update progress bar
+      const fillWidth = (step - 1) * 50; // 0%, 50%, or 100%
+      document.getElementById('progress-fill').style.width = fillWidth + '%';
+
+      // Update step indicators
+      for (let i = 1; i <= 3; i++) {
+        const stepInd = document.getElementById('step-' + i);
+        const stepWrap = document.getElementById('wrap-' + i);
+        
+        stepInd.classList.remove('active', 'completed');
+        stepWrap.classList.remove('active', 'completed');
+
+        if (i < step) {
+          stepInd.classList.add('completed');
+          stepInd.innerHTML = '✓';
+          stepWrap.classList.add('completed');
+        } else if (i === step) {
+          stepInd.classList.add('active');
+          stepInd.innerHTML = i;
+          stepWrap.classList.add('active');
+        } else {
+          stepInd.innerHTML = i;
+        }
+      }
+      
+      currentStep = step;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
