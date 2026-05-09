@@ -7,8 +7,7 @@ export default function middleware(request) {
 
   // Only protect the /admin.html path
   if (url.pathname !== '/admin.html') {
-    // Pass through to next route (Vercel standard)
-    return new Response(null, { headers: { 'x-middleware-next': '1' } });
+    return; // Pass through to next route
   }
 
   const basicAuth = request.headers.get('authorization');
@@ -25,7 +24,7 @@ export default function middleware(request) {
       const correctPass = process.env.ADMIN_PASS || 'aurum2026';
 
       if (user === correctUser && pwd === correctPass) {
-        return new Response(null, { headers: { 'x-middleware-next': '1' } }); // Allow access
+        return; // Allow access
       }
     } catch (e) {
       console.error('Basic Auth decoding failed', e);
