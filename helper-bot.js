@@ -116,48 +116,48 @@
         <li>A minimum of <b>$100 USD</b> for the trading bot.</li>
       </ul>
       <p>Ensure you have matching crypto for gas fees in your wallet!</p>
-    \`,
-    "video": \`
+    `,
+    "video": `
       Sure! Here is the official Onboarding Guide Video:
       <br><br>
       <iframe width="100%" height="200" src="https://www.youtube.com/embed/TL5LHCLY7eA?rel=0" frameborder="0" allowfullscreen></iframe>
-    \`,
-    "exodus": \`
-      To transfer from Coinbase to Exodus:
+    `,
+    "exodus": `
+      To transfer funds:
       <ol>
-        <li>In Coinbase, select Cash/USDC and click Send.</li>
-        <li>Select the <strong>Exodus</strong> wallet.</li>
-        <li>Select the <strong>Ethereum</strong> network and change to USDC.</li>
-        <li>Send and wait ~1 min for it to appear in Exodus.</li>
+        <li>Select Cash and click Send.</li>
+        <li>Select the destination wallet.</li>
+        <li>Select the correct network.</li>
+        <li>Send and wait ~1 min for it to appear.</li>
       </ol>
-    \`,
-    "topup": \`
-      To top-up from Exodus to Aurum:
+    `,
+    "topup": `
+      To top-up your balance:
       <ol>
-        <li>In Exodus, swap your USDC to <strong>USDT</strong>.</li>
-        <li>In Aurum, go to Finance > Top Up.</li>
-        <li>Select Asset = <strong>USDT Tether</strong>, Network = <strong>BNB</strong>.</li>
-        <li>Send the USDT to the QR code/address provided. It takes ~30 mins.</li>
+        <li>Swap to the correct asset type.</li>
+        <li>Go to Finance > Top Up.</li>
+        <li>Select Asset and Network.</li>
+        <li>Send funds to the QR code/address provided. It takes ~30 mins.</li>
       </ol>
-    \`,
-    "neyro_topup": \`
-      To top-up the Neyro Agent:
+    `,
+    "neyro_topup": `
+      To top-up the Agent:
       <ol>
-        <li>Click Connect Wallet in the top right > WalletConnect.</li>
-        <li>Select the <strong>Uniswap Wallet</strong>.</li>
+        <li>Click Connect Wallet in the top right.</li>
+        <li>Select the supported Web3 Wallet.</li>
         <li>Click <strong>Top-up Agent</strong>.</li>
-        <li>In the Uniswap app, swap to Tether USD and scan the QR code on Aurum.</li>
+        <li>Swap to the correct asset and scan the QR code.</li>
       </ol>
-    \`,
-    "neyro_withdraw": \`
-      To withdraw Neyro profit:
+    `,
+    "neyro_withdraw": `
+      To withdraw profit:
       <ol>
         <li>Click <strong>Withdraw Profit</strong> in the middle of the page.</li>
-        <li>Your "Available Profit" will go to zero.</li>
-        <li>After a minute, your USDT Wallet balance will increase!</li>
+        <li>Your Available Profit will go to zero.</li>
+        <li>After a minute, your external balance will increase!</li>
       </ol>
       To withdraw capital, click <strong>Close Agent</strong> (starts a 48hr countdown).
-    \`
+    `
   };
 
   document.getElementById('botTriggerBtn').addEventListener('click', toggleBot);
